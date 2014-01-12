@@ -1,3 +1,17 @@
+
+$( document ).ajaxStart(function() {
+  $( "#loading" ).show();
+});
+
+$( document ).ajaxStop(function() {
+  $( "#loading" ).hide();
+//  $('#qtableDiv' ).attr("tabindex",-1).focus();
+  $('html, body').animate({ scrollTop: $('#navigation').offset().top }, 'slow');
+});
+
+$( document ).ajaxError(function( event, request, settings ) {
+  $( "#loading" ).hide();
+});
 // Full Text search
 $(document).ready(function(){
   $('#nxt,#prv,#orgSrch,#trnsSrch').live('click', function() {
