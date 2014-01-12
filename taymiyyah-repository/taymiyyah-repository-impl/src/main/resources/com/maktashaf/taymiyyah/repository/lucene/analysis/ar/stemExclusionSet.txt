@@ -1,0 +1,8 @@
+# Since sound alike come after stem so to support sound alike for
+# all keywords(Stem Exclusive Set) need to make a entry for each sound letter.
+# This means that when modifying this list, you might need to add some
+# redundant entries, for example containing forms with both أ and ا
+# Other example is ھ and ح
+الله
+اللہ
+اللھ

@@ -1,0 +1,34 @@
+# Stop words not normalize to sound.
+# This means that when modifying this list, you might need to add some
+# redundant entries, for example containing forms with both أ and ا
+# Other example is ھ and ح
+کے
+کا
+کی
+کئ
+کو
+کسے
+کسی
+سے
+سا
+سی
+ہے
+ہی
+ھی
+ھے
+ہیں
+ھیں
+تھا
+تھی
+اور
+ابھی
+کیلیے
+نے
+پر
+میں
+کیا
+کر
+وہ
+جس
+اس
+تک

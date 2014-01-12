@@ -2,7 +2,8 @@ package com.maktashaf.taymiyyah.repository.lucene.search;
 
 import java.io.File;
 
-import com.maktashaf.taymiyyah.analysis.AnalyzerRegistry;
+import com.maktashaf.taymiyyah.common.ProjectConstant;
+import com.maktashaf.taymiyyah.repository.lucene.analysis.AnalyzerRegistry;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
@@ -20,6 +21,17 @@ public class QuranTextSearcher extends AbstractQuranSearcher implements QuranSea
   protected String resolveIndexPath(SearchParam searchParam) {
     StringBuilder indexPath = new StringBuilder();
     indexPath.append(searchParam.getContextPath());
+    indexPath.append(File.separator);
+    indexPath.append(LocaleEnum.Ar.value().getLanguage());
+    return indexPath.toString();
+  }
+
+  @Override
+  protected String resolveSpellIndexPath(SearchParam searchParam) {
+    StringBuilder indexPath = new StringBuilder();
+    indexPath.append(searchParam.getContextPath());
+    indexPath.append(File.separator);
+    indexPath.append(ProjectConstant.spellCheckDir);
     indexPath.append(File.separator);
     indexPath.append(LocaleEnum.Ar.value().getLanguage());
     return indexPath.toString();

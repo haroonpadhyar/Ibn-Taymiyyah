@@ -35,7 +35,7 @@
     </dependency>
 	  <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>taymiyyah-repository-simple-api</artifactId>
+      <artifactId>taymiyyah-repository-api</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -56,7 +56,11 @@
     </dependency>
     <dependency>
       <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-analyzers</artifactId>
+      <artifactId>lucene-analyzers-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-analyzers-phonetic</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.lucene</groupId>

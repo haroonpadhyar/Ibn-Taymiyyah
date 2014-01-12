@@ -5,17 +5,19 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.maktashaf.taymiyyah.analysis.ur.UrduAnalyzer;
 import com.maktashaf.taymiyyah.common.QuranField;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
+import com.maktashaf.taymiyyah.repository.lucene.spellcheck.SpellAdviser;
+import com.maktashaf.taymiyyah.repository.lucene.spellcheck.SpellAdviserImpl;
 import com.maktashaf.taymiyyah.vo.SearchResult;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -35,6 +37,7 @@ import org.apache.lucene.util.Version;
 public abstract class AbstractQuranSearcher  implements QuranSearcher{
   private static Logger logger = Logger.getLogger(AbstractQuranSearcher.class);
   public static int MAX_HITS = 500; // ideally 20 result per page so total 25 pages.
+  private SpellAdviser spellAdviser = new SpellAdviserImpl();
 
   @Override
   public SearchResult search(SearchParam searchParam){
@@ -56,14 +59,10 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
         throw new RuntimeException("No Analyzer found for: "
             +searchParam.getLocaleEnum().value() + ": "+searchParam.getTranslator());
 
-      reader = IndexReader.open(dir);
+      reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 
-      Version version = Version.LUCENE_31;
-      if(analyzer instanceof UrduAnalyzer)
-        version = Version.LUCENE_30;
-
-      QueryParser parser = new QueryParser(version, QuranField.ayahText.value(), analyzer);
+      QueryParser parser = new QueryParser(Version.LUCENE_46, QuranField.ayahText.value(), analyzer);
       Query query = parser.parse(searchParam.getTerm());
 
       TopScoreDocCollector collector = TopScoreDocCollector.create(MAX_HITS, true);
@@ -91,11 +90,18 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
         quranList.add(quran);
       }
 
+      String suggestedTerm = "";
+      if (quranList.size() <= 0) {
+        String spellIndexPath = resolveSpellIndexPath(searchParam);
+        suggestedTerm = spellAdviser.suggest(searchParam.getTerm(), spellIndexPath, analyzer);
+      }
+
       //prepare result
       searchResult = SearchResult.builder()
           .withTotalHits(totalHits)
           .withTotalPages(totalPages)
           .withQuranList(quranList)
+          .withSuggestedTerm(suggestedTerm)
           .build();
     }
     catch(Exception e) {
@@ -108,8 +114,6 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
           dir.close();
         if(reader != null)
           reader.close();
-        if(searcher != null)
-          searcher.close();
       } catch(Exception e){
         e.printStackTrace();
         logger.error(e.getMessage());
@@ -139,6 +143,7 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
   }
 
   protected abstract String resolveIndexPath(SearchParam searchParam);
+  protected abstract String resolveSpellIndexPath(SearchParam searchParam);
   protected abstract String getSearchedTextFromField(Quran quran);
   protected abstract void setSearchedTextInField(Quran quran, String text);
   protected abstract Analyzer chooseAnalyzer(SearchParam searchParam);

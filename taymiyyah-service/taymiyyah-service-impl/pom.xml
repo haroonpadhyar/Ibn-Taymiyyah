@@ -30,17 +30,17 @@
 	  </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>taymiyyah-repository-simple-api</artifactId>
+      <artifactId>taymiyyah-repository-api</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>taymiyyah-repository-simple-impl</artifactId>
+      <artifactId>taymiyyah-repository-impl</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>taymiyyah-search-service-api</artifactId>
+      <artifactId>taymiyyah-service-api</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

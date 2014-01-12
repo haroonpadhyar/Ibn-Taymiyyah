@@ -71,6 +71,154 @@ public class SearchServlet extends HttpServlet{
     }
   }
 
+  private SearchResult process(String term, int pageNo, LocaleEnum localeEnum, boolean original){
+    StringBuilder realPath = new StringBuilder();
+    realPath.append(getServletContext().getRealPath(""));
+    realPath.append(File.separator);
+    realPath.append("WEB-INF");
+    realPath.append(File.separator);
+    realPath.append("index");
+
+    // For the time being translator are hard coded. later when we give the facility to
+    // select translator from UI, this value will be collected from request.
+    Translator translator = Translator.None;
+    if(localeEnum == LocaleEnum.Ar)
+      translator = Translator.None;
+    if(localeEnum == LocaleEnum.Ur)
+      translator = Translator.Maududi;
+    if(localeEnum == LocaleEnum.En)
+      translator = Translator.YousufAli;
+
+    SearchParam searchParam = SearchParam.builder()
+        .withContextPath(realPath.toString())
+        .withTerm(term)
+        .withLocale(localeEnum)
+        .withTranslator(translator)
+        .withOriginal(original)
+        .withPageSize(PAGE_SIZE)
+        .withPageNo(pageNo)
+        .build();
+    SearchResult searchResult = quranSearchService.doFullTextSearch(searchParam);
+
+    return searchResult;
+  }
+
+  private void handleAjax(HttpServletRequest req, HttpServletResponse resp, long startTime) throws ServletException, IOException {
+    String src = req.getParameter("src");
+    if(src.equals("srch")){
+      doIdSearch(req, resp);
+      return;
+    }
+
+    String searchedTerm = req.getParameter("term");
+    String termHidden = req.getParameter("termHidden");
+    String term = termHidden;
+    String locale = req.getParameter("locale");
+    String pageNoStr = req.getParameter("currentPage");
+    String totalPagesStr = req.getParameter("totalPages");
+    boolean original = req.getParameter("original").equals("1");
+
+    if(pageNoStr == null || pageNoStr.length() <=0)
+      pageNoStr = String.valueOf("0");
+
+    if(totalPagesStr == null || totalPagesStr.length() <=0)
+      totalPagesStr = String.valueOf("0");
+
+    int currentPage = Integer.valueOf(pageNoStr).intValue();
+    int totalPage = Integer.valueOf(totalPagesStr).intValue();
+    currentPage = Math.max(currentPage, 1); // page should be submitted at least from first page for pagination
+    totalPage = Math.max(totalPage, 1);
+    if(src.equals("nxt")){
+      currentPage += 1;
+      currentPage = Math.min(currentPage, totalPage);// shouldn't be more than total pages
+    } else if(src.equals("prv")){
+      currentPage -= 1;
+      currentPage = Math.min(currentPage, totalPage); // shouldn't be more than total pages
+      currentPage = Math.max(currentPage, 1); // should not be at 0 or -ve index
+    } else if(src.equals("orgSrch")){
+      // refresh search
+      original = true;
+      currentPage = 1;
+      term = searchedTerm;
+    } else if(src.equals("trnsSrch")){
+      // refresh search
+      original = false;
+      currentPage = 1;
+      term = searchedTerm;
+    }
+
+    LocaleEnum localeEnum = LocaleEnum.languageBiMap.look(locale);
+    if(localeEnum == null)
+      localeEnum = LocaleEnum.Ar;
+
+    SearchResult searchResult = SearchResult.builder().withQuranList(new ArrayList<Quran>(1)).build();
+    if(null != term && term.length() > 0)
+        searchResult = process(term, currentPage, localeEnum, original);
+    currentPage = Math.min(currentPage, searchResult.getTotalPages());
+    long totalTime = System.currentTimeMillis() - startTime;
+    ResultData resultData = new ResultData()
+        .withCurrentPage(currentPage)
+        .withTotalPages(searchResult.getTotalPages())
+        .withTotalHits(searchResult.getTotalHits())
+        .withOriginal(original ? 1 : 0)
+        .withTerm(term)
+        .withLang(localeEnum.value().getLanguage())
+        .withTime(String.valueOf(totalTime / 1000f))
+        .withSuggestedTerm(searchResult.getSuggestedTerm())
+        .withQuranList(searchResult.getQuranList());
+
+    Gson gson = new Gson();
+    String json = gson.toJson(resultData);
+
+    resp.setContentType("text/html");
+    resp.getWriter().write(json);
+  }
+
+  private void doIdSearch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    String radio = req.getParameter("radio");
+    String surahId = req.getParameter("surahId");
+    String ayahId = req.getParameter("ayahId");
+    String locale = req.getParameter("locale");
+    LocaleEnum localeEnum = LocaleEnum.languageBiMap.look(locale);
+    if(localeEnum == null)
+      localeEnum = LocaleEnum.Ar;
+
+    int surahNo = 0;
+    int ayahNo = 0;
+    Quran quran = null;
+    try{
+      surahNo = Integer.valueOf(surahId);
+      ayahNo = Integer.valueOf(ayahId);
+    } catch(Exception e){
+      logger.error(e.getMessage());
+      surahNo = 0;
+      ayahNo = 0;
+    }
+
+    if(radio.equals("idSrch")) {
+      if((surahNo > 0 && surahNo <= 114)
+          && (ayahNo > 0 && ayahNo <= ayahCountMap.get(surahNo)))
+        quran = quranSearchService.findByAyahId(surahNo, ayahNo, localeEnum);
+    }
+    else if(radio.equals("srSrch")){
+      if(ayahNo > 0 && ayahNo <= 6236)
+        quran = quranSearchService.findByAccumId(ayahNo, localeEnum);
+    }
+
+    List<Quran> quranList = new ArrayList<Quran>();
+    if(quran != null)
+      quranList.add(quran);
+    ResultData resultData = new ResultData()
+        .withLang(localeEnum.value().getLanguage())
+        .withQuranList(quranList);
+
+    Gson gson = new Gson();
+    String json = gson.toJson(resultData);
+
+    resp.setContentType("text/html");
+    resp.getWriter().write(json);
+  }
+
   @Override
   public void init() throws ServletException {
     String pageSize = getServletContext().getInitParameter("pageSize");
@@ -190,153 +338,6 @@ public class SearchServlet extends HttpServlet{
     ayahCountMap.put(113,5);
     ayahCountMap.put(114,6);
 
-  }
-
-  private SearchResult process(String term, int pageNo, LocaleEnum localeEnum, boolean original){
-    StringBuilder realPath = new StringBuilder();
-    realPath.append(getServletContext().getRealPath(""));
-    realPath.append(File.separator);
-    realPath.append("WEB-INF");
-    realPath.append(File.separator);
-    realPath.append("index");
-
-    // For the time being translator are hard coded. later when we give the facility to
-    // select translator from UI, this value will be collected from request.
-    Translator translator = Translator.None;
-    if(localeEnum == LocaleEnum.Ar)
-      translator = Translator.None;
-    if(localeEnum == LocaleEnum.Ur)
-      translator = Translator.Maududi;
-    if(localeEnum == LocaleEnum.En)
-      translator = Translator.YousufAli;
-
-    SearchParam searchParam = SearchParam.builder()
-        .withContextPath(realPath.toString())
-        .withTerm(term)
-        .withLocale(localeEnum)
-        .withTranslator(translator)
-        .withOriginal(original)
-        .withPageSize(PAGE_SIZE)
-        .withPageNo(pageNo)
-        .build();
-    SearchResult searchResult = quranSearchService.doFullTextSearch(searchParam);
-
-    return searchResult;
-  }
-
-  private void handleAjax(HttpServletRequest req, HttpServletResponse resp, long startTime) throws ServletException, IOException {
-    String src = req.getParameter("src");
-    if(src.equals("srch")){
-      doIdSearch(req, resp);
-      return;
-    }
-
-    String searchedTerm = req.getParameter("term");
-    String termHidden = req.getParameter("termHidden");
-    String term = termHidden;
-    String locale = req.getParameter("locale");
-    String pageNoStr = req.getParameter("currentPage");
-    String totalPagesStr = req.getParameter("totalPages");
-    boolean original = req.getParameter("original").equals("1");
-
-    if(pageNoStr == null || pageNoStr.length() <=0)
-      pageNoStr = String.valueOf("0");
-
-    if(totalPagesStr == null || totalPagesStr.length() <=0)
-      totalPagesStr = String.valueOf("0");
-
-    int currentPage = Integer.valueOf(pageNoStr).intValue();
-    int totalPage = Integer.valueOf(totalPagesStr).intValue();
-    currentPage = Math.max(currentPage, 1); // page should be submitted at least from first page for pagination
-    totalPage = Math.max(totalPage, 1);
-    if(src.equals("nxt")){
-      currentPage += 1;
-      currentPage = Math.min(currentPage, totalPage);// shouldn't be more than total pages
-    } else if(src.equals("prv")){
-      currentPage -= 1;
-      currentPage = Math.min(currentPage, totalPage); // shouldn't be more than total pages
-      currentPage = Math.max(currentPage, 1); // should not be at 0 or -ve index
-    } else if(src.equals("orgSrch")){
-      // refresh search
-      original = true;
-      currentPage = 1;
-      term = searchedTerm;
-    } else if(src.equals("trnsSrch")){
-      // refresh search
-      original = false;
-      currentPage = 1;
-      term = searchedTerm;
-    }
-
-    LocaleEnum localeEnum = LocaleEnum.languageBiMap.look(locale);
-    if(localeEnum == null)
-      localeEnum = LocaleEnum.Ar;
-
-    SearchResult searchResult = SearchResult.builder().withQuranList(new ArrayList<Quran>(1)).build();
-    if(null != term && term.length() > 0)
-        searchResult = process(term, currentPage, localeEnum, original);
-    currentPage = Math.min(currentPage, searchResult.getTotalPages());
-    long totalTime = System.currentTimeMillis() - startTime;
-    ResultData resultData = new ResultData()
-        .withCurrentPage(currentPage)
-        .withTotalPages(searchResult.getTotalPages())
-        .withTotalHits(searchResult.getTotalHits())
-        .withOriginal(original ? 1 : 0)
-        .withTerm(term)
-        .withLang(localeEnum.value().getLanguage())
-        .withTime(String.valueOf(totalTime / 1000f))
-        .withQuranList(searchResult.getQuranList());
-
-    Gson gson = new Gson();
-    String json = gson.toJson(resultData);
-
-    resp.setContentType("text/html");
-    resp.getWriter().write(json);
-  }
-
-  private void doIdSearch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String radio = req.getParameter("radio");
-    String surahId = req.getParameter("surahId");
-    String ayahId = req.getParameter("ayahId");
-    String locale = req.getParameter("locale");
-    LocaleEnum localeEnum = LocaleEnum.languageBiMap.look(locale);
-    if(localeEnum == null)
-      localeEnum = LocaleEnum.Ar;
-
-    int surahNo = 0;
-    int ayahNo = 0;
-    Quran quran = null;
-    try{
-      surahNo = Integer.valueOf(surahId);
-      ayahNo = Integer.valueOf(ayahId);
-    } catch(Exception e){
-      logger.error(e.getMessage());
-      surahNo = 0;
-      ayahNo = 0;
-    }
-
-    if(radio.equals("idSrch")) {
-      if((surahNo > 0 && surahNo <= 114)
-          && (ayahNo > 0 && ayahNo <= ayahCountMap.get(surahNo)))
-        quran = quranSearchService.findByAyahId(surahNo, ayahNo, localeEnum);
-    }
-    else if(radio.equals("srSrch")){
-      if(ayahNo > 0 && ayahNo <= 6236)
-        quran = quranSearchService.findByAccumId(ayahNo, localeEnum);
-    }
-
-    List<Quran> quranList = new ArrayList<Quran>();
-    if(quran != null)
-      quranList.add(quran);
-    ResultData resultData = new ResultData()
-        .withLang(localeEnum.value().getLanguage())
-        .withQuranList(quranList);
-
-    Gson gson = new Gson();
-    String json = gson.toJson(resultData);
-
-    resp.setContentType("text/html");
-    resp.getWriter().write(json);
   }
 
 }

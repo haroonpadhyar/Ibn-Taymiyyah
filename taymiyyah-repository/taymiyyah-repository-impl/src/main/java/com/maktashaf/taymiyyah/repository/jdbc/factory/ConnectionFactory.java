@@ -53,7 +53,7 @@ public class ConnectionFactory {
     Properties properties = new Properties();
 
     try{
-      InputStream is = getClass().getResourceAsStream("/repository.properties");
+      InputStream is = getClass().getResourceAsStream("repository.properties");
       properties.load(is);
       is.close();
     }catch(Exception e){

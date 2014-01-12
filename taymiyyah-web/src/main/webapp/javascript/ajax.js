@@ -51,9 +51,20 @@ $(document).ready(function(){
         $('#totalPagesHidden').val(resp.totalPages);
         $('#originalHidden').val(resp.original);
         $('#termHidden').val(resp.term);
-        $('#timeDiv' ).show();
-        $('#qtableDiv' ).show();
-        $('#paginationDiv' ).show();
+
+        var suggestedTerm= resp.suggestedTerm;
+        if(suggestedTerm.length > 0){
+          $('#didYouMeanSuggestion' ).html(suggestedTerm);
+          $('#didYouMean' ).show();
+          $('#timeDiv' ).hide();
+          $('#qtableDiv' ).hide();
+          $('#paginationDiv' ).hide();
+        }else{
+          $('#didYouMean' ).hide();
+          $('#timeDiv' ).show();
+          $('#qtableDiv' ).show();
+          $('#paginationDiv' ).show();
+        }
       }
     });
     return false; // keeps the page from not refreshing

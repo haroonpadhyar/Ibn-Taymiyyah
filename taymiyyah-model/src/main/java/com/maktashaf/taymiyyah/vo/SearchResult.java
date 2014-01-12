@@ -10,6 +10,7 @@ import com.maktashaf.taymiyyah.model.Quran;
 public class SearchResult {
   private int totalHits;
   private int totalPages;
+  private String suggestedTerm;
   private List<Quran> quranList;
 
   private SearchResult(){
@@ -26,6 +27,10 @@ public class SearchResult {
 
   public List<Quran> getQuranList() {
     return quranList;
+  }
+
+  public String getSuggestedTerm() {
+    return suggestedTerm;
   }
 
   public static SearchResultBuilder builder(){
@@ -51,6 +56,11 @@ public class SearchResult {
 
     public SearchResultBuilder withQuranList(List<Quran> quranList){
       searchResult.quranList = quranList;
+      return this;
+    }
+
+    public SearchResultBuilder withSuggestedTerm(String suggestedTerm){
+      searchResult.suggestedTerm = suggestedTerm;
       return this;
     }
 
