@@ -13,10 +13,16 @@ package com.maktashaf.taymiyyah.repository.lucene.analysis.ar.filter;
 public class ArabicTransliterationNormalizer {
 
   public static final char CHOTI_YEH = '\u06CC';
+  public static final char BARI_YEH = '\u06D2'; //  ے
+  public static final char BARI_YEH_WITH_HAMZA_ABOVE = '\u06D3';
   public static final char DOTLESS_YEH = '\u0649';
   public static final char HEH = '\u0647';
   public static final char CHOTI_HEH = '\u06C1';
   public static final char DO_CHASHMI_HEH = '\u06BE';
+
+  public static final char HEH_WITH_YEH_ABOVE = '\u06C0';
+  public static final char HEH_GOAL_WITH_HAMZA_ABOVE = '\u06C2';
+  public static final char TEH_MARBUTA_GOAL = '\u06C3';
 
 
   public static final char KAF_AR = '\u0643';
@@ -38,10 +44,15 @@ public class ArabicTransliterationNormalizer {
           s[i] = KAF_AR;
           break;
         case CHOTI_YEH:
+        case BARI_YEH:
+        case BARI_YEH_WITH_HAMZA_ABOVE:
           s[i] = DOTLESS_YEH;
           break;
         case CHOTI_HEH:
         case DO_CHASHMI_HEH:
+        case HEH_WITH_YEH_ABOVE:
+        case HEH_GOAL_WITH_HAMZA_ABOVE:
+        case TEH_MARBUTA_GOAL:
           s[i] = HEH;
           break;
         default:

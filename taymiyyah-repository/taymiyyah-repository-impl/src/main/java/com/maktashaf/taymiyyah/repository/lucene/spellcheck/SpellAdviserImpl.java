@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.search.spell.LevensteinDistance;
 import org.apache.lucene.search.spell.SpellChecker;
 import org.apache.lucene.store.Directory;
@@ -36,11 +37,12 @@ public class SpellAdviserImpl implements SpellAdviser {
       boolean suggestionFound = false;
       for (int i = 0; i < split.length; i++) {
         String s = split[i];
-        // To skip stop words use Analyser.
+        // To skip stop words & normalize use Analyser.
         TokenStream stream = analyzer.tokenStream("contents", new StringReader(s));
         stream.reset();
         if (stream.incrementToken()){
-          String[] suggestions = spell.suggestSimilar(s, 1);
+          CharTermAttribute charTermAttribute = stream.addAttribute(CharTermAttribute.class);
+          String[] suggestions = spell.suggestSimilar(charTermAttribute.toString(), 1);
           if(suggestions.length > 0)  {
             split[i] = suggestions[0];
             suggestionFound = true;

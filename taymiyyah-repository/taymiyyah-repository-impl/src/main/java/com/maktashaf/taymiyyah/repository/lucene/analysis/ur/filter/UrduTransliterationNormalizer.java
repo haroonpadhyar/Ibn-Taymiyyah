@@ -15,6 +15,7 @@ public class UrduTransliterationNormalizer {
   public static final char CHOTI_YEH = '\u06CC';
   public static final char DOTLESS_YEH = '\u0649';
   public static final char HEH = '\u0647';
+  public static final char TEH_MARBUTA = '\u0629';
   public static final char CHOTI_HEH = '\u06C1';
   public static final char YEH = '\u064A';
 
@@ -42,6 +43,7 @@ public class UrduTransliterationNormalizer {
           s[i] = CHOTI_YEH;
           break;
         case HEH:
+        case TEH_MARBUTA:
           s[i] = CHOTI_HEH;
           break;
         default:
