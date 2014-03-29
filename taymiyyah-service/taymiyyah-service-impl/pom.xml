@@ -7,7 +7,7 @@
 
   <parent>
     <groupId>com.maktashaf.taymiyyah</groupId>
-    <artifactId>taymiyyah-search-service</artifactId>
+    <artifactId>taymiyyah-service</artifactId>
     <version>1.0</version>
   </parent>
   
