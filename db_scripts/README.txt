@@ -43,3 +43,5 @@ Sequence to run script:
 
 ## insert english translation of quran by yousufali.
 3- quran_en_yousufali.sql
+
+Note: These scripts are mysql compatible.
