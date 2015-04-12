@@ -1,10 +1,12 @@
 package com.maktashaf.taymiyyah.repository.lucene.search;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.QuranField;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
@@ -17,12 +19,9 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.*;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.NullFragmenter;
 import org.apache.lucene.search.highlight.QueryScorer;
@@ -96,6 +95,7 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
         suggestedTerm = spellAdviser.suggest(searchParam.getTerm(), spellIndexPath, analyzer);
       }
 
+      setUnSearchedTextInField(searchParam, quranList);
       //prepare result
       searchResult = SearchResult.builder()
           .withTotalHits(totalHits)
@@ -146,5 +146,6 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
   protected abstract String resolveSpellIndexPath(SearchParam searchParam);
   protected abstract String getSearchedTextFromField(Quran quran);
   protected abstract void setSearchedTextInField(Quran quran, String text);
+  protected abstract void setUnSearchedTextInField(SearchParam searchParam, List<Quran> quranList);
   protected abstract Analyzer chooseAnalyzer(SearchParam searchParam);
 }

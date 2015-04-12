@@ -19,7 +19,7 @@ public class QuranSearchSearchServiceImpl implements QuranSearchService {
   @Override
   public SearchResult doFullTextSearch(SearchParam searchParam) {
     SearchResult searchResult = quranLuceneRepo.searchAyah(searchParam);
-    quranJDBCRepo.fillTranslation(searchResult.getQuranList(), searchParam.getLocaleEnum(), searchParam.isOriginal());
+//    quranJDBCRepo.fillTranslation(searchResult.getQuranList(), searchParam.getLocaleEnum(), searchParam.isOriginal());
     return searchResult;
   }
 

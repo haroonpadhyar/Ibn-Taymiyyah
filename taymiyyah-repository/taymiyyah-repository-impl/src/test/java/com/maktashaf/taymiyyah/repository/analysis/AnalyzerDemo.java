@@ -66,19 +66,19 @@ public class AnalyzerDemo {
   public static void main(String[] args) throws IOException {
 
 //    createSpellCheckIndex();
-    /*String[] split = "as".split(" ");
-    System.out.println(StringUtils.join(split, ' '));
+//    String[] split = "as".split(" ");
+//    System.out.println(StringUtils.join(split, ' '));
     doSpellCheck();
-    System.out.println("Done.");
-    System.exit(1);*/
+//    System.out.println("Done.");
+//    System.exit(1);
 
-    String[] strings = examples;
+   /* String[] strings = examples;
     if (args.length > 0) {
       strings = args;
     }
     for (int i = 0; i < strings.length; i++) {
       analyze(strings[i]);
-    }
+    }*/
 
   }
 
@@ -122,12 +122,12 @@ public class AnalyzerDemo {
   public static void doSpellCheck(){
     String term = "مُحَمَّدٌ";
     term = "ہارون";
-    term = "هارون";
-    term = "هار";
-    term = "+محمد";
+//    term = "هارون";
+//    term = "هار";
+//    term = "محد";
 //    term = "صدری";
 //    term = "محمد صدری";
-    term = "OR";
+//    term = "OR";
     try {
       Directory dir = FSDirectory.open(new File(spellPath));
       SpellChecker spell = new SpellChecker(dir);
