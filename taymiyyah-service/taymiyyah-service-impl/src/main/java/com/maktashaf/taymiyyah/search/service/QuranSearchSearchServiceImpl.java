@@ -24,12 +24,14 @@ public class QuranSearchSearchServiceImpl implements QuranSearchService {
   }
 
   @Override
-  public Quran findByAccumId(int accumId, LocaleEnum localeEnum) {
-    return quranJDBCRepo.findByAccumId(accumId, localeEnum);
+  public Quran findByAccumId(int accumId, LocaleEnum localeEnum, String realPath) {
+//    return quranJDBCRepo.findByAccumId(accumId, localeEnum);
+    return quranLuceneRepo.findByAccumId(accumId, localeEnum, realPath);
   }
 
   @Override
-  public Quran findByAyahId(int surahId, int ayahId, LocaleEnum localeEnum) {
-    return quranJDBCRepo.findByAyahId(surahId, ayahId, localeEnum);
+  public Quran findByAyahId(int surahId, int ayahId, LocaleEnum localeEnum, String realPath) {
+//    return quranJDBCRepo.findByAyahId(surahId, ayahId, localeEnum);
+    return quranLuceneRepo.findByAyahId(surahId, ayahId, localeEnum, realPath);
   }
 }

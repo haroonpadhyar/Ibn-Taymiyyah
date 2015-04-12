@@ -11,6 +11,6 @@ import com.maktashaf.taymiyyah.vo.SearchResult;
 public interface QuranSearchService {
 
   public SearchResult doFullTextSearch(SearchParam searchParam);
-  public Quran findByAccumId(int accumId, LocaleEnum localeEnum);
-  public Quran findByAyahId(int surahId, int ayahId, LocaleEnum localeEnum);
+  public Quran findByAccumId(int accumId, LocaleEnum localeEnum, String realPath);
+  public Quran findByAyahId(int surahId, int ayahId, LocaleEnum localeEnum, String realPath);
 }

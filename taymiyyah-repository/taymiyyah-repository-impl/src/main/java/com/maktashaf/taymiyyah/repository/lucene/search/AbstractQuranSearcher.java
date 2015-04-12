@@ -6,6 +6,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.QuranField;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
@@ -140,6 +141,124 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       logger.debug(e.getMessage());
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public Quran findByAccumId(int accumId, LocaleEnum localeEnum, String realPath){
+    Quran quran = null;
+    Directory dir = null;
+    IndexReader reader = null;
+    IndexSearcher searcher = null;
+    try {
+      StringBuilder indexPath = new StringBuilder();
+      indexPath.append(realPath);
+      indexPath.append(File.separator);
+      indexPath.append(LocaleEnum.Ar.value().getLanguage());
+
+      dir = FSDirectory.open(new File(indexPath.toString()));
+      reader = DirectoryReader.open(dir);
+      searcher = new IndexSearcher(reader);
+
+      TermQuery termQuery = new TermQuery(new Term(QuranField.accumId.value(), String.valueOf(accumId)));
+      TopDocs topDocs = searcher.search(termQuery, 1);
+      ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+      Document doc = searcher.doc(scoreDocs[0].doc);
+
+      quran = new Quran();
+      quran.setAccmId(Integer.valueOf(doc.get(QuranField.accumId.value())).intValue());
+      quran.setAyahId(Integer.valueOf(doc.get(QuranField.ayahId.value())).intValue());
+      quran.setSurahId(Integer.valueOf(doc.get(QuranField.surahId.value())).intValue());
+      quran.setJuzId(Integer.valueOf(doc.get(QuranField.juzId.value())).intValue());
+      quran.setSurahName(doc.get(QuranField.surahName.value()));
+      quran.setJuzName(doc.get(QuranField.juzName.value()));
+      quran.setAyahText(doc.get(QuranField.ayahText.value()));
+
+      // load translation.
+      SearchParam searchParam = SearchParam.builder()
+              .withContextPath(realPath)
+              .withLocale(localeEnum)
+              .build();
+      setUnSearchedTextInField(searchParam, Lists.newArrayList(quran));
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      new RuntimeException(e);
+    }finally {
+      try {
+        if(dir != null)
+          dir.close();
+        if(reader != null)
+          reader.close();
+      } catch(Exception e){
+        e.printStackTrace();
+        logger.error(e.getMessage());
+        throw new RuntimeException(e);
+      }
+    }
+
+    return quran;
+  }
+
+  @Override
+  public Quran findByAyahId(int surahId, int ayahId, LocaleEnum localeEnum, String realPath){
+    Quran quran = null;
+    Directory dir = null;
+    IndexReader reader = null;
+    IndexSearcher searcher = null;
+    try {
+      StringBuilder indexPath = new StringBuilder();
+      indexPath.append(realPath);
+      indexPath.append(File.separator);
+      indexPath.append(LocaleEnum.Ar.value().getLanguage());
+
+      dir = FSDirectory.open(new File(indexPath.toString()));
+      reader = DirectoryReader.open(dir);
+      searcher = new IndexSearcher(reader);
+
+      TermQuery termQuerySurah = new TermQuery(new Term(QuranField.surahId.value(), String.valueOf(surahId)));
+      TermQuery termQueryAyah = new TermQuery(new Term(QuranField.ayahId.value(), String.valueOf(ayahId)));
+      BooleanQuery booleanQuery = new BooleanQuery();
+      booleanQuery.add(termQuerySurah, BooleanClause.Occur.MUST);
+      booleanQuery.add(termQueryAyah, BooleanClause.Occur.MUST);
+      TopDocs topDocs = searcher.search(booleanQuery, 1);
+      ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+      Document doc = searcher.doc(scoreDocs[0].doc);
+
+      quran = new Quran();
+      quran.setAccmId(Integer.valueOf(doc.get(QuranField.accumId.value())).intValue());
+      quran.setAyahId(Integer.valueOf(doc.get(QuranField.ayahId.value())).intValue());
+      quran.setSurahId(Integer.valueOf(doc.get(QuranField.surahId.value())).intValue());
+      quran.setJuzId(Integer.valueOf(doc.get(QuranField.juzId.value())).intValue());
+      quran.setSurahName(doc.get(QuranField.surahName.value()));
+      quran.setJuzName(doc.get(QuranField.juzName.value()));
+      quran.setAyahText(doc.get(QuranField.ayahText.value()));
+
+      // load translation.
+      SearchParam searchParam = SearchParam.builder()
+              .withContextPath(realPath)
+              .withLocale(localeEnum)
+              .build();
+      setUnSearchedTextInField(searchParam, Lists.newArrayList(quran));// for correct result QuranTextSearcher should be called from lunce repo
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      new RuntimeException(e);
+    }finally {
+      try {
+        if(dir != null)
+          dir.close();
+        if(reader != null)
+          reader.close();
+      } catch(Exception e){
+        e.printStackTrace();
+        logger.error(e.getMessage());
+        throw new RuntimeException(e);
+      }
+    }
+
+    return quran;
   }
 
   protected abstract String resolveIndexPath(SearchParam searchParam);

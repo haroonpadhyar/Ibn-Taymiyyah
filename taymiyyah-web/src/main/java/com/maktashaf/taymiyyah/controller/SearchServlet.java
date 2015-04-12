@@ -175,6 +175,13 @@ public class SearchServlet extends HttpServlet{
   }
 
   private void doIdSearch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    StringBuilder realPath = new StringBuilder();
+    realPath.append(getServletContext().getRealPath(""));
+    realPath.append(File.separator);
+    realPath.append("WEB-INF");
+    realPath.append(File.separator);
+    realPath.append("index");
+
     String radio = req.getParameter("radio");
     String surahId = req.getParameter("surahId");
     String ayahId = req.getParameter("ayahId");
@@ -198,11 +205,11 @@ public class SearchServlet extends HttpServlet{
     if(radio.equals("idSrch")) {
       if((surahNo > 0 && surahNo <= 114)
           && (ayahNo > 0 && ayahNo <= ayahCountMap.get(surahNo)))
-        quran = quranSearchService.findByAyahId(surahNo, ayahNo, localeEnum);
+        quran = quranSearchService.findByAyahId(surahNo, ayahNo, localeEnum, realPath.toString());
     }
     else if(radio.equals("srSrch")){
       if(ayahNo > 0 && ayahNo <= 6236)
-        quran = quranSearchService.findByAccumId(ayahNo, localeEnum);
+        quran = quranSearchService.findByAccumId(ayahNo, localeEnum, realPath.toString());
     }
 
     List<Quran> quranList = new ArrayList<Quran>();
