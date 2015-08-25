@@ -2,11 +2,8 @@ package com.maktashaf.taymiyyah.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -72,12 +69,7 @@ public class SearchServlet extends HttpServlet{
   }
 
   private SearchResult process(String term, int pageNo, LocaleEnum localeEnum, boolean original){
-    StringBuilder realPath = new StringBuilder();
-    realPath.append(getServletContext().getRealPath(""));
-    realPath.append(File.separator);
-    realPath.append("WEB-INF");
-    realPath.append(File.separator);
-    realPath.append("index");
+    String luceneContextPath = loadProperties().getProperty("lucene.index.context.path");
 
     // For the time being translator are hard coded. later when we give the facility to
     // select translator from UI, this value will be collected from request.
@@ -90,7 +82,7 @@ public class SearchServlet extends HttpServlet{
       translator = Translator.YousufAli;
 
     SearchParam searchParam = SearchParam.builder()
-        .withContextPath(realPath.toString())
+        .withContextPath(luceneContextPath)
         .withTerm(term)
         .withLocale(localeEnum)
         .withTranslator(translator)
@@ -224,6 +216,22 @@ public class SearchServlet extends HttpServlet{
 
     resp.setContentType("text/html");
     resp.getWriter().write(json);
+  }
+
+  private Properties loadProperties(){
+    Properties properties = new Properties();
+
+    try{
+      InputStream is = getClass().getClassLoader().getResourceAsStream("com/maktashaf/taymiyyah/repository/jdbc/factory/repository.properties");
+      properties.load(is);
+      is.close();
+    }catch(Exception e){
+      e.printStackTrace();
+      logger.error(e.getMessage());
+      throw new RuntimeException(e);
+    }
+
+    return properties;
   }
 
   @Override
