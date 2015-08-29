@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 public class SearchServlet extends HttpServlet{
   private static Logger logger = Logger.getLogger(SearchServlet.class);
   private int PAGE_SIZE = 1;
+  private String LUCENE_INDEX_PATH = "";
   private Map<Integer, Integer> ayahCountMap = new HashMap<Integer, Integer>(114);
 
   QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
@@ -69,7 +70,6 @@ public class SearchServlet extends HttpServlet{
   }
 
   private SearchResult process(String term, int pageNo, LocaleEnum localeEnum, boolean original){
-    String luceneContextPath = loadProperties().getProperty("lucene.index.context.path");
 
     // For the time being translator are hard coded. later when we give the facility to
     // select translator from UI, this value will be collected from request.
@@ -82,7 +82,7 @@ public class SearchServlet extends HttpServlet{
       translator = Translator.YousufAli;
 
     SearchParam searchParam = SearchParam.builder()
-        .withContextPath(luceneContextPath)
+        .withContextPath(LUCENE_INDEX_PATH)
         .withTerm(term)
         .withLocale(localeEnum)
         .withTranslator(translator)
@@ -167,12 +167,6 @@ public class SearchServlet extends HttpServlet{
   }
 
   private void doIdSearch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    StringBuilder realPath = new StringBuilder();
-    realPath.append(getServletContext().getRealPath(""));
-    realPath.append(File.separator);
-    realPath.append("WEB-INF");
-    realPath.append(File.separator);
-    realPath.append("index");
 
     String radio = req.getParameter("radio");
     String surahId = req.getParameter("surahId");
@@ -197,11 +191,11 @@ public class SearchServlet extends HttpServlet{
     if(radio.equals("idSrch")) {
       if((surahNo > 0 && surahNo <= 114)
           && (ayahNo > 0 && ayahNo <= ayahCountMap.get(surahNo)))
-        quran = quranSearchService.findByAyahId(surahNo, ayahNo, localeEnum, realPath.toString());
+        quran = quranSearchService.findByAyahId(surahNo, ayahNo, localeEnum, LUCENE_INDEX_PATH);
     }
     else if(radio.equals("srSrch")){
       if(ayahNo > 0 && ayahNo <= 6236)
-        quran = quranSearchService.findByAccumId(ayahNo, localeEnum, realPath.toString());
+        quran = quranSearchService.findByAccumId(ayahNo, localeEnum, LUCENE_INDEX_PATH);
     }
 
     List<Quran> quranList = new ArrayList<Quran>();
@@ -237,6 +231,7 @@ public class SearchServlet extends HttpServlet{
   @Override
   public void init() throws ServletException {
     String pageSize = getServletContext().getInitParameter("pageSize");
+    LUCENE_INDEX_PATH = loadProperties().getProperty("lucene.index.context.path");
     PAGE_SIZE = Integer.valueOf(pageSize).intValue();
     ayahCountMap.put(1,7);
     ayahCountMap.put(2,286);

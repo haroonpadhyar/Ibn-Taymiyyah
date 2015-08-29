@@ -1,12 +1,11 @@
 
 $( document ).ajaxStart(function() {
-  $( "#loading" ).show();
+  $("body").addClass("loading");
 });
 
 $( document ).ajaxStop(function() {
-  $( "#loading" ).hide();
-//  $('#qtableDiv' ).attr("tabindex",-1).focus();
-  $('html, body').animate({ scrollTop: $('#navigation').offset().top }, 'slow');
+  $("body").removeClass("loading");
+  //$("html,body").animate({scrollTop: 0}, 1000);
 });
 
 $( document ).ajaxError(function( event, request, settings ) {
