@@ -59,10 +59,10 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
       IndexWriter writer = new IndexWriter(dir, iwc);
 
       // loading data from database.
-//      List<Quran> qurans = quranJDBCRepo.findAll(LocaleEnum.Ar);
+//      List<Quran> qurans = quranJDBCRepo.findAll(LocaleEnum.Arabic);
 
       // load data from file.
-      List<Quran> qurans = parseSQLData(LocaleEnum.Ar);
+      List<Quran> qurans = parseSQLData(LocaleEnum.Arabic);
       for (Quran quran : qurans) {
         System.out.println("Indexing... "+quran.getAccmId()+" : "+quran.getAyahText());
         Document doc = new Document();
@@ -100,10 +100,10 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
       IndexWriter writer = new IndexWriter(dir, iwc);
 
       // loading data from database.
-//      List<Quran> qurans = quranJDBCRepo.findAll(LocaleEnum.Ur);
+//      List<Quran> qurans = quranJDBCRepo.findAll(LocaleEnum.Urdu);
 
       // load data from file.
-      List<Quran> qurans = parseSQLData(LocaleEnum.Ur);
+      List<Quran> qurans = parseSQLData(LocaleEnum.Urdu);
       for (Quran quran : qurans) {
         System.out.println("Indexing... "+quran.getAccmId()+" : "+quran.getAyahText());
         Document doc = new Document();
@@ -141,10 +141,10 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
       IndexWriter writer = new IndexWriter(dir, iwc);
 
       // loading data from database.
-//      List<Quran> qurans = quranJDBCRepo.findAll(LocaleEnum.En);
+//      List<Quran> qurans = quranJDBCRepo.findAll(LocaleEnum.English);
 
       // load data from file.
-      List<Quran> qurans = parseSQLData(LocaleEnum.En);
+      List<Quran> qurans = parseSQLData(LocaleEnum.English);
       for (Quran quran : qurans) {
         System.out.println("Indexing... "+quran.getAccmId()+" : "+quran.getAyahText());
         Document doc = new Document();
@@ -177,7 +177,7 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
       SearchParam searchParam = SearchParam.builder()
           .withContextPath(contextPath)
           .withTerm(term)
-          .withLocale(LocaleEnum.Ar)
+          .withLocale(LocaleEnum.Arabic)
           .withOriginal(true)
           .withPageNo(1)
           .withPageSize(12)
@@ -208,7 +208,7 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
       SearchParam searchParam = SearchParam.builder()
           .withContextPath(contextPath)
           .withTerm(term)
-          .withLocale(LocaleEnum.Ur)
+          .withLocale(LocaleEnum.Urdu)
           .withTranslator(Translator.Maududi)
           .withOriginal(false)
           .withPageNo(3)
@@ -237,7 +237,7 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
       SearchParam searchParam = SearchParam.builder()
           .withContextPath(contextPath)
           .withTerm(term)
-          .withLocale(LocaleEnum.En)
+          .withLocale(LocaleEnum.English)
           .withTranslator(Translator.YousufAli)
           .withOriginal(false)
           .withPageNo(1)
@@ -272,7 +272,7 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
   public void genFromSQL(){
 
     try {
-      Directory dir = FSDirectory.open(new File(contextPath + File.separator + LocaleEnum.Ar.value().getLanguage()));
+      Directory dir = FSDirectory.open(new File(contextPath + File.separator + LocaleEnum.Arabic.value().getLanguage()));
       ArabicCustomizedAnalyzer arabicAnalyzer = new ArabicCustomizedAnalyzer(Version.LUCENE_46);
       IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_46,arabicAnalyzer);
       iwc.setOpenMode(OpenMode.CREATE);
@@ -283,7 +283,7 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
       FileReader fileReader = new FileReader("/Users/haroonpadhyar/Personal/Work/Projects/Ibn-Taymiyyah/db_scripts/quran-original_book.sql");
 //      fileReader.r
 
-      List<Quran> qurans = quranJDBCRepo.findAll(LocaleEnum.Ar);
+      List<Quran> qurans = quranJDBCRepo.findAll(LocaleEnum.Arabic);
       for (Quran quran : qurans) {
         System.out.println("Indexing... "+quran.getAccmId()+" : "+quran.getAyahText());
         Document doc = new Document();
@@ -307,7 +307,7 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
 
   @Test
   public void testParseSQLData(){
-    List<Quran> quranList = parseSQLData(LocaleEnum.Ur);
+    List<Quran> quranList = parseSQLData(LocaleEnum.Urdu);
     System.out.println(quranList.size());
   }
 
@@ -316,23 +316,23 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
     List<Quran> quranList = new ArrayList<Quran>();
     String filePath = "";
     int start = 0;
-    if(locale == LocaleEnum.Ar) {
+    if(locale == LocaleEnum.Arabic) {
       filePath = "./db_scripts/quran-original_book.sql";
       start = 137;
     }
-    else if(locale == LocaleEnum.Ur) {
+    else if(locale == LocaleEnum.Urdu) {
       filePath = "./db_scripts/quran_ur_maududi.sql";
       start = 148;
     }
-    else if(locale == LocaleEnum.En) {
+    else if(locale == LocaleEnum.English) {
       filePath = "./db_scripts/quran_en_yousufali.txt";
       start = 150;
     }
 
     try {
       ImmutableMap<Integer, Quran> quranImmutableMap = null;
-      if(locale != LocaleEnum.Ar) {
-        List<Quran> quranListTemp = parseSQLData(LocaleEnum.Ar);
+      if(locale != LocaleEnum.Arabic) {
+        List<Quran> quranListTemp = parseSQLData(LocaleEnum.Arabic);
         quranImmutableMap = Maps.uniqueIndex(quranListTemp, new Function<Quran, Integer>() {
           @Override
           public Integer apply(Quran quran) {
@@ -348,7 +348,7 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
       int i = 0;
       while (line != null) {
         i++;
-        if(locale == LocaleEnum.En) {
+        if(locale == LocaleEnum.English) {
           String[] split = line.split("\\|");
           surahId = split[0].trim();
           ayahId = split[1].trim();
@@ -365,7 +365,7 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
           ayahText = split[2].trim().substring(1, split[2].trim().length() - 1);
         }
 
-        if(locale != LocaleEnum.Ar) {
+        if(locale != LocaleEnum.Arabic) {
           accumId = String.valueOf(quranImmutableMap.get(i).getAccmId());
           juzId = String.valueOf(quranImmutableMap.get(i).getJuzId());
           surahName = String.valueOf(quranImmutableMap.get(i).getSurahName());

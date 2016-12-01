@@ -8,9 +8,9 @@ import com.google.common.collect.ImmutableBiMap;
  * @author: Haroon Anwar Padhyar.
  */
 public enum LocaleEnum {
-  Ar(new Locale("ar")),
-  Ur(new Locale("ur")),
-  En(new Locale("en"))
+  Arabic(new Locale("ar")),
+  Urdu(new Locale("ur")),
+  English(new Locale("en"))
   ;
 
   private Locale value;

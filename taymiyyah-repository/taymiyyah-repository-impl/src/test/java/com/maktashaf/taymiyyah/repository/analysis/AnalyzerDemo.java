@@ -8,7 +8,6 @@ import com.maktashaf.taymiyyah.repository.lucene.analysis.ar.ArabicCustomizedAna
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ur.UrduAnalyzer;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.QuranField;
-import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.ar.ArabicAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
@@ -27,8 +26,8 @@ import org.apache.lucene.util.Version;
 public class AnalyzerDemo {
   final static String contextPath = "./index";
   final static String spellCheck = ProjectConstant.spellCheckDir;
-  final static String spellPath = contextPath+File.separator+spellCheck+File.separator+LocaleEnum.Ar.value().getLanguage();
-  final static String indexPath = contextPath+File.separator+ LocaleEnum.Ar.value().getLanguage();
+  final static String spellPath = contextPath+File.separator+spellCheck+File.separator+LocaleEnum.Arabic.value().getLanguage();
+  final static String indexPath = contextPath+File.separator+ LocaleEnum.Arabic.value().getLanguage();
 
   private static final String[] examples = {
 //      "The quick brown fox jumped over the lazy dogs",

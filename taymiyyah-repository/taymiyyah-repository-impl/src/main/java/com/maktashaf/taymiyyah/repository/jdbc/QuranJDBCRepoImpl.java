@@ -102,11 +102,11 @@ public class QuranJDBCRepoImpl implements QuranJDBCRepo{
       rs = statement.executeQuery(query);
       while (rs.next()){
         if(isOriginal)   {
-          if(localeEnum != LocaleEnum.Ar)//it is temporary check since no arabic translator
+          if(localeEnum != LocaleEnum.Arabic)//it is temporary check since no arabic translator
           quranMap.get(rs.getInt(QuranField.accumId.value())).setAyahTranslationText(rs.getString(QuranField.ayahText.value()));
         }
         else{
-          if(localeEnum != LocaleEnum.Ar)
+          if(localeEnum != LocaleEnum.Arabic)
             quranMap.get(rs.getInt(QuranField.accumId.value())).setAyahText(rs.getString(QuranField.ayahText.value()));
           else {
             // This is temporary until we don't have any arabic translation. Just return the
@@ -146,7 +146,7 @@ public class QuranJDBCRepoImpl implements QuranJDBCRepo{
     ResultSet rs = null;
     try {
       connection = ConnectionFactory.getInstance().getConnection();
-      quran = byAccumId(accumId, LocaleEnum.Ar, connection);
+      quran = byAccumId(accumId, LocaleEnum.Arabic, connection);
       if(quran != null)
         quran.setAyahTranslationText(byAccumId(quran.getAccmId(), localeEnum, connection).getAyahText());
     } catch(Exception e){
@@ -221,7 +221,7 @@ public class QuranJDBCRepoImpl implements QuranJDBCRepo{
     PreparedStatement statement = null;
     ResultSet rs = null;
     try {
-      String query = queryBuilder.getAyahIdQuery(LocaleEnum.Ar);
+      String query = queryBuilder.getAyahIdQuery(LocaleEnum.Arabic);
       if(logger.isDebugEnabled()){
         logger.debug("getAyahIdQuery: "+query);
         logger.debug(", surahId: "+surahId);

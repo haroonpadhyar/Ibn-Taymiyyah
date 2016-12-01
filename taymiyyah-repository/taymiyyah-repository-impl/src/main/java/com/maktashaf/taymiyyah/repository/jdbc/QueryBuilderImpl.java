@@ -15,11 +15,11 @@ public class QueryBuilderImpl implements QueryBuilder {
   public String getFindAllQuery(LocaleEnum localeEnum){
     StringBuilder query = new StringBuilder();
     query.append("SELECT * FROM ");
-    if(localeEnum == LocaleEnum.Ar)
+    if(localeEnum == LocaleEnum.Arabic)
       query.append(QuranText.Quran.value());
-    else if(localeEnum == LocaleEnum.Ur)
+    else if(localeEnum == LocaleEnum.Urdu)
       query.append(QuranText.QuranUrMaududi.value());
-    else if(localeEnum == LocaleEnum.En)
+    else if(localeEnum == LocaleEnum.English)
       query.append(QuranText.QuranEnYousufAli.value());
     else
       query.append(QuranText.Quran.value());
@@ -39,11 +39,11 @@ public class QueryBuilderImpl implements QueryBuilder {
     query.append(QuranField.juzName.value());
     query.append(" FROM ");
     if(isOriginal){
-      if(localeEnum == LocaleEnum.Ur)
+      if(localeEnum == LocaleEnum.Urdu)
         query.append(QuranText.QuranUrMaududi.value());
-      else if(localeEnum == LocaleEnum.En)
+      else if(localeEnum == LocaleEnum.English)
         query.append(QuranText.QuranEnYousufAli.value());
-      else if(localeEnum == LocaleEnum.Ar)
+      else if(localeEnum == LocaleEnum.Arabic)
         query.append(QuranText.Quran.value());
     } else
       query.append(QuranText.Quran.value());
@@ -69,11 +69,11 @@ public class QueryBuilderImpl implements QueryBuilder {
   public String getAccumIdQuery(LocaleEnum localeEnum){
     StringBuilder query = new StringBuilder();
     query.append("SELECT * FROM ");
-    if(localeEnum == LocaleEnum.Ar)
+    if(localeEnum == LocaleEnum.Arabic)
       query.append(QuranText.Quran.value());
-    else if(localeEnum == LocaleEnum.Ur)
+    else if(localeEnum == LocaleEnum.Urdu)
       query.append(QuranText.QuranUrMaududi.value());
-    else if(localeEnum == LocaleEnum.En)
+    else if(localeEnum == LocaleEnum.English)
       query.append(QuranText.QuranEnYousufAli.value());
     else
       query.append(QuranText.Quran.value());
@@ -89,11 +89,11 @@ public class QueryBuilderImpl implements QueryBuilder {
   public String getAyahIdQuery(LocaleEnum localeEnum){
     StringBuilder query = new StringBuilder();
     query.append("SELECT * FROM ");
-    if(localeEnum == LocaleEnum.Ar)
+    if(localeEnum == LocaleEnum.Arabic)
       query.append(QuranText.Quran.value());
-    else if(localeEnum == LocaleEnum.Ur)
+    else if(localeEnum == LocaleEnum.Urdu)
       query.append(QuranText.QuranUrMaududi.value());
-    else if(localeEnum == LocaleEnum.En)
+    else if(localeEnum == LocaleEnum.English)
       query.append(QuranText.QuranEnYousufAli.value());
     else
       query.append(QuranText.Quran.value());

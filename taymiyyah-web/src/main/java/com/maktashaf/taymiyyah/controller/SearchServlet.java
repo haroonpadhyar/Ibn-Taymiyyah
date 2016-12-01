@@ -46,7 +46,7 @@ public class SearchServlet extends HttpServlet{
 
       if(localeEnum == null ) {
         if(null == req.getSession().getAttribute("locale"))
-          localeEnum = LocaleEnum.Ur;
+          localeEnum = LocaleEnum.Urdu;
         else {
           Locale local = (Locale) req.getSession().getAttribute("locale");
           localeEnum = LocaleEnum.localeBiMap.look(local);
@@ -143,7 +143,7 @@ public class SearchServlet extends HttpServlet{
 
     LocaleEnum localeEnum = LocaleEnum.languageBiMap.look(locale);
     if(localeEnum == null)
-      localeEnum = LocaleEnum.Ar;
+      localeEnum = LocaleEnum.Arabic;
 
     SearchResult searchResult = SearchResult.builder().withQuranList(new ArrayList<Quran>(1)).build();
     if(null != term && term.length() > 0)
@@ -176,7 +176,7 @@ public class SearchServlet extends HttpServlet{
     String locale = req.getParameter("locale");
     LocaleEnum localeEnum = LocaleEnum.languageBiMap.look(locale);
     if(localeEnum == null)
-      localeEnum = LocaleEnum.Ar;
+      localeEnum = LocaleEnum.Arabic;
 
     int surahNo = 0;
     int ayahNo = 0;

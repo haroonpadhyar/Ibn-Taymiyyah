@@ -6,8 +6,8 @@ import com.google.common.collect.ImmutableMap;
  * @author: Haroon Anwar Padhyar.
  */
 public enum Translator {
-  Maududi(LocaleEnum.Ur),
-  YousufAli(LocaleEnum.En);
+  Maududi(LocaleEnum.Urdu),
+  YousufAli(LocaleEnum.English);
 
   private LocaleEnum localeEnum;
   private Translator(LocaleEnum localeEnum){

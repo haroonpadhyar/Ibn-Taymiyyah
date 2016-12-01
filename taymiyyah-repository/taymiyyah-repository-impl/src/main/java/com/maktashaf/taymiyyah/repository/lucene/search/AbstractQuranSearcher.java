@@ -160,7 +160,7 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       StringBuilder indexPath = new StringBuilder();
       indexPath.append(realPath);
       indexPath.append(File.separator);
-      indexPath.append(LocaleEnum.Ar.value().getLanguage());
+      indexPath.append(LocaleEnum.Arabic.value().getLanguage());
 
       dir = FSDirectory.open(new File(indexPath.toString()));
       reader = DirectoryReader.open(dir);
@@ -217,7 +217,7 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       StringBuilder indexPath = new StringBuilder();
       indexPath.append(realPath);
       indexPath.append(File.separator);
-      indexPath.append(LocaleEnum.Ar.value().getLanguage());
+      indexPath.append(LocaleEnum.Arabic.value().getLanguage());
 
       dir = FSDirectory.open(new File(indexPath.toString()));
       reader = DirectoryReader.open(dir);

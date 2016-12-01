@@ -6,7 +6,6 @@ import java.sql.Statement;
 import java.util.List;
 
 import com.maktashaf.taymiyyah.common.LocaleEnum;
-import com.maktashaf.taymiyyah.common.QuranField;
 import com.maktashaf.taymiyyah.model.Quran;
 import com.maktashaf.taymiyyah.repository.jdbc.factory.ConnectionFactory;
 import org.junit.Test;
@@ -22,7 +21,7 @@ public class QuranJDBCRepoImplTest {
 
   @Test
   public void shouldFindAllAr(){
-    List<Quran> all = quranJDBCRepo.findAll(LocaleEnum.Ar);
+    List<Quran> all = quranJDBCRepo.findAll(LocaleEnum.Arabic);
     System.out.println(all.size());
     assertEquals(6236, all.size());
     assertNotNull(all.get(0).getAyahText());
@@ -31,7 +30,7 @@ public class QuranJDBCRepoImplTest {
 
   @Test
   public void shouldFindAllUr(){
-    List<Quran> all = quranJDBCRepo.findAll(LocaleEnum.Ur);
+    List<Quran> all = quranJDBCRepo.findAll(LocaleEnum.Urdu);
     System.out.println(all.size());
     assertEquals(6236, all.size());
     assertNotNull(all.get(0).getAyahText());
@@ -40,7 +39,7 @@ public class QuranJDBCRepoImplTest {
 
   @Test
   public void shouldFindAllEn(){
-    List<Quran> all = quranJDBCRepo.findAll(LocaleEnum.En);
+    List<Quran> all = quranJDBCRepo.findAll(LocaleEnum.English);
     System.out.println(all.size());
     assertEquals(6236, all.size());
     assertNotNull(all.get(0).getAyahText());
@@ -49,7 +48,7 @@ public class QuranJDBCRepoImplTest {
 
   @Test
   public void shouldFindAccumId(){
-    Quran quran  = quranJDBCRepo.findByAccumId(2, LocaleEnum.En);
+    Quran quran  = quranJDBCRepo.findByAccumId(2, LocaleEnum.English);
     assertNotNull(quran);
     assertNotNull(quran.getAyahText());
     System.out.println(quran.getAyahText());
@@ -57,7 +56,7 @@ public class QuranJDBCRepoImplTest {
 
   @Test
   public void shouldFindAyahId(){
-    Quran quran  = quranJDBCRepo.findByAyahId(2, 3, LocaleEnum.En);
+    Quran quran  = quranJDBCRepo.findByAyahId(2, 3, LocaleEnum.English);
     assertNotNull(quran);
     assertNotNull(quran.getAyahText());
     System.out.println(quran.getAyahText());

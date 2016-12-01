@@ -49,7 +49,7 @@ public class QuranTextSearcher extends AbstractQuranSearcher implements QuranSea
 
   @Override
   protected Analyzer chooseAnalyzer(SearchParam searchParam){
-    return AnalyzerRegistry.getAnalyzer(LocaleEnum.Ar);
+    return AnalyzerRegistry.getAnalyzer(LocaleEnum.Arabic);
   }
 
   @Override
