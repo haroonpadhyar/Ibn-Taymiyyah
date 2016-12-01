@@ -8,7 +8,6 @@ import com.google.common.collect.ImmutableBiMap;
  * @author: Haroon Anwar Padhyar.
  */
 public enum LocaleEnum {
-  Original(new Locale("QURA'AN")),
   Ar(new Locale("ar")),
   Ur(new Locale("ur")),
   En(new Locale("en"))

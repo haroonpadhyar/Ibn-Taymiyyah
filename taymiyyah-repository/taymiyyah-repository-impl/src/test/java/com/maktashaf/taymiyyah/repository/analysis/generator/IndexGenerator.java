@@ -1,6 +1,9 @@
 package com.maktashaf.taymiyyah.repository.analysis.generator;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +20,13 @@ import com.maktashaf.taymiyyah.repository.jdbc.QuranJDBCRepoImpl;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ar.ArabicCustomizedAnalyzer;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.en.EnglishPhoneticAnalyzer;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ur.UrduAnalyzer;
+import com.maktashaf.taymiyyah.repository.lucene.search.AbstractQuranSearcher;
 import com.maktashaf.taymiyyah.repository.lucene.search.QuranSearcher;
 import com.maktashaf.taymiyyah.repository.lucene.search.QuranTextSearcher;
 import com.maktashaf.taymiyyah.repository.lucene.search.QuranTranslationSearcher;
 import com.maktashaf.taymiyyah.vo.SearchResult;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
@@ -38,14 +40,19 @@ import org.junit.Test;
 /**
  * @author: Haroon
  */
-public class IndexGenerator {
+public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develop path resolver API.then extend from that.
   QuranJDBCRepo quranJDBCRepo = new QuranJDBCRepoImpl();
   final String contextPath = "./index";
+  SearchParam searchParam = SearchParam.builder()
+      .withContextPath(contextPath)
+      .build();
 
   @Test
   public void createIndexAr(){
     try {
-      Directory dir = FSDirectory.open(new File(contextPath + File.separator + LocaleEnum.Ar.value().getLanguage()));
+      Directory dir = FSDirectory.open(new File(resolveIndexPathForOriginal(SearchParam.builder()
+                  .withContextPath(contextPath)
+                  .build())));
       ArabicCustomizedAnalyzer arabicAnalyzer = new ArabicCustomizedAnalyzer(Version.LUCENE_46);
       IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_46,arabicAnalyzer);
       iwc.setOpenMode(OpenMode.CREATE);
@@ -80,7 +87,12 @@ public class IndexGenerator {
   @Test
   public void createIndexUr(){
     try {
-      Directory dir = FSDirectory.open(new File(contextPath + File.separator + LocaleEnum.Ur.value().getLanguage()));
+      Directory dir = FSDirectory.open(new File(resolveIndexPathForTranslation(
+              SearchParam.builder()
+                  .withContextPath(contextPath)
+                  .withTranslator(Translator.Maududi)
+                  .build()
+          )));
       Analyzer analyzer = new UrduAnalyzer(Version.LUCENE_46);
 
       IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_46,analyzer);
@@ -116,7 +128,12 @@ public class IndexGenerator {
   @Test
   public void createIndexEn(){
     try {
-      Directory dir = FSDirectory.open(new File(contextPath + File.separator + LocaleEnum.En.value().getLanguage()));
+      Directory dir = FSDirectory.open(new File(resolveIndexPathForTranslation(
+              SearchParam.builder()
+                  .withContextPath(contextPath)
+                  .withTranslator(Translator.YousufAli)
+                  .build()
+          )));
       Analyzer analyzer = new EnglishPhoneticAnalyzer(Version.LUCENE_46);
 
       IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_46,analyzer);
@@ -161,7 +178,6 @@ public class IndexGenerator {
           .withContextPath(contextPath)
           .withTerm(term)
           .withLocale(LocaleEnum.Ar)
-          .withTranslator(Translator.None)
           .withOriginal(true)
           .withPageNo(1)
           .withPageSize(12)
@@ -379,4 +395,33 @@ public class IndexGenerator {
     return quranList;
   }
 
+  @Override
+  protected String resolveIndexPath(SearchParam searchParam) {
+    return null;
+  }
+
+  @Override
+  protected String resolveSpellIndexPath(SearchParam searchParam) {
+    return null;
+  }
+
+  @Override
+  protected String getSearchedTextFromField(Quran quran) {
+    return null;
+  }
+
+  @Override
+  protected void setSearchedTextInField(Quran quran, String text) {
+
+  }
+
+  @Override
+  protected void setUnSearchedTextInField(SearchParam searchParam, List<Quran> quranList) {
+
+  }
+
+  @Override
+  protected Analyzer chooseAnalyzer(SearchParam searchParam) {
+    return null;
+  }
 }

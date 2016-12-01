@@ -1,6 +1,9 @@
 package com.maktashaf.taymiyyah.repository.lucene.analysis;
 
+import java.util.Map;
+
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ar.ArabicCustomizedAnalyzer;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.en.EnglishPhoneticAnalyzer;
@@ -14,18 +17,17 @@ import org.apache.lucene.util.Version;
  * @author: Haroon Anwar Padhyar.
  */
 public class AnalyzerRegistry {
-  private static Table<LocaleEnum, Translator, Analyzer> analyzerTable = HashBasedTable.create();
+  private static Map<LocaleEnum, Analyzer> analyzerTable = Maps.newEnumMap(LocaleEnum.class);
 
   static {
     ArabicCustomizedAnalyzer arabicCustomizedAnalyzer = new ArabicCustomizedAnalyzer(Version.LUCENE_46);
-    analyzerTable.put(LocaleEnum.Original, Translator.None, arabicCustomizedAnalyzer);
-    analyzerTable.put(LocaleEnum.Ar, Translator.None, arabicCustomizedAnalyzer);
-    analyzerTable.put(LocaleEnum.Ur, Translator.Maududi, new UrduAnalyzer(Version.LUCENE_46));
-    analyzerTable.put(LocaleEnum.En, Translator.YousufAli, new EnglishPhoneticAnalyzer(Version.LUCENE_46));
+    analyzerTable.put(LocaleEnum.Ar, arabicCustomizedAnalyzer);
+    analyzerTable.put(LocaleEnum.Ur, new UrduAnalyzer(Version.LUCENE_46));
+    analyzerTable.put(LocaleEnum.En, new EnglishPhoneticAnalyzer(Version.LUCENE_46));
   }
 
-  public static Analyzer getAnalyzer(LocaleEnum localeEnum, Translator translator){
-    return analyzerTable.get(localeEnum, translator);
+  public static Analyzer getAnalyzer(LocaleEnum localeEnum){
+    return analyzerTable.get(localeEnum);
   }
 
 }

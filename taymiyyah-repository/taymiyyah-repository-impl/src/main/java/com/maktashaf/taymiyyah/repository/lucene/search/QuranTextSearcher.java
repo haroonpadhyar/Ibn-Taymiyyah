@@ -3,13 +3,11 @@ package com.maktashaf.taymiyyah.repository.lucene.search;
 import java.io.File;
 import java.util.List;
 
-import com.maktashaf.taymiyyah.common.ProjectConstant;
-import com.maktashaf.taymiyyah.common.QuranField;
-import com.maktashaf.taymiyyah.repository.lucene.analysis.AnalyzerRegistry;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
-import com.maktashaf.taymiyyah.common.Translator;
+import com.maktashaf.taymiyyah.common.QuranField;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
+import com.maktashaf.taymiyyah.repository.lucene.analysis.AnalyzerRegistry;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -31,22 +29,12 @@ public class QuranTextSearcher extends AbstractQuranSearcher implements QuranSea
 
   @Override
   protected String resolveIndexPath(SearchParam searchParam) {
-    StringBuilder indexPath = new StringBuilder();
-    indexPath.append(searchParam.getContextPath());
-    indexPath.append(File.separator);
-    indexPath.append(LocaleEnum.Ar.value().getLanguage());
-    return indexPath.toString();
+    return resolveIndexPathForOriginal(searchParam);
   }
 
   @Override
   protected String resolveSpellIndexPath(SearchParam searchParam) {
-    StringBuilder indexPath = new StringBuilder();
-    indexPath.append(searchParam.getContextPath());
-    indexPath.append(File.separator);
-    indexPath.append(ProjectConstant.spellCheckDir);
-    indexPath.append(File.separator);
-    indexPath.append(LocaleEnum.Ar.value().getLanguage());
-    return indexPath.toString();
+    return resolveSpellIndexPathForOriginal(searchParam);
   }
 
   @Override
@@ -61,7 +49,7 @@ public class QuranTextSearcher extends AbstractQuranSearcher implements QuranSea
 
   @Override
   protected Analyzer chooseAnalyzer(SearchParam searchParam){
-    return AnalyzerRegistry.getAnalyzer(LocaleEnum.Original, Translator.None);
+    return AnalyzerRegistry.getAnalyzer(LocaleEnum.Ar);
   }
 
   @Override
@@ -70,12 +58,7 @@ public class QuranTextSearcher extends AbstractQuranSearcher implements QuranSea
     IndexReader reader = null;
     IndexSearcher searcher = null;
     try {
-      StringBuilder indexPath = new StringBuilder();
-      indexPath.append(searchParam.getContextPath());
-      indexPath.append(File.separator);
-      indexPath.append(searchParam.getLocaleEnum().value().getLanguage());
-
-      dir = FSDirectory.open(new File(indexPath.toString()));
+      dir = FSDirectory.open(new File(resolveIndexPathForTranslation(searchParam)));
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 

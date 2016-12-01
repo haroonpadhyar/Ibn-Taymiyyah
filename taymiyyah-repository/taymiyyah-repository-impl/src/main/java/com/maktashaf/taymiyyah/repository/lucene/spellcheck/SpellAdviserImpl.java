@@ -4,11 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 
-import com.maktashaf.taymiyyah.common.LocaleEnum;
-import com.maktashaf.taymiyyah.common.ProjectConstant;
-import com.maktashaf.taymiyyah.common.Translator;
-import com.maktashaf.taymiyyah.common.vo.SearchParam;
-import com.maktashaf.taymiyyah.repository.lucene.analysis.AnalyzerRegistry;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
@@ -65,12 +60,4 @@ public class SpellAdviserImpl implements SpellAdviser {
     return suggestedTerm;
   }
 
-  private Analyzer chooseAnalyzer(SearchParam searchParam){
-    Analyzer analyzer = null;
-    if(searchParam.isOriginal())
-      analyzer = AnalyzerRegistry.getAnalyzer(LocaleEnum.Original, Translator.None);
-    else
-      analyzer = AnalyzerRegistry.getAnalyzer(searchParam.getLocaleEnum(), searchParam.getTranslator());
-    return analyzer;
-  }
 }

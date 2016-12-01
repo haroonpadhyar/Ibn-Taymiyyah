@@ -1,9 +1,12 @@
 package com.maktashaf.taymiyyah.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +25,7 @@ import com.maktashaf.taymiyyah.vo.SearchResult;
 import org.apache.log4j.Logger;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public class SearchServlet extends HttpServlet{
   private static Logger logger = Logger.getLogger(SearchServlet.class);
@@ -35,7 +38,6 @@ public class SearchServlet extends HttpServlet{
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     try {
-      List<Quran> quranList = new ArrayList<Quran>();
       String locale = req.getParameter("locale");
       LocaleEnum localeEnum = null;
       if(locale != null && locale.length() > 0)
@@ -69,18 +71,9 @@ public class SearchServlet extends HttpServlet{
     }
   }
 
-  private SearchResult process(String term, int pageNo, LocaleEnum localeEnum, boolean original){
+  private SearchResult process(String term, int pageNo, LocaleEnum localeEnum, boolean original, String translatorStr){
 
-    // For the time being translator are hard coded. later when we give the facility to
-    // select translator from UI, this value will be collected from request.
-    Translator translator = Translator.None;
-    if(localeEnum == LocaleEnum.Ar)
-      translator = Translator.None;
-    if(localeEnum == LocaleEnum.Ur)
-      translator = Translator.Maududi;
-    if(localeEnum == LocaleEnum.En)
-      translator = Translator.YousufAli;
-
+    Translator translator = Translator.look(translatorStr);
     SearchParam searchParam = SearchParam.builder()
         .withContextPath(LUCENE_INDEX_PATH)
         .withTerm(term)
@@ -106,6 +99,7 @@ public class SearchServlet extends HttpServlet{
     String termHidden = req.getParameter("termHidden");
     String term = termHidden;
     String locale = req.getParameter("locale");
+    String translatorStr = req.getParameter("translator");
     String pageNoStr = req.getParameter("currentPage");
     String totalPagesStr = req.getParameter("totalPages");
     boolean original = req.getParameter("original").equals("1");
@@ -145,7 +139,7 @@ public class SearchServlet extends HttpServlet{
 
     SearchResult searchResult = SearchResult.builder().withQuranList(new ArrayList<Quran>(1)).build();
     if(null != term && term.length() > 0)
-        searchResult = process(term, currentPage, localeEnum, original);
+        searchResult = process(term, currentPage, localeEnum, original, translatorStr);
     currentPage = Math.min(currentPage, searchResult.getTotalPages());
     long totalTime = System.currentTimeMillis() - startTime;
     ResultData resultData = new ResultData()

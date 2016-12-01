@@ -20,6 +20,7 @@ $(document).ready(function(){
       data: 'ajax=yes&term=' + $('#term').val()
           +'&termHidden='+$('#termHidden').val()
           +'&locale='+$('#locale').val()
+          +'&translator=Maududi'
           +'&src='+$(this ).attr("id")
           +'&currentPage='+$('#currentPageHidden').val()
           +'&totalPages='+$('#totalPagesHidden').val()

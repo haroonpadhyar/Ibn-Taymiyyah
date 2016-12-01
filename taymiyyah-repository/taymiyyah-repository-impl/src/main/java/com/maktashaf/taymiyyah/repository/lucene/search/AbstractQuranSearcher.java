@@ -1,13 +1,13 @@
 package com.maktashaf.taymiyyah.repository.lucene.search;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
+import com.maktashaf.taymiyyah.common.ProjectConstant;
 import com.maktashaf.taymiyyah.common.QuranField;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
@@ -22,7 +22,14 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.NullFragmenter;
 import org.apache.lucene.search.highlight.QueryScorer;
@@ -32,7 +39,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public abstract class AbstractQuranSearcher  implements QuranSearcher{
   private static Logger logger = Logger.getLogger(AbstractQuranSearcher.class);
@@ -259,6 +266,43 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
     }
 
     return quran;
+  }
+
+  //TODO need to develop path resolver API. (will be required when serving hadith)
+  protected String resolveIndexPathForTranslation(SearchParam searchParam) {
+    return new StringBuilder()
+        .append(searchParam.getContextPath())
+        .append(File.separator)
+        .append(ProjectConstant.translationkDir)
+        .append(File.separator)
+        .append(searchParam.getTranslator().getLocaleEnum().value().getLanguage())
+        .append(File.separator)
+        .append(searchParam.getTranslator().name())
+        .toString();
+  }
+
+  protected String resolveSpellIndexPathForTranslation(SearchParam searchParam) {
+    return new StringBuilder()
+        .append(resolveIndexPathForTranslation(searchParam))
+        .append(File.separator)
+        .append(ProjectConstant.spellCheckDir)
+        .toString();
+  }
+
+  protected String resolveIndexPathForOriginal(SearchParam searchParam) {
+    return new StringBuilder()
+        .append(searchParam.getContextPath())
+        .append(File.separator)
+        .append(ProjectConstant.QuraanDir)
+        .toString();
+  }
+
+  protected String resolveSpellIndexPathForOriginal(SearchParam searchParam) {
+    return new StringBuilder()
+        .append(resolveIndexPathForOriginal(searchParam))
+        .append(File.separator)
+        .append(ProjectConstant.spellCheckDir)
+        .toString();
   }
 
   protected abstract String resolveIndexPath(SearchParam searchParam);
