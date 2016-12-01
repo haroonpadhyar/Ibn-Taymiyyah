@@ -38,7 +38,7 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <%--<li class="active"><a href="index.jsp"><fmt:message key="home" bundle="${msg}"/></a></li>--%>
+        <%--<li class="active"><a href="main.jsp"><fmt:message key="home" bundle="${msg}"/></a></li>--%>
         <li class="active"><a href="index.jsp"><fmt:message key="home"/></a></li>
         <%--<li ><a href="about.jsp"><fmt:message key="about" bundle="${msg}"/></a></li>--%>
         <li ><a href="about.jsp"><fmt:message key="about"/></a></li>

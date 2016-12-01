@@ -1,3 +1,4 @@
+<%@ page import="com.maktashaf.taymiyyah.common.Translator" %>
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -46,6 +47,24 @@
                    style="width: 100%;padding: 5px;" value="محمد" />
           </div>
         </div><%-- end row 1--%>
+        <div class="row">
+          <div class="col-md-2">
+              <%--<label style="padding: 5px;"><fmt:message key="searchTerm" bundle="${msg}"/>:</label>--%>
+            <label style="padding: 5px;"><fmt:message key="translator" />:</label>
+          </div>
+          <div class="col-md-10">
+            <select id="translatorCombo" style="width: 100%;padding: 7px;">
+              <%
+                Translator[] translators = (Translator[])session.getAttribute("translators");
+                if(null != translators)
+                for(Translator translator: translators) {
+                  out.println("<option value=\"" + translator.name()+"\"> " + translator.name()+"</option>");
+                }
+              %>
+
+            </select>
+          </div>
+        </div><%-- end row 2--%>
         <br>
         <div class="row">
           <div class="col-md-2">

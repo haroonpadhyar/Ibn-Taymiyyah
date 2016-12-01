@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import javax.servlet.ServletException;
@@ -43,12 +44,19 @@ public class SearchServlet extends HttpServlet{
       if(locale != null && locale.length() > 0)
         localeEnum = LocaleEnum.languageBiMap.look(locale);
 
-      if(localeEnum == null)
-        localeEnum = LocaleEnum.Ar;
+      if(localeEnum == null ) {
+        if(null == req.getSession().getAttribute("locale"))
+          localeEnum = LocaleEnum.Ur;
+        else {
+          Locale local = (Locale) req.getSession().getAttribute("locale");
+          localeEnum = LocaleEnum.localeBiMap.look(local);
+        }
+      }
 
       req.getSession().setAttribute("locale", localeEnum.value());
       req.getSession().setAttribute("localeLang", localeEnum.value().getLanguage());
-      req.getRequestDispatcher("/index.jsp").forward(req, resp);
+      req.getSession().setAttribute("translators", Translator.values());
+      req.getRequestDispatcher("/pages/main.jsp").forward(req, resp);
 
 
     }catch(Exception e){
