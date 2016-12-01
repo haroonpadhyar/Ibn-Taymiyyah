@@ -58,7 +58,7 @@
                 Translator[] translators = (Translator[])session.getAttribute("translators");
                 if(null != translators)
                 for(Translator translator: translators) {
-                  out.println("<option value=\"" + translator.name()+"\"> " + translator.name()+"</option>");
+                  out.println("<option value=\"" + translator.name()+"\"> " +translator.getLocaleEnum().name() +" - "+ translator.getLabel()+"</option>");
                 }
               %>
 

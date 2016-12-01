@@ -156,7 +156,7 @@ public class SearchServlet extends HttpServlet{
         .withTotalHits(searchResult.getTotalHits())
         .withOriginal(original ? 1 : 0)
         .withTerm(term)
-        .withLang(localeEnum.value().getLanguage())
+        .withLang(Translator.look(translatorStr).getLocaleEnum().value().getLanguage())
         .withTime(String.valueOf(totalTime / 1000f))
         .withSuggestedTerm(searchResult.getSuggestedTerm())
         .withQuranList(searchResult.getQuranList());

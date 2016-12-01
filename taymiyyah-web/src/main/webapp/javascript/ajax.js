@@ -42,15 +42,13 @@ $(document).ready(function(){
               +"</p>";
 
           if(resp.lang == "en"){
-            str +="<p style=\"font-size: large\" >"
+            str +="<p style=\"font-size: large\" dir=\"ltr\">"
                 +quran.ayahTranslationText
                 +"</p>";
           } else{
-            if(resp.lang != "ar"){
               str +="<p style=\"font-size: large\" dir=\"rtl\">"
                   +quran.ayahTranslationText
                   +"</p>" ;
-            }
           }
 
           str += "</div>";

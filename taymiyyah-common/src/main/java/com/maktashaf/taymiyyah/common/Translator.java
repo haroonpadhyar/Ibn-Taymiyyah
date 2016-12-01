@@ -6,16 +6,21 @@ import com.google.common.collect.ImmutableMap;
  * @author: Haroon Anwar Padhyar.
  */
 public enum Translator {
-  Maududi(LocaleEnum.Urdu),
-  YousufAli(LocaleEnum.English);
+  Maududi(LocaleEnum.Urdu, " ابوالاعلی مودودی"),
+  YousufAli(LocaleEnum.English, "Yousuf Ali");
 
   private LocaleEnum localeEnum;
-  private Translator(LocaleEnum localeEnum){
+  private String label;
+  private Translator(LocaleEnum localeEnum, String label){
     this.localeEnum = localeEnum;
+    this.label = label;
   }
 
   public LocaleEnum getLocaleEnum(){
     return this.localeEnum;
+  }
+  public String getLabel(){
+    return this.label;
   }
 
   private static final ImmutableMap<String, Translator> nameMap;
