@@ -17,18 +17,22 @@ $(document).ready(function(){
     $.ajax({ // ajax call starts
       url: 'searchthetext',
       type: "POST",
-      data: 'ajax=yes&term=' + $('#term').val()
-          +'&termHidden='+$('#termHidden').val()
-          +'&locale='+$('#locale').val()
-          +'&translator='+$('#translatorCombo').val()
-          +'&src='+$(this ).attr("id")
-          +'&currentPage='+$('#currentPageHidden').val()
-          +'&totalPages='+$('#totalPagesHidden').val()
-          +'&original='+$('#originalHidden').val(),
-//            dataType: 'json',
-      success: function(data)
+      data: {
+        'searchParams': JSON.stringify(
+            { 'ajax'       : 'true',
+              'term'       : $( '#term' ).val(),
+              'termHidden' : $( '#termHidden' ).val(),
+              'locale'     : $( '#locale' ).val(),
+              'translator' : $( '#translatorCombo' ).val(),
+              'src'        : $( this ).attr( "id" ),
+              'currentPage': $( '#currentPageHidden' ).val(),
+              'totalPages' : $( '#totalPagesHidden' ).val(),
+              'original'   : $( '#originalHidden' ).val()
+            })
+      },
+      dataType: 'json',
+      success: function(resp)
       {
-        var resp = JSON.parse(data);
         var quranList = resp.quranList;
         var str ="";
         for(var i =0;i < quranList.length;i++)

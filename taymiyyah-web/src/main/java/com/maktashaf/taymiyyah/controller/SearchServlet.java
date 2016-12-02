@@ -21,6 +21,7 @@ import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
 import com.maktashaf.taymiyyah.search.service.QuranSearchSearchServiceImpl;
 import com.maktashaf.taymiyyah.search.service.QuranSearchService;
+import com.maktashaf.taymiyyah.vo.RequestData;
 import com.maktashaf.taymiyyah.vo.ResultData;
 import com.maktashaf.taymiyyah.vo.SearchResult;
 import org.apache.log4j.Logger;
@@ -69,9 +70,12 @@ public class SearchServlet extends HttpServlet{
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     try{
       long startTime = System.currentTimeMillis();
-      String ajax = req.getParameter("ajax");
-      if(ajax != null && ajax.equals("yes"))
-        handleAjax(req, resp, startTime);
+      String json = req.getParameter("searchParams");
+      Gson gson = new Gson();
+      RequestData requestData = gson.fromJson(json, RequestData.class);
+
+      if(requestData.getAjax())
+        handleAjax(req, resp, startTime, requestData);
 
     }catch(Exception e){
       //TODO send some error message
@@ -96,30 +100,24 @@ public class SearchServlet extends HttpServlet{
     return searchResult;
   }
 
-  private void handleAjax(HttpServletRequest req, HttpServletResponse resp, long startTime) throws ServletException, IOException {
-    String src = req.getParameter("src");
+  private void handleAjax(HttpServletRequest req, HttpServletResponse resp, long startTime, RequestData requestData) throws ServletException, IOException {
+    String src = requestData.getSrc();
     if(src.equals("srch")){
       doIdSearch(req, resp);
       return;
     }
 
-    String searchedTerm = req.getParameter("term");
-    String termHidden = req.getParameter("termHidden");
+    String searchedTerm = requestData.getTerm();
+    String termHidden = requestData.getTermHidden();
     String term = termHidden;
-    String locale = req.getParameter("locale");
-    String translatorStr = req.getParameter("translator");
-    String pageNoStr = req.getParameter("currentPage");
-    String totalPagesStr = req.getParameter("totalPages");
-    boolean original = req.getParameter("original").equals("1");
+    String locale = requestData.getLocale();
+    String translatorStr = requestData.getTranslator();
+    boolean original = requestData.getOriginal();
 
-    if(pageNoStr == null || pageNoStr.length() <=0)
-      pageNoStr = String.valueOf("0");
 
-    if(totalPagesStr == null || totalPagesStr.length() <=0)
-      totalPagesStr = String.valueOf("0");
 
-    int currentPage = Integer.valueOf(pageNoStr).intValue();
-    int totalPage = Integer.valueOf(totalPagesStr).intValue();
+    int currentPage = requestData.getCurrentPage();
+    int totalPage = requestData.getTotalPages();
     currentPage = Math.max(currentPage, 1); // page should be submitted at least from first page for pagination
     totalPage = Math.max(totalPage, 1);
     if(src.equals("nxt")){
@@ -154,7 +152,7 @@ public class SearchServlet extends HttpServlet{
         .withCurrentPage(currentPage)
         .withTotalPages(searchResult.getTotalPages())
         .withTotalHits(searchResult.getTotalHits())
-        .withOriginal(original ? 1 : 0)
+        .withOriginal(original)
         .withTerm(term)
         .withLang(Translator.look(translatorStr).getLocaleEnum().value().getLanguage())
         .withTime(String.valueOf(totalTime / 1000f))
@@ -164,7 +162,7 @@ public class SearchServlet extends HttpServlet{
     Gson gson = new Gson();
     String json = gson.toJson(resultData);
 
-    resp.setContentType("text/html");
+    resp.setContentType("application/json");
     resp.getWriter().write(json);
   }
 

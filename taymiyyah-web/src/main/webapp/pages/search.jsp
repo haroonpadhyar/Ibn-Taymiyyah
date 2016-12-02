@@ -106,7 +106,7 @@
         %>
         <input id="currentPageHidden" type="hidden" value="0" />
         <input id="totalPagesHidden" type="hidden" value="0" />
-        <input id="originalHidden" type="hidden" value="0" />
+        <input id="originalHidden" type="hidden" value="false" />
         <input id="termHidden" type="hidden" value="" />
         <%--Hidden values--%>
 

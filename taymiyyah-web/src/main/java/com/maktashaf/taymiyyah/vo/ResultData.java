@@ -5,13 +5,13 @@ import java.util.List;
 import com.maktashaf.taymiyyah.model.Quran;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public class ResultData {
   private int currentPage;
   private int totalPages;
   private int totalHits;
-  private int original;
+  private boolean original;
   private String term;
   private String lang;
   private String time;
@@ -57,15 +57,15 @@ public class ResultData {
     return this;
   }
 
-  public int getOriginal() {
+  public boolean getOriginal() {
     return original;
   }
 
-  public void setOriginal(int original) {
+  public void setOriginal(boolean original) {
     this.original = original;
   }
 
-  public ResultData withOriginal(int original) {
+  public ResultData withOriginal(boolean original) {
     this.original = original;
     return this;
   }
