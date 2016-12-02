@@ -1,4 +1,6 @@
-JSON based request
+*JSON based request
+Add more translator
+Id based search revisit
 Exception handling with client response.
 Apply proper builder pattern to VOs.
 Server side fully latest JSON based and only required parameter logic mean what can be stored in session don't expect from request
