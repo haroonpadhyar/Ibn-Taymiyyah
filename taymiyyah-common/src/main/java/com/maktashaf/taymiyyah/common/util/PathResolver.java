@@ -5,7 +5,6 @@ import java.io.File;
 import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.common.ProjectConstant;
 import com.maktashaf.taymiyyah.common.Translator;
-import com.maktashaf.taymiyyah.common.vo.SearchParam;
 
 /**
  *
@@ -30,14 +29,14 @@ public class PathResolver {
   }
 
   private static String resolveIndexPath(){
-    return ProjectConstant.spellCheckDir;
+    return ProjectConstant.LUCENE_INDEX_PATH;
   }
 
   private static String resolveIndexPathForTranslation(Translator translator) {
     return new StringBuilder()
         .append(resolveIndexPath())
         .append(File.separator)
-        .append(ProjectConstant.translationDir)
+        .append(ProjectConstant.TRANSLATION_DIR)
         .append(File.separator)
         .append(translator.getLocaleEnum().value().getLanguage())
         .append(File.separator)
@@ -49,7 +48,7 @@ public class PathResolver {
     return new StringBuilder()
         .append(resolveIndexPathForTranslation(translator))
         .append(File.separator)
-        .append(ProjectConstant.spellCheckDir)
+        .append(ProjectConstant.SPELL_CHECK_DIR)
         .toString();
   }
 
@@ -57,7 +56,7 @@ public class PathResolver {
     return new StringBuilder()
         .append(resolveIndexPath())
         .append(File.separator)
-        .append(ProjectConstant.QuraanDir)
+        .append(ProjectConstant.QURANN_DIR)
         .toString();
   }
 
@@ -65,7 +64,7 @@ public class PathResolver {
     return new StringBuilder()
         .append(resolveIndexPathForOriginal())
         .append(File.separator)
-        .append(ProjectConstant.spellCheckDir)
+        .append(ProjectConstant.SPELL_CHECK_DIR)
         .toString();
   }
 }

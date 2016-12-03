@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.QuranField;
 import com.maktashaf.taymiyyah.common.Translator;
+import com.maktashaf.taymiyyah.common.util.PathResolver;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
 import com.maktashaf.taymiyyah.repository.jdbc.QuranJDBCRepo;
@@ -43,16 +45,11 @@ import org.junit.Test;
 public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develop path resolver API.then extend from that.
   QuranJDBCRepo quranJDBCRepo = new QuranJDBCRepoImpl();
   final String contextPath = "./index";
-  SearchParam searchParam = SearchParam.builder()
-      .withContextPath(contextPath)
-      .build();
 
   @Test
   public void createIndexAr(){
     try {
-      Directory dir = FSDirectory.open(new File(resolveIndexPathForOriginal(SearchParam.builder()
-                  .withContextPath(contextPath)
-                  .build())));
+      Directory dir = FSDirectory.open(new File(PathResolver.resolveIndexPath(Optional.<Translator>absent())));
       ArabicCustomizedAnalyzer arabicAnalyzer = new ArabicCustomizedAnalyzer(Version.LUCENE_46);
       IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_46,arabicAnalyzer);
       iwc.setOpenMode(OpenMode.CREATE);
@@ -87,12 +84,7 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
   @Test
   public void createIndexUr(){
     try {
-      Directory dir = FSDirectory.open(new File(resolveIndexPathForTranslation(
-              SearchParam.builder()
-                  .withContextPath(contextPath)
-                  .withTranslator(Translator.Maududi)
-                  .build()
-          )));
+      Directory dir = FSDirectory.open(new File(PathResolver.resolveIndexPath(Optional.of(Translator.Maududi))));
       Analyzer analyzer = new UrduAnalyzer(Version.LUCENE_46);
 
       IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_46,analyzer);
@@ -128,12 +120,7 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
   @Test
   public void createIndexEn(){
     try {
-      Directory dir = FSDirectory.open(new File(resolveIndexPathForTranslation(
-              SearchParam.builder()
-                  .withContextPath(contextPath)
-                  .withTranslator(Translator.YousufAli)
-                  .build()
-          )));
+      Directory dir = FSDirectory.open(new File(PathResolver.resolveIndexPath(Optional.of(Translator.YousufAli))));
       Analyzer analyzer = new EnglishPhoneticAnalyzer(Version.LUCENE_46);
 
       IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_46,analyzer);
@@ -175,7 +162,6 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
 //      term = "على";
 
       SearchParam searchParam = SearchParam.builder()
-          .withContextPath(contextPath)
           .withTerm(term)
           .withLocale(LocaleEnum.Arabic)
           .withOriginal(true)
@@ -206,7 +192,6 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
 //      term = "على";
 
       SearchParam searchParam = SearchParam.builder()
-          .withContextPath(contextPath)
           .withTerm(term)
           .withLocale(LocaleEnum.Urdu)
           .withTranslator(Translator.Maududi)
@@ -235,7 +220,6 @@ public class IndexGenerator extends AbstractQuranSearcher{ //TODO need to develo
     try {
       String term = "Mohamad";
       SearchParam searchParam = SearchParam.builder()
-          .withContextPath(contextPath)
           .withTerm(term)
           .withLocale(LocaleEnum.English)
           .withTranslator(Translator.YousufAli)

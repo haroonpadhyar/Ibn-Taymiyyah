@@ -7,7 +7,6 @@ import com.maktashaf.taymiyyah.common.Translator;
  * @author: Haroon
  */
 public class SearchParam {
-  private String contextPath;
   private String term;
   private LocaleEnum localeEnum;
   private Translator translator;
@@ -17,10 +16,6 @@ public class SearchParam {
 
   private SearchParam(){
 
-  }
-
-  public String getContextPath() {
-    return contextPath;
   }
 
   public String getTerm() {
@@ -56,11 +51,6 @@ public class SearchParam {
 
     private SearchParamBuilder(){
       searchParam = new SearchParam();
-    }
-
-    public SearchParamBuilder withContextPath(String contextPath){
-      searchParam.contextPath = contextPath;
-      return this;
     }
 
     public SearchParamBuilder withTerm(String term){

@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
+import com.maktashaf.taymiyyah.common.ProjectConstant;
 import com.maktashaf.taymiyyah.common.QuranField;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
@@ -181,7 +182,6 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
 
       // load translation.
       SearchParam searchParam = SearchParam.builder()
-              .withContextPath(realPath)
               .withLocale(localeEnum)
               .build();
       setUnSearchedTextInField(searchParam, Lists.newArrayList(quran));
@@ -242,7 +242,6 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
 
       // load translation.
       SearchParam searchParam = SearchParam.builder()
-              .withContextPath(realPath)
               .withLocale(localeEnum)
               .build();
       setUnSearchedTextInField(searchParam, Lists.newArrayList(quran));// for correct result QuranTextSearcher should be called from lunce repo

@@ -25,7 +25,7 @@ import org.apache.lucene.util.Version;
  */
 public class AnalyzerDemo {
   final static String contextPath = "./index";
-  final static String spellCheck = ProjectConstant.spellCheckDir;
+  final static String spellCheck = ProjectConstant.SPELL_CHECK_DIR;
   final static String spellPath = contextPath+File.separator+spellCheck+File.separator+LocaleEnum.Arabic.value().getLanguage();
   final static String indexPath = contextPath+File.separator+ LocaleEnum.Arabic.value().getLanguage();
 

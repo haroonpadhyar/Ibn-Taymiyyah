@@ -12,10 +12,6 @@
     <param-name>javax.servlet.jsp.jstl.fmt.fallbackLocale</param-name>
     <param-value>ar</param-value>
   </context-param>
-  <context-param>
-    <param-name>pageSize</param-name>
-    <param-value>20</param-value>
-  </context-param>
 
   <filter>
     <filter-name>encoding-filter</filter-name>

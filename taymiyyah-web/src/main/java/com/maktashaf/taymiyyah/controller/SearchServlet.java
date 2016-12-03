@@ -1,13 +1,11 @@
 package com.maktashaf.taymiyyah.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +30,6 @@ import org.apache.log4j.Logger;
  */
 public class SearchServlet extends HttpServlet{
   private static Logger logger = Logger.getLogger(SearchServlet.class);
-  private int PAGE_SIZE = 1;
   private Map<Integer, Integer> ayahCountMap = new HashMap<Integer, Integer>(114);
 
   QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
@@ -87,12 +84,11 @@ public class SearchServlet extends HttpServlet{
 
     Translator translator = Translator.look(translatorStr);
     SearchParam searchParam = SearchParam.builder()
-        .withContextPath(ProjectConstant.LUCENE_INDEX_PATH)
         .withTerm(term)
         .withLocale(localeEnum)
         .withTranslator(translator)
         .withOriginal(original)
-        .withPageSize(PAGE_SIZE)
+        .withPageSize(ProjectConstant.RESULT_PAGE_SIZE)// can be override with user request,
         .withPageNo(pageNo)
         .build();
     SearchResult searchResult = quranSearchService.doFullTextSearch(searchParam);
@@ -212,27 +208,8 @@ public class SearchServlet extends HttpServlet{
     resp.getWriter().write(json);
   }
 
-  private Properties loadProperties(){
-    Properties properties = new Properties();
-
-    try{
-      InputStream is = getClass().getClassLoader().getResourceAsStream("com/maktashaf/taymiyyah/repository/jdbc/factory/repository.properties");
-      properties.load(is);
-      is.close();
-    }catch(Exception e){
-      e.printStackTrace();
-      logger.error(e.getMessage());
-      throw new RuntimeException(e);
-    }
-
-    return properties;
-  }
-
   @Override
   public void init() throws ServletException {
-    String pageSize = getServletContext().getInitParameter("pageSize");
-    ProjectConstant.LUCENE_INDEX_PATH = loadProperties().getProperty("lucene.index.context.path");
-    PAGE_SIZE = Integer.valueOf(pageSize).intValue();
     ayahCountMap.put(1,7);
     ayahCountMap.put(2,286);
     ayahCountMap.put(3,200);
