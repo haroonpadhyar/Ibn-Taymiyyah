@@ -3,7 +3,7 @@ Generalise and extend able Index Generator.
 Add more translator.
 Deployment with Openshit Next Gen
 Continue Quraan reading from searched ayah.
-Id based search revisit
+*Id based search revisit
 Exception handling with client response.
 Apply proper builder pattern to VOs.
 Server side fully latest JSON based and only required parameter logic mean what can be stored in session don't expect from request

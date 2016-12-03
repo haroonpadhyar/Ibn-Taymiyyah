@@ -1,9 +1,12 @@
-package com.maktashaf.taymiyyah.repository.analysis;
+package com.maktashaf.taymiyyah.analysis;
 
 import java.io.File;
 import java.io.IOException;
 
+import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.common.ProjectConstant;
+import com.maktashaf.taymiyyah.common.Translator;
+import com.maktashaf.taymiyyah.common.util.PathResolver;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ar.ArabicCustomizedAnalyzer;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ur.UrduAnalyzer;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
@@ -67,7 +70,7 @@ public class AnalyzerDemo {
 //    createSpellCheckIndex();
 //    String[] split = "as".split(" ");
 //    System.out.println(StringUtils.join(split, ' '));
-    doSpellCheck();
+    doSpellCheck1();
 //    System.out.println("Done.");
 //    System.exit(1);
 
@@ -129,6 +132,29 @@ public class AnalyzerDemo {
 //    term = "OR";
     try {
       Directory dir = FSDirectory.open(new File(spellPath));
+      SpellChecker spell = new SpellChecker(dir);
+      spell.setStringDistance(new LevensteinDistance());
+
+      System.out.println("Exist: "+spell.exist(term));
+      String[] suggestions = spell.suggestSimilar(term, 150);
+      System.out.println("suggestions: "+suggestions.length);
+      for (String suggestion : suggestions) {
+        System.out.println(suggestion);
+      }
+
+
+
+      dir.close();
+    }
+    catch(IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void doSpellCheck1(){
+    String term = "muhmad";
+    try {
+      Directory dir = FSDirectory.open(new File(PathResolver.resolveSpellIndexPath(Optional.of(Translator.YousufAli))));
       SpellChecker spell = new SpellChecker(dir);
       spell.setStringDistance(new LevensteinDistance());
 

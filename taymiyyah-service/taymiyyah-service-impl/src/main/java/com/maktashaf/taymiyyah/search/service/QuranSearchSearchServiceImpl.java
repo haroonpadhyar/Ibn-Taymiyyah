@@ -13,8 +13,8 @@ import com.maktashaf.taymiyyah.vo.SearchResult;
  * @author Haroon Anwar padhyar.
  */
 public class QuranSearchSearchServiceImpl implements QuranSearchService {
-  QuranJDBCRepo quranJDBCRepo = new QuranJDBCRepoImpl();
-  QuranLuceneRepo quranLuceneRepo = new QuranLuceneRepoImpl();
+  private QuranJDBCRepo quranJDBCRepo = new QuranJDBCRepoImpl();
+  private QuranLuceneRepo quranLuceneRepo = new QuranLuceneRepoImpl();
 
   @Override
   public SearchResult doFullTextSearch(SearchParam searchParam) {

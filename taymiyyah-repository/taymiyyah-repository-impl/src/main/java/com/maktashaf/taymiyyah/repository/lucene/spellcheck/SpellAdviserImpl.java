@@ -37,7 +37,7 @@ public class SpellAdviserImpl implements SpellAdviser {
         stream.reset();
         if (stream.incrementToken()){
           CharTermAttribute charTermAttribute = stream.addAttribute(CharTermAttribute.class);
-          String[] suggestions = spell.suggestSimilar(charTermAttribute.toString(), 1);
+          String[] suggestions = spell.suggestSimilar(charTermAttribute.toString(), 150);
           if(suggestions.length > 0)  {
             split[i] = suggestions[0];
             suggestionFound = true;

@@ -1,4 +1,4 @@
-package com.maktashaf.taymiyyah.repository.analysis;
+package com.maktashaf.taymiyyah.analysis;
 
 import java.io.IOException;
 import java.io.StringReader;

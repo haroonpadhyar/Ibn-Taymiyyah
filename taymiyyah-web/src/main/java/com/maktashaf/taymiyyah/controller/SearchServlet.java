@@ -33,7 +33,7 @@ public class SearchServlet extends HttpServlet{
   private static Logger logger = Logger.getLogger(SearchServlet.class);
   private Map<Integer, Integer> ayahCountMap = new HashMap<Integer, Integer>(114);
 
-  QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
+  private QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
