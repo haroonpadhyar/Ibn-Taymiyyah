@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.maktashaf.taymiyyah.common.LocaleEnum;
-import com.maktashaf.taymiyyah.common.ProjectConstant;
 import com.maktashaf.taymiyyah.common.QuranField;
+import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
 import com.maktashaf.taymiyyah.repository.lucene.spellcheck.SpellAdviser;
@@ -57,9 +56,7 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       int totalHits = 0;
       int totalPages = 0;
 
-      dir = FSDirectory.open(
-          new File(resolveIndexPath(searchParam))
-      );
+      dir = FSDirectory.open(new File(resolveIndexPath(searchParam)));
 
       Analyzer analyzer = chooseAnalyzer(searchParam);
       if(analyzer == null)
@@ -151,18 +148,18 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
   }
 
   @Override
-  public Quran findByAccumId(int accumId, LocaleEnum localeEnum, String realPath){
+  public Quran findByAccumId(int accumId, Translator translator){
     Quran quran = null;
     Directory dir = null;
     IndexReader reader = null;
     IndexSearcher searcher = null;
     try {
-      StringBuilder indexPath = new StringBuilder();
-      indexPath.append(realPath);
-      indexPath.append(File.separator);
-      indexPath.append(LocaleEnum.Arabic.value().getLanguage());
+      SearchParam searchParam = SearchParam.builder()
+          .withOriginal(true)
+          .withTranslator(translator)
+          .build();
 
-      dir = FSDirectory.open(new File(indexPath.toString()));
+      dir = FSDirectory.open(new File(resolveIndexPath(searchParam)));
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 
@@ -181,9 +178,6 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       quran.setAyahText(doc.get(QuranField.ayahText.value()));
 
       // load translation.
-      SearchParam searchParam = SearchParam.builder()
-              .withLocale(localeEnum)
-              .build();
       setUnSearchedTextInField(searchParam, Lists.newArrayList(quran));
 
 
@@ -207,18 +201,18 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
   }
 
   @Override
-  public Quran findByAyahId(int surahId, int ayahId, LocaleEnum localeEnum, String realPath){
+  public Quran findByAyahId(int surahId, int ayahId, Translator translator){
     Quran quran = null;
     Directory dir = null;
     IndexReader reader = null;
     IndexSearcher searcher = null;
     try {
-      StringBuilder indexPath = new StringBuilder();
-      indexPath.append(realPath);
-      indexPath.append(File.separator);
-      indexPath.append(LocaleEnum.Arabic.value().getLanguage());
+      SearchParam searchParam = SearchParam.builder()
+          .withOriginal(true)
+          .withTranslator(translator)
+          .build();
 
-      dir = FSDirectory.open(new File(indexPath.toString()));
+      dir = FSDirectory.open(new File(resolveIndexPath(searchParam)));
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 
@@ -241,10 +235,7 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       quran.setAyahText(doc.get(QuranField.ayahText.value()));
 
       // load translation.
-      SearchParam searchParam = SearchParam.builder()
-              .withLocale(localeEnum)
-              .build();
-      setUnSearchedTextInField(searchParam, Lists.newArrayList(quran));// for correct result QuranTextSearcher should be called from lunce repo
+      setUnSearchedTextInField(searchParam, Lists.newArrayList(quran));
 
 
     } catch (Exception e) {

@@ -1,6 +1,6 @@
 package com.maktashaf.taymiyyah.search.service;
 
-import com.maktashaf.taymiyyah.common.LocaleEnum;
+import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
 import com.maktashaf.taymiyyah.repository.jdbc.QuranJDBCRepo;
@@ -24,14 +24,14 @@ public class QuranSearchSearchServiceImpl implements QuranSearchService {
   }
 
   @Override
-  public Quran findByAccumId(int accumId, LocaleEnum localeEnum, String realPath) {
+  public Quran findByAccumId(int accumId, Translator translator) {
 //    return quranJDBCRepo.findByAccumId(accumId, localeEnum);
-    return quranLuceneRepo.findByAccumId(accumId, localeEnum, realPath);
+    return quranLuceneRepo.findByAccumId(accumId, translator);
   }
 
   @Override
-  public Quran findByAyahId(int surahId, int ayahId, LocaleEnum localeEnum, String realPath) {
+  public Quran findByAyahId(int surahId, int ayahId, Translator translator) {
 //    return quranJDBCRepo.findByAyahId(surahId, ayahId, localeEnum);
-    return quranLuceneRepo.findByAyahId(surahId, ayahId, localeEnum, realPath);
+    return quranLuceneRepo.findByAyahId(surahId, ayahId, translator);
   }
 }

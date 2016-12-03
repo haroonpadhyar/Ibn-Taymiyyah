@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.base.Throwables;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.ProjectConstant;
@@ -67,6 +68,11 @@ public class SearchServlet extends HttpServlet{
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     try{
       long startTime = System.currentTimeMillis();
+      String ajax = req.getParameter("ajax");
+      if(null != ajax && "YES".equalsIgnoreCase(ajax)){
+        doIdSearch(req, resp);
+        return;
+      }
       String json = req.getParameter("searchParams");
       Gson gson = new Gson();
       RequestData requestData = gson.fromJson(json, RequestData.class);
@@ -80,9 +86,8 @@ public class SearchServlet extends HttpServlet{
     }
   }
 
-  private SearchResult process(String term, int pageNo, LocaleEnum localeEnum, boolean original, String translatorStr){
+  private SearchResult process(String term, int pageNo, LocaleEnum localeEnum, boolean original, Translator translator){
 
-    Translator translator = Translator.look(translatorStr);
     SearchParam searchParam = SearchParam.builder()
         .withTerm(term)
         .withLocale(localeEnum)
@@ -98,18 +103,13 @@ public class SearchServlet extends HttpServlet{
 
   private void handleAjax(HttpServletRequest req, HttpServletResponse resp, long startTime, RequestData requestData) throws ServletException, IOException {
     String src = requestData.getSrc();
-    if(src.equals("srch")){
-      doIdSearch(req, resp);
-      return;
-    }
-
     String searchedTerm = requestData.getTerm();
     String termHidden = requestData.getTermHidden();
     String term = termHidden;
     String locale = requestData.getLocale();
     String translatorStr = requestData.getTranslator();
     boolean original = requestData.getOriginal();
-
+    Translator translator = Translator.look(translatorStr);
 
 
     int currentPage = requestData.getCurrentPage();
@@ -141,7 +141,7 @@ public class SearchServlet extends HttpServlet{
 
     SearchResult searchResult = SearchResult.builder().withQuranList(new ArrayList<Quran>(1)).build();
     if(null != term && term.length() > 0)
-        searchResult = process(term, currentPage, localeEnum, original, translatorStr);
+        searchResult = process(term, currentPage, localeEnum, original, translator);
     currentPage = Math.min(currentPage, searchResult.getTotalPages());
     long totalTime = System.currentTimeMillis() - startTime;
     ResultData resultData = new ResultData()
@@ -150,7 +150,7 @@ public class SearchServlet extends HttpServlet{
         .withTotalHits(searchResult.getTotalHits())
         .withOriginal(original)
         .withTerm(term)
-        .withLang(Translator.look(translatorStr).getLocaleEnum().value().getLanguage())
+        .withLang(translator.getLocaleEnum().value().getLanguage())
         .withTime(String.valueOf(totalTime / 1000f))
         .withSuggestedTerm(searchResult.getSuggestedTerm())
         .withQuranList(searchResult.getQuranList());
@@ -167,10 +167,8 @@ public class SearchServlet extends HttpServlet{
     String radio = req.getParameter("radio");
     String surahId = req.getParameter("surahId");
     String ayahId = req.getParameter("ayahId");
-    String locale = req.getParameter("locale");
-    LocaleEnum localeEnum = LocaleEnum.languageBiMap.look(locale);
-    if(localeEnum == null)
-      localeEnum = LocaleEnum.Arabic;
+    String translatorStr = req.getParameter("translator");
+    Translator translator = Translator.look(translatorStr);
 
     int surahNo = 0;
     int ayahNo = 0;
@@ -187,24 +185,24 @@ public class SearchServlet extends HttpServlet{
     if(radio.equals("idSrch")) {
       if((surahNo > 0 && surahNo <= 114)
           && (ayahNo > 0 && ayahNo <= ayahCountMap.get(surahNo)))
-        quran = quranSearchService.findByAyahId(surahNo, ayahNo, localeEnum, ProjectConstant.LUCENE_INDEX_PATH);
+        quran = quranSearchService.findByAyahId(surahNo, ayahNo, translator);
     }
     else if(radio.equals("srSrch")){
       if(ayahNo > 0 && ayahNo <= 6236)
-        quran = quranSearchService.findByAccumId(ayahNo, localeEnum, ProjectConstant.LUCENE_INDEX_PATH);
+        quran = quranSearchService.findByAccumId(ayahNo, translator);
     }
 
-    List<Quran> quranList = new ArrayList<Quran>();
+    List<Quran> quranList = Lists.newArrayList();
     if(quran != null)
       quranList.add(quran);
     ResultData resultData = new ResultData()
-        .withLang(localeEnum.value().getLanguage())
+        .withLang(translator.getLocaleEnum().value().getLanguage())
         .withQuranList(quranList);
 
     Gson gson = new Gson();
     String json = gson.toJson(resultData);
 
-    resp.setContentType("text/html");
+    resp.setContentType("application/json");
     resp.getWriter().write(json);
   }
 

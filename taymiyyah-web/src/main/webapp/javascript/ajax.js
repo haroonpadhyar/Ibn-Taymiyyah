@@ -96,12 +96,11 @@ $(document).ready(function(){
       data: 'ajax=yes&radio=' + $('input:radio[name=radio]:checked').val()
           +'&surahId='+$('#ayahCombo').val()
           +'&ayahId='+$('#ayaNo').val()
-          +'&locale='+$('#locale').val()
+          +'&translator='+$('#translatorCombo').val()
           +'&src='+$(this ).attr("id"),
-//            dataType: 'json',
-      success: function(data)
+      dataType: 'json',
+      success: function(resp)
       {
-        var resp = JSON.parse(data);
         var quranList = resp.quranList;
         var str ="";
         for(var i =0;i < quranList.length;i++)
@@ -115,15 +114,13 @@ $(document).ready(function(){
               +"</p>";
 
           if(resp.lang == "en"){
-            str +="<p style=\"font-size: large\" >"
+            str +="<p style=\"font-size: large\" dir=\"ltr\">"
                 +quran.ayahTranslationText
                 +"</p>";
           } else{
-            if(resp.lang != "ar"){
-              str +="<p style=\"font-size: large\" dir=\"rtl\">"
-                  +quran.ayahTranslationText
-                  +"</p>" ;
-            }
+            str +="<p style=\"font-size: large\" dir=\"rtl\">"
+                +quran.ayahTranslationText
+                +"</p>" ;
           }
 
           str += "</div>";

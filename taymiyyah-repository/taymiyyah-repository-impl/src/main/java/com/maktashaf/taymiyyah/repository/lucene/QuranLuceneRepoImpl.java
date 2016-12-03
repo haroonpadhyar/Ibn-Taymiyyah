@@ -1,6 +1,6 @@
 package com.maktashaf.taymiyyah.repository.lucene;
 
-import com.maktashaf.taymiyyah.common.LocaleEnum;
+import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
 import com.maktashaf.taymiyyah.repository.lucene.search.SearcherRegistry;
@@ -18,12 +18,12 @@ public class QuranLuceneRepoImpl implements QuranLuceneRepo{
     return searchResult;
   }
 
-  public Quran findByAccumId(int accumId, LocaleEnum localeEnum, String realPath){
-    Quran byAccumId = SearcherRegistry.getSearcher(Boolean.TRUE).findByAccumId(accumId, localeEnum, realPath);
+  public Quran findByAccumId(int accumId, Translator translator){
+    Quran byAccumId = SearcherRegistry.getSearcher(Boolean.TRUE).findByAccumId(accumId, translator);
     return byAccumId;
   }
-  public Quran findByAyahId(int surahId, int ayahId, LocaleEnum localeEnum, String realPath){
-    Quran byAyahId = SearcherRegistry.getSearcher(Boolean.TRUE).findByAyahId(surahId, ayahId, localeEnum, realPath);
+  public Quran findByAyahId(int surahId, int ayahId, Translator translator){
+    Quran byAyahId = SearcherRegistry.getSearcher(Boolean.TRUE).findByAyahId(surahId, ayahId, translator);
     return byAyahId;
   }
 }
