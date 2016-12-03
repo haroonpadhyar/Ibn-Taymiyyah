@@ -3,7 +3,10 @@ package com.maktashaf.taymiyyah.repository.lucene.search;
 import java.io.File;
 import java.util.List;
 
+import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.common.QuranField;
+import com.maktashaf.taymiyyah.common.Translator;
+import com.maktashaf.taymiyyah.common.util.PathResolver;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.AnalyzerRegistry;
@@ -28,12 +31,12 @@ public class QuranTranslationSearcher extends AbstractQuranSearcher implements Q
 
   @Override
   protected String resolveIndexPath(SearchParam searchParam) {
-    return resolveIndexPathForTranslation(searchParam);
+    return PathResolver.resolveIndexPath(Optional.of(searchParam.getTranslator()));
   }
 
   @Override
   protected String resolveSpellIndexPath(SearchParam searchParam) {
-    return resolveSpellIndexPathForTranslation(searchParam);
+    return PathResolver.resolveSpellIndexPath(Optional.of(searchParam.getTranslator()));
   }
 
   @Override
@@ -57,7 +60,7 @@ public class QuranTranslationSearcher extends AbstractQuranSearcher implements Q
     IndexReader reader = null;
     IndexSearcher searcher = null;
     try {
-      dir = FSDirectory.open(new File(resolveIndexPathForOriginal(searchParam)));
+      dir = FSDirectory.open(new File(PathResolver.resolveIndexPath(Optional.<Translator>absent())));
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 

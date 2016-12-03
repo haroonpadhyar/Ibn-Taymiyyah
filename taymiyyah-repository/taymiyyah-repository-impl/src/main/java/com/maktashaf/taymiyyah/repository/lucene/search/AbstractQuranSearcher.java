@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
-import com.maktashaf.taymiyyah.common.ProjectConstant;
 import com.maktashaf.taymiyyah.common.QuranField;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
@@ -266,43 +265,6 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
     }
 
     return quran;
-  }
-
-  //TODO need to develop path resolver API. (will be required when serving hadith)
-  protected String resolveIndexPathForTranslation(SearchParam searchParam) {
-    return new StringBuilder()
-        .append(searchParam.getContextPath())
-        .append(File.separator)
-        .append(ProjectConstant.translationkDir)
-        .append(File.separator)
-        .append(searchParam.getTranslator().getLocaleEnum().value().getLanguage())
-        .append(File.separator)
-        .append(searchParam.getTranslator().name())
-        .toString();
-  }
-
-  protected String resolveSpellIndexPathForTranslation(SearchParam searchParam) {
-    return new StringBuilder()
-        .append(resolveIndexPathForTranslation(searchParam))
-        .append(File.separator)
-        .append(ProjectConstant.spellCheckDir)
-        .toString();
-  }
-
-  protected String resolveIndexPathForOriginal(SearchParam searchParam) {
-    return new StringBuilder()
-        .append(searchParam.getContextPath())
-        .append(File.separator)
-        .append(ProjectConstant.QuraanDir)
-        .toString();
-  }
-
-  protected String resolveSpellIndexPathForOriginal(SearchParam searchParam) {
-    return new StringBuilder()
-        .append(resolveIndexPathForOriginal(searchParam))
-        .append(File.separator)
-        .append(ProjectConstant.spellCheckDir)
-        .toString();
   }
 
   protected abstract String resolveIndexPath(SearchParam searchParam);

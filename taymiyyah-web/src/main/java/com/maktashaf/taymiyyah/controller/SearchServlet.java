@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.common.base.Throwables;
 import com.google.gson.Gson;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
+import com.maktashaf.taymiyyah.common.ProjectConstant;
 import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
@@ -32,7 +33,6 @@ import org.apache.log4j.Logger;
 public class SearchServlet extends HttpServlet{
   private static Logger logger = Logger.getLogger(SearchServlet.class);
   private int PAGE_SIZE = 1;
-  private String LUCENE_INDEX_PATH = "";
   private Map<Integer, Integer> ayahCountMap = new HashMap<Integer, Integer>(114);
 
   QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
@@ -87,7 +87,7 @@ public class SearchServlet extends HttpServlet{
 
     Translator translator = Translator.look(translatorStr);
     SearchParam searchParam = SearchParam.builder()
-        .withContextPath(LUCENE_INDEX_PATH)
+        .withContextPath(ProjectConstant.LUCENE_INDEX_PATH)
         .withTerm(term)
         .withLocale(localeEnum)
         .withTranslator(translator)
@@ -191,11 +191,11 @@ public class SearchServlet extends HttpServlet{
     if(radio.equals("idSrch")) {
       if((surahNo > 0 && surahNo <= 114)
           && (ayahNo > 0 && ayahNo <= ayahCountMap.get(surahNo)))
-        quran = quranSearchService.findByAyahId(surahNo, ayahNo, localeEnum, LUCENE_INDEX_PATH);
+        quran = quranSearchService.findByAyahId(surahNo, ayahNo, localeEnum, ProjectConstant.LUCENE_INDEX_PATH);
     }
     else if(radio.equals("srSrch")){
       if(ayahNo > 0 && ayahNo <= 6236)
-        quran = quranSearchService.findByAccumId(ayahNo, localeEnum, LUCENE_INDEX_PATH);
+        quran = quranSearchService.findByAccumId(ayahNo, localeEnum, ProjectConstant.LUCENE_INDEX_PATH);
     }
 
     List<Quran> quranList = new ArrayList<Quran>();
@@ -231,7 +231,7 @@ public class SearchServlet extends HttpServlet{
   @Override
   public void init() throws ServletException {
     String pageSize = getServletContext().getInitParameter("pageSize");
-    LUCENE_INDEX_PATH = loadProperties().getProperty("lucene.index.context.path");
+    ProjectConstant.LUCENE_INDEX_PATH = loadProperties().getProperty("lucene.index.context.path");
     PAGE_SIZE = Integer.valueOf(pageSize).intValue();
     ayahCountMap.put(1,7);
     ayahCountMap.put(2,286);
