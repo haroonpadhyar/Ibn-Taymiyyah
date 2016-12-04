@@ -1,11 +1,5 @@
 package com.maktashaf.taymiyyah.analysis.generator;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.List;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Lists;
@@ -13,14 +7,8 @@ import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.QuranField;
 import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.util.PathResolver;
-import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.AnalyzerRegistry;
-import com.maktashaf.taymiyyah.repository.lucene.spellcheck.SpellAdviser;
-import com.maktashaf.taymiyyah.repository.lucene.spellcheck.SpellAdviserImpl;
-import com.maktashaf.taymiyyah.search.service.QuranSearchSearchServiceImpl;
-import com.maktashaf.taymiyyah.search.service.QuranSearchService;
-import com.maktashaf.taymiyyah.vo.SearchResult;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
@@ -30,199 +18,28 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
-import org.apache.lucene.search.spell.LevensteinDistance;
 import org.apache.lucene.search.spell.LuceneDictionary;
 import org.apache.lucene.search.spell.SpellChecker;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
+
 /**
- * @author: Haroon
+ * * @author Haroon Anwar Padhyar
  */
 public class IndexGenerator {
-  private QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
-  private SpellAdviser spellAdviser = new SpellAdviserImpl();
   private static final String QURAN_METADATA_FILE_PATH = "./data/Quran_metadata.txt";
   private static final int QURAN_AYAH_COUNT = 6236;
 
-  // -- Quran
-  @Test
-  public void createIndexForQuran(){
-    createIndex(Optional.<Translator>absent(), "./data/Quran/quran-simple.txt");
-  }
-
-  @Test
-  public void searchIndexForQuran(){
-    try {
-      String term = "قلوبنا";
-//      term = "محمد";
-//      term = "علي";
-//      term = "على";
-
-      SearchParam searchParam = SearchParam.builder()
-          .withTerm(term)
-          .withLocale(LocaleEnum.Arabic)
-          .withTranslator(Translator.Maududi)
-          .withOriginal(true)
-          .withPageNo(1)
-          .withPageSize(12)
-          .build();
-      SearchResult searchResult = quranSearchService.doFullTextSearch(searchParam);
-
-      for (Quran quran : searchResult.getQuranList()) {
-        System.out.println(quran.getAyahText());
-        System.out.println("-------------------");
-      }
-//      assertEquals(6, search.size());
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-
-  }
-
-  @Test
-  public void doSpellCheckForQuran(){
-    String term = "مُحَمَّدٌ";
-//    term = "ہارون";
-//    term = "ممد";
-//    term = "هارون";
-//    term = "هار";
-//    term = "محد";
-//    term = "صدری";
-//    term = "محمد صدری";
-//    term = "OR";
-    try {
-      String suggestion = spellAdviser.suggest(
-          term, PathResolver.resolveSpellIndexPath(Optional.<Translator>absent()),
-          AnalyzerRegistry.getAnalyzer(LocaleEnum.Arabic)
-      );
-
-      System.out.println(suggestion);
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  // -- Maududi
-  @Test
-  public void createIndexForMaududiTranslation(){
-    createIndex(Optional.of(Translator.Maududi), "./data/translation/urdu/ur.maududi.txt");
-  }
-
-  @Test
-  public void searchIndexMaududiTranslation(){
-    try {
-      String term = "قلوبنا";
-      term = "محمد";
-//      term = "علي";
-//      term = "على";
-
-      SearchParam searchParam = SearchParam.builder()
-          .withTerm(term)
-          .withLocale(LocaleEnum.Urdu)
-          .withTranslator(Translator.Maududi)
-          .withOriginal(false)
-          .withPageNo(3)
-          .withPageSize(32)
-          .build();
-      SearchResult searchResult = quranSearchService.doFullTextSearch(searchParam);
-
-      System.out.println("Total: " + searchResult.getQuranList().size());
-      for (Quran quran : searchResult.getQuranList()) {
-        System.out.println(quran.getAyahTranslationText());
-        System.out.println("-------------------");
-      }
-//      assertEquals(100, search.size());
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  @Test
-  public void doSpellCheckForMaududiTranslation(){
-    String term = "مُحَمَّدٌ";
-//    term = "ہارون";
-    term = "ممد";
-//    term = "هارون";
-//    term = "هار";
-//    term = "محد";
-//    term = "صدری";
-//    term = "محمد صدری";
-//    term = "OR";
-    try {
-      Optional<Translator> translatorOptional = Optional.of(Translator.Maududi);
-      String suggestion = spellAdviser.suggest(
-          term, PathResolver.resolveSpellIndexPath(translatorOptional),
-          AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())
-      );
-
-      System.out.println(suggestion);
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-
-  // -- Yousuf Ali
-  @Test
-  public void createIndexForYousufAliTranslation(){
-    createIndex(Optional.of(Translator.YousufAli), "./data/translation/english/en.yusufali.txt");
-  }
-
-  @Test
-  public void searchIndexForYousufAliTranslation(){
-    try {
-      String term = "Mohamad";
-//      term = "MHMT";
-      SearchParam searchParam = SearchParam.builder()
-          .withTerm(term)
-          .withLocale(LocaleEnum.English)
-          .withTranslator(Translator.YousufAli)
-          .withOriginal(false)
-          .withPageNo(1)
-          .withPageSize(12)
-          .build();
-
-      SearchResult searchResult = quranSearchService.doFullTextSearch(searchParam);
-
-      for (Quran quran : searchResult.getQuranList()) {
-        System.out.println(quran.getAyahTranslationText());
-        System.out.println("-------------------");
-      }
-//      assertEquals(4, search.size());
-
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  @Test
-  public void doSpellCheckForYousufAliTranslation(){//TODO Egnlish spell check
-    String term = "hamad";
-    try {
-//      PathResolver.resolveSpellIndexPath(Optional.of(Translator.YousufAli))));
-      Optional<Translator> translatorOptional = Optional.of(Translator.YousufAli);
-      String suggestion = spellAdviser.suggest(
-          term, PathResolver.resolveSpellIndexPath(translatorOptional),
-          AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())
-      );
-
-      System.out.println(suggestion);
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  // Private world
-  private void createIndex(Optional<Translator> translatorOptional, String sourceFilePath){
+  protected void createIndex(Optional<Translator> translatorOptional, String sourceFilePath){
     try {
       List<Quran> quranList = parseTextForQuran(sourceFilePath);
 
@@ -360,6 +177,7 @@ public class IndexGenerator {
   }
 
   @Test
+  @Ignore
   public void testParser(){
     List<Quran> quranList = parseTextForQuran("./db_scripts/quran_en_yousufali.txt");
     System.out.println(quranList.size());
