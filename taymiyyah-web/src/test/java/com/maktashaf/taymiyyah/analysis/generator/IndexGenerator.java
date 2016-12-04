@@ -249,6 +249,7 @@ public class IndexGenerator {
         writer.addDocument(doc);
       }
       writer.close();
+      dir.close();
 
       //Generate spell check dictionary
       createSpellCheckIndex(translatorOptional);
