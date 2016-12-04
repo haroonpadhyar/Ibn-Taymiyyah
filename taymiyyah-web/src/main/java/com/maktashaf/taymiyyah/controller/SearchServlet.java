@@ -158,7 +158,7 @@ public class SearchServlet extends HttpServlet{
     Gson gson = new Gson();
     String json = gson.toJson(resultData);
 
-    resp.setContentType("application/json");
+    resp.setContentType("text/html");
     resp.getWriter().write(json);
   }
 
@@ -202,7 +202,7 @@ public class SearchServlet extends HttpServlet{
     Gson gson = new Gson();
     String json = gson.toJson(resultData);
 
-    resp.setContentType("application/json");
+    resp.setContentType("text/html");
     resp.getWriter().write(json);
   }
 

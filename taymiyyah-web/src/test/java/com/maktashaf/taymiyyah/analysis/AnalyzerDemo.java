@@ -2,17 +2,21 @@ package com.maktashaf.taymiyyah.analysis;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 
 import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.common.ProjectConstant;
 import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.util.PathResolver;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ar.ArabicCustomizedAnalyzer;
+import com.maktashaf.taymiyyah.repository.lucene.analysis.en.EnglishPhoneticAnalyzer;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ur.UrduAnalyzer;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.QuranField;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.ar.ArabicAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -163,6 +167,62 @@ public class AnalyzerDemo {
       System.out.println("suggestions: "+suggestions.length);
       for (String suggestion : suggestions) {
         System.out.println(suggestion);
+      }
+
+      System.out.println("*******************************");
+      String s = term;
+      EnglishPhoneticAnalyzer analyzer = new EnglishPhoneticAnalyzer(Version.LUCENE_46);
+      TokenStream stream = analyzer.tokenStream("contents", new StringReader(s));
+      stream.reset();
+      if (stream.incrementToken()){
+        CharTermAttribute charTermAttribute = stream.addAttribute(CharTermAttribute.class);
+        suggestions = spell.suggestSimilar(charTermAttribute.toString(), 150);
+        for (String suggestion : suggestions) {
+          System.out.println(suggestion);
+        }
+      }
+
+
+
+      dir.close();
+    }
+    catch(IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static void doSpellCheck2(){
+    String term = "مُحَمَّدٌ";
+//    term = "ہارون";
+//    term = "هارون";
+//    term = "هار";
+//    term = "محد";
+//    term = "صدری";
+//    term = "محمد صدری";
+//    term = "OR";
+    try {
+      Directory dir = FSDirectory.open(new File(PathResolver.resolveSpellIndexPath(Optional.of(Translator.Maududi))));
+      SpellChecker spell = new SpellChecker(dir);
+      spell.setStringDistance(new LevensteinDistance());
+
+      System.out.println("Exist: "+spell.exist(term));
+      String[] suggestions = spell.suggestSimilar(term, 150);
+      System.out.println("suggestions: "+suggestions.length);
+      for (String suggestion : suggestions) {
+        System.out.println(suggestion);
+      }
+
+      System.out.println("*******************************");
+      String s = term;
+      UrduAnalyzer analyzer = new UrduAnalyzer(Version.LUCENE_46);
+      TokenStream stream = analyzer.tokenStream("contents", new StringReader(s));
+      stream.reset();
+      if (stream.incrementToken()){
+        CharTermAttribute charTermAttribute = stream.addAttribute(CharTermAttribute.class);
+        suggestions = spell.suggestSimilar(charTermAttribute.toString(), 150);
+        for (String suggestion : suggestions) {
+          System.out.println(suggestion);
+        }
       }
 
 

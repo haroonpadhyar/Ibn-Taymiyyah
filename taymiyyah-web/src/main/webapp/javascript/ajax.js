@@ -30,9 +30,10 @@ $(document).ready(function(){
               'original'   : $( '#originalHidden' ).val()
             })
       },
-      dataType: 'json',
-      success: function(resp)
+//      dataType: 'json',
+      success: function(data)
       {
+        var resp = JSON.parse(data);
         var quranList = resp.quranList;
         var str ="";
         for(var i =0;i < quranList.length;i++)
@@ -98,9 +99,10 @@ $(document).ready(function(){
           +'&ayahId='+$('#ayaNo').val()
           +'&translator='+$('#translatorCombo').val()
           +'&src='+$(this ).attr("id"),
-      dataType: 'json',
-      success: function(resp)
+//      dataType: 'json',
+      success: function(data)
       {
+        var resp = JSON.parse(data);
         var quranList = resp.quranList;
         var str ="";
         for(var i =0;i < quranList.length;i++)
