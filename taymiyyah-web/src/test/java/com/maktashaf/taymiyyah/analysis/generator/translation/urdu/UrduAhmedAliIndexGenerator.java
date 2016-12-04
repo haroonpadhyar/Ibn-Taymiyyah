@@ -1,4 +1,4 @@
-package com.maktashaf.taymiyyah.analysis.generator.translation.arabic;
+package com.maktashaf.taymiyyah.analysis.generator.translation.urdu;
 
 import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.analysis.generator.IndexGenerator;
@@ -19,13 +19,13 @@ import org.junit.Test;
 /**
  * * @author Haroon Anwar Padhyar
  */
-public class MuyassarIndexGenerator extends IndexGenerator{
+public class UrduAhmedAliIndexGenerator extends IndexGenerator{
   private QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
   private SpellAdviser spellAdviser = new SpellAdviserImpl();
 
   @Test
   public void createIndex(){
-    createIndex(Optional.of(Translator.Arabic_Muyassar), "./data/translation/arabic/ar.muyassar.txt");
+    createIndex(Optional.of(Translator.Urdu_AhmedAli), "./data/translation/urdu/ur.ahmedali.txt");
   }
 
   @Test
@@ -39,8 +39,8 @@ public class MuyassarIndexGenerator extends IndexGenerator{
 
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.Arabic)
-          .withTranslator(Translator.Arabic_Muyassar)
+          .withLocale(LocaleEnum.Urdu)
+          .withTranslator(Translator.Urdu_AhmedAli)
           .withOriginal(false)
           .withPageNo(3)
           .withPageSize(32)
@@ -72,7 +72,7 @@ public class MuyassarIndexGenerator extends IndexGenerator{
 //    term = "محمد صدری";
 //    term = "OR";
     try {
-      Optional<Translator> translatorOptional = Optional.of(Translator.Arabic_Muyassar);
+      Optional<Translator> translatorOptional = Optional.of(Translator.Urdu_AhmedAli);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
           AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())

@@ -19,7 +19,7 @@ import org.junit.Test;
 /**
  * @author Haroon Anwar Padhyar
  */
-public class MubarakpuriIndexGenerator extends IndexGenerator{
+public class EnglishMubarakpuriIndexGenerator extends IndexGenerator{
   private QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
   private SpellAdviser spellAdviser = new SpellAdviserImpl();
 

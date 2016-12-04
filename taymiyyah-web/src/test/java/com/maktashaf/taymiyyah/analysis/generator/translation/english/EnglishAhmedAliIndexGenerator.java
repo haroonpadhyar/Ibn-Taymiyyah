@@ -19,13 +19,13 @@ import org.junit.Test;
 /**
  * @author Haroon Anwar Padhyar
  */
-public class ArberryIndexGenerator extends IndexGenerator{
+public class EnglishAhmedAliIndexGenerator extends IndexGenerator{
   private QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
   private SpellAdviser spellAdviser = new SpellAdviserImpl();
 
   @Test
   public void createIndex(){
-    createIndex(Optional.of(Translator.English_Arberry), "./data/translation/english/en.arberry.txt");
+    createIndex(Optional.of(Translator.English_AhmedAli), "./data/translation/english/en.ahmedali.txt");
   }
 
   @Test
@@ -37,7 +37,7 @@ public class ArberryIndexGenerator extends IndexGenerator{
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
           .withLocale(LocaleEnum.English)
-          .withTranslator(Translator.English_Arberry)
+          .withTranslator(Translator.English_AhmedAli)
           .withOriginal(false)
           .withPageNo(1)
           .withPageSize(12)
@@ -63,7 +63,7 @@ public class ArberryIndexGenerator extends IndexGenerator{
     String term = "hamad";
     try {
 //      PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_YousufAli))));
-      Optional<Translator> translatorOptional = Optional.of(Translator.English_Arberry);
+      Optional<Translator> translatorOptional = Optional.of(Translator.English_AhmedAli);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
           AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())

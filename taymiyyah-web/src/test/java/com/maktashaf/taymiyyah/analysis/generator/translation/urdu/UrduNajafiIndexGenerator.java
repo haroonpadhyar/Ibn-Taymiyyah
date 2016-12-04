@@ -19,13 +19,13 @@ import org.junit.Test;
 /**
  * * @author Haroon Anwar Padhyar
  */
-public class JalandhryIndexGenerator extends IndexGenerator{
+public class UrduNajafiIndexGenerator extends IndexGenerator{
   private QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
   private SpellAdviser spellAdviser = new SpellAdviserImpl();
 
   @Test
   public void createIndex(){
-    createIndex(Optional.of(Translator.Urdu_Jalandhry), "./data/translation/urdu/ur.jalandhry.txt");
+    createIndex(Optional.of(Translator.Urdu_Najafi), "./data/translation/urdu/ur.najafi.txt");
   }
 
   @Test
@@ -40,7 +40,7 @@ public class JalandhryIndexGenerator extends IndexGenerator{
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
           .withLocale(LocaleEnum.Urdu)
-          .withTranslator(Translator.Urdu_Jalandhry)
+          .withTranslator(Translator.Urdu_Najafi)
           .withOriginal(false)
           .withPageNo(3)
           .withPageSize(32)
@@ -72,7 +72,7 @@ public class JalandhryIndexGenerator extends IndexGenerator{
 //    term = "محمد صدری";
 //    term = "OR";
     try {
-      Optional<Translator> translatorOptional = Optional.of(Translator.Urdu_Jalandhry);
+      Optional<Translator> translatorOptional = Optional.of(Translator.Urdu_Najafi);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
           AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())

@@ -1,4 +1,4 @@
-package com.maktashaf.taymiyyah.analysis.generator.translation.english;
+package com.maktashaf.taymiyyah.analysis.generator.translation.urdu;
 
 import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.analysis.generator.IndexGenerator;
@@ -17,40 +17,42 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 /**
- * @author Haroon Anwar Padhyar
+ * * @author Haroon Anwar Padhyar
  */
-public class DaryabadiIndexGenerator extends IndexGenerator{
+public class UrduMaududiIndexGenerator extends IndexGenerator{
   private QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
   private SpellAdviser spellAdviser = new SpellAdviserImpl();
 
   @Test
   public void createIndex(){
-    createIndex(Optional.of(Translator.English_Daryabadi), "./data/translation/english/en.daryabadi.txt");
+    createIndex(Optional.of(Translator.Urdu_Maududi), "./data/translation/urdu/ur.maududi.txt");
   }
 
   @Test
   @Ignore
   public void searchIndex(){
     try {
-      String term = "Mohamad";
-//      term = "MHMT";
+      String term = "قلوبنا";
+      term = "محمد";
+//      term = "علي";
+//      term = "على";
+
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.English)
-          .withTranslator(Translator.English_Daryabadi)
+          .withLocale(LocaleEnum.Urdu)
+          .withTranslator(Translator.Urdu_Maududi)
           .withOriginal(false)
-          .withPageNo(1)
-          .withPageSize(12)
+          .withPageNo(3)
+          .withPageSize(32)
           .build();
-
       SearchResult searchResult = quranSearchService.doFullTextSearch(searchParam);
 
+      System.out.println("Total: " + searchResult.getQuranList().size());
       for (Quran quran : searchResult.getQuranList()) {
         System.out.println(quran.getAyahTranslationText());
         System.out.println("-------------------");
       }
-//      assertEquals(4, search.size());
-
+//      assertEquals(100, search.size());
     }
     catch(Exception e) {
       e.printStackTrace();
@@ -59,11 +61,18 @@ public class DaryabadiIndexGenerator extends IndexGenerator{
 
   @Test
   @Ignore
-  public void doSpellCheck(){//TODO Egnlish spell check
-    String term = "hamad";
+  public void doSpellCheck(){
+    String term = "مُحَمَّدٌ";
+//    term = "ہارون";
+    term = "ممد";
+//    term = "هارون";
+//    term = "هار";
+//    term = "محد";
+//    term = "صدری";
+//    term = "محمد صدری";
+//    term = "OR";
     try {
-//      PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_Daryabadi))));
-      Optional<Translator> translatorOptional = Optional.of(Translator.English_Daryabadi);
+      Optional<Translator> translatorOptional = Optional.of(Translator.Urdu_Maududi);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
           AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())

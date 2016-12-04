@@ -19,13 +19,13 @@ import org.junit.Test;
 /**
  * @author Haroon Anwar Padhyar
  */
-public class QaraiIndexGenerator extends IndexGenerator{
+public class EnglishDaryabadiIndexGenerator extends IndexGenerator{
   private QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
   private SpellAdviser spellAdviser = new SpellAdviserImpl();
 
   @Test
   public void createIndex(){
-    createIndex(Optional.of(Translator.English_Qarai), "./data/translation/english/en.qarai.txt");
+    createIndex(Optional.of(Translator.English_Daryabadi), "./data/translation/english/en.daryabadi.txt");
   }
 
   @Test
@@ -37,7 +37,7 @@ public class QaraiIndexGenerator extends IndexGenerator{
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
           .withLocale(LocaleEnum.English)
-          .withTranslator(Translator.English_Qarai)
+          .withTranslator(Translator.English_Daryabadi)
           .withOriginal(false)
           .withPageNo(1)
           .withPageSize(12)
@@ -62,8 +62,8 @@ public class QaraiIndexGenerator extends IndexGenerator{
   public void doSpellCheck(){//TODO Egnlish spell check
     String term = "hamad";
     try {
-//      PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_Qarai))));
-      Optional<Translator> translatorOptional = Optional.of(Translator.English_Qarai);
+//      PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_Daryabadi))));
+      Optional<Translator> translatorOptional = Optional.of(Translator.English_Daryabadi);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
           AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())

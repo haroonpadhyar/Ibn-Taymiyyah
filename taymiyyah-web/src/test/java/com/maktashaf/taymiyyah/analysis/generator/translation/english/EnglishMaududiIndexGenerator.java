@@ -19,13 +19,13 @@ import org.junit.Test;
 /**
  * @author Haroon Anwar Padhyar
  */
-public class AhmedRazaKhanIndexGenerator extends IndexGenerator{
+public class EnglishMaududiIndexGenerator extends IndexGenerator{
   private QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
   private SpellAdviser spellAdviser = new SpellAdviserImpl();
 
   @Test
   public void createIndex(){
-    createIndex(Optional.of(Translator.English_AhmedRazaKhanEn), "./data/translation/english/en.ahmedraza.txt");
+    createIndex(Optional.of(Translator.English_Maududi), "./data/translation/english/en.maududi.txt");
   }
 
   @Test
@@ -37,7 +37,7 @@ public class AhmedRazaKhanIndexGenerator extends IndexGenerator{
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
           .withLocale(LocaleEnum.English)
-          .withTranslator(Translator.English_AhmedRazaKhanEn)
+          .withTranslator(Translator.English_Maududi)
           .withOriginal(false)
           .withPageNo(1)
           .withPageSize(12)
@@ -62,8 +62,8 @@ public class AhmedRazaKhanIndexGenerator extends IndexGenerator{
   public void doSpellCheck(){//TODO Egnlish spell check
     String term = "hamad";
     try {
-//      PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_YousufAli))));
-      Optional<Translator> translatorOptional = Optional.of(Translator.English_AhmedRazaKhanEn);
+//      PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_Maududi))));
+      Optional<Translator> translatorOptional = Optional.of(Translator.English_Maududi);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
           AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())
