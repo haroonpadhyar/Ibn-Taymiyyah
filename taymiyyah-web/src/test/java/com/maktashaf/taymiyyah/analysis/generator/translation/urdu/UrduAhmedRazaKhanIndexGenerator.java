@@ -25,7 +25,7 @@ public class UrduAhmedRazaKhanIndexGenerator extends IndexGenerator{
 
   @Test
   public void createIndex(){
-    createIndex(Optional.of(Translator.Urdu_AhmedRazaKhan), "./data/translation/urdu/ur.kanzuliman.txt.txt");
+    createIndex(Optional.of(Translator.Urdu_AhmedRazaKhan), "./data/translation/urdu/ur.kanzuliman.txt");
   }
 
   @Test
