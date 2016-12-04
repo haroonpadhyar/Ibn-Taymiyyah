@@ -1,6 +1,7 @@
-package com.maktashaf.taymiyyah.analysis.generator;
+package com.maktashaf.taymiyyah.analysis.generator.translation.english;
 
 import com.google.common.base.Optional;
+import com.maktashaf.taymiyyah.analysis.generator.IndexGenerator;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.util.PathResolver;
@@ -24,7 +25,7 @@ public class YousufAliIndexGenerator extends IndexGenerator{
 
   @Test
   public void createIndex(){
-    createIndex(Optional.of(Translator.YousufAli), "./data/translation/english/en.yusufali.txt");
+    createIndex(Optional.of(Translator.English_YousufAli), "./data/translation/english/en.yusufali.txt");
   }
 
   @Test
@@ -36,7 +37,7 @@ public class YousufAliIndexGenerator extends IndexGenerator{
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
           .withLocale(LocaleEnum.English)
-          .withTranslator(Translator.YousufAli)
+          .withTranslator(Translator.English_YousufAli)
           .withOriginal(false)
           .withPageNo(1)
           .withPageSize(12)
@@ -61,8 +62,8 @@ public class YousufAliIndexGenerator extends IndexGenerator{
   public void doSpellCheck(){//TODO Egnlish spell check
     String term = "hamad";
     try {
-//      PathResolver.resolveSpellIndexPath(Optional.of(Translator.YousufAli))));
-      Optional<Translator> translatorOptional = Optional.of(Translator.YousufAli);
+//      PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_YousufAli))));
+      Optional<Translator> translatorOptional = Optional.of(Translator.English_YousufAli);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
           AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())

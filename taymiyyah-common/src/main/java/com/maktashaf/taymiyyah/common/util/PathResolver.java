@@ -38,7 +38,7 @@ public class PathResolver {
         .append(File.separator)
         .append(ProjectConstant.TRANSLATION_DIR)
         .append(File.separator)
-        .append(translator.getLocaleEnum().value().getLanguage())
+        .append(translator.getLocaleEnum().name())
         .append(File.separator)
         .append(translator.name())
         .toString();

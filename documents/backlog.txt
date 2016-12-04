@@ -13,3 +13,4 @@ Resolve TODOs
 Revisit maven dependencies many are not required like hadoop, zookeeper etc.
 Logging
 Code comments
+Biography of translator

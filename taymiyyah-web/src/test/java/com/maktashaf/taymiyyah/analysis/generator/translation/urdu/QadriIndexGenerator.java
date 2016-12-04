@@ -1,4 +1,4 @@
-package com.maktashaf.taymiyyah.analysis.generator.Quran;
+package com.maktashaf.taymiyyah.analysis.generator.translation.urdu;
 
 import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.analysis.generator.IndexGenerator;
@@ -13,19 +13,19 @@ import com.maktashaf.taymiyyah.repository.lucene.spellcheck.SpellAdviserImpl;
 import com.maktashaf.taymiyyah.search.service.QuranSearchSearchServiceImpl;
 import com.maktashaf.taymiyyah.search.service.QuranSearchService;
 import com.maktashaf.taymiyyah.vo.SearchResult;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * * @author Haroon Anwar Padhyar
  */
-public class QuranIndexGenerator extends IndexGenerator{
+public class QadriIndexGenerator extends IndexGenerator{
   private QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
   private SpellAdviser spellAdviser = new SpellAdviserImpl();
 
   @Test
   public void createIndex(){
-    createIndex(Optional.<Translator>absent(), "./data/Quran/quran-simple.txt");
+    createIndex(Optional.of(Translator.Urdu_Qadri), "./data/translation/urdu/ur.qadri.txt");
   }
 
   @Test
@@ -33,30 +33,30 @@ public class QuranIndexGenerator extends IndexGenerator{
   public void searchIndex(){
     try {
       String term = "قلوبنا";
-//      term = "محمد";
+      term = "محمد";
 //      term = "علي";
 //      term = "على";
 
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.Arabic)
-          .withTranslator(Translator.Urdu_Maududi)
-          .withOriginal(true)
-          .withPageNo(1)
-          .withPageSize(12)
+          .withLocale(LocaleEnum.Urdu)
+          .withTranslator(Translator.Urdu_Qadri)
+          .withOriginal(false)
+          .withPageNo(3)
+          .withPageSize(32)
           .build();
       SearchResult searchResult = quranSearchService.doFullTextSearch(searchParam);
 
+      System.out.println("Total: " + searchResult.getQuranList().size());
       for (Quran quran : searchResult.getQuranList()) {
-        System.out.println(quran.getAyahText());
+        System.out.println(quran.getAyahTranslationText());
         System.out.println("-------------------");
       }
-//      assertEquals(6, search.size());
+//      assertEquals(100, search.size());
     }
     catch(Exception e) {
       e.printStackTrace();
     }
-
   }
 
   @Test
@@ -64,7 +64,7 @@ public class QuranIndexGenerator extends IndexGenerator{
   public void doSpellCheck(){
     String term = "مُحَمَّدٌ";
 //    term = "ہارون";
-//    term = "ممد";
+    term = "ممد";
 //    term = "هارون";
 //    term = "هار";
 //    term = "محد";
@@ -72,9 +72,10 @@ public class QuranIndexGenerator extends IndexGenerator{
 //    term = "محمد صدری";
 //    term = "OR";
     try {
+      Optional<Translator> translatorOptional = Optional.of(Translator.Urdu_Qadri);
       String suggestion = spellAdviser.suggest(
-          term, PathResolver.resolveSpellIndexPath(Optional.<Translator>absent()),
-          AnalyzerRegistry.getAnalyzer(LocaleEnum.Arabic)
+          term, PathResolver.resolveSpellIndexPath(translatorOptional),
+          AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())
       );
 
       System.out.println(suggestion);
@@ -83,5 +84,4 @@ public class QuranIndexGenerator extends IndexGenerator{
       e.printStackTrace();
     }
   }
-
 }

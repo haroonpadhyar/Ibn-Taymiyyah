@@ -1,4 +1,4 @@
-package com.maktashaf.taymiyyah.analysis.generator.Quran;
+package com.maktashaf.taymiyyah.analysis.generator.translation.english;
 
 import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.analysis.generator.IndexGenerator;
@@ -13,68 +13,60 @@ import com.maktashaf.taymiyyah.repository.lucene.spellcheck.SpellAdviserImpl;
 import com.maktashaf.taymiyyah.search.service.QuranSearchSearchServiceImpl;
 import com.maktashaf.taymiyyah.search.service.QuranSearchService;
 import com.maktashaf.taymiyyah.vo.SearchResult;
-import org.junit.Test;
 import org.junit.Ignore;
+import org.junit.Test;
 
 /**
- * * @author Haroon Anwar Padhyar
+ * @author Haroon Anwar Padhyar
  */
-public class QuranIndexGenerator extends IndexGenerator{
+public class QaribullahIndexGenerator extends IndexGenerator{
   private QuranSearchService quranSearchService = new QuranSearchSearchServiceImpl();
   private SpellAdviser spellAdviser = new SpellAdviserImpl();
 
   @Test
   public void createIndex(){
-    createIndex(Optional.<Translator>absent(), "./data/Quran/quran-simple.txt");
+    createIndex(Optional.of(Translator.English_Qaribullah), "./data/translation/english/en.qaribullah.txt");
   }
 
   @Test
   @Ignore
   public void searchIndex(){
     try {
-      String term = "قلوبنا";
-//      term = "محمد";
-//      term = "علي";
-//      term = "على";
-
+      String term = "Mohamad";
+//      term = "MHMT";
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.Arabic)
-          .withTranslator(Translator.Urdu_Maududi)
-          .withOriginal(true)
+          .withLocale(LocaleEnum.English)
+          .withTranslator(Translator.English_Qaribullah)
+          .withOriginal(false)
           .withPageNo(1)
           .withPageSize(12)
           .build();
+
       SearchResult searchResult = quranSearchService.doFullTextSearch(searchParam);
 
       for (Quran quran : searchResult.getQuranList()) {
-        System.out.println(quran.getAyahText());
+        System.out.println(quran.getAyahTranslationText());
         System.out.println("-------------------");
       }
-//      assertEquals(6, search.size());
+//      assertEquals(4, search.size());
+
     }
     catch(Exception e) {
       e.printStackTrace();
     }
-
   }
 
   @Test
   @Ignore
-  public void doSpellCheck(){
-    String term = "مُحَمَّدٌ";
-//    term = "ہارون";
-//    term = "ممد";
-//    term = "هارون";
-//    term = "هار";
-//    term = "محد";
-//    term = "صدری";
-//    term = "محمد صدری";
-//    term = "OR";
+  public void doSpellCheck(){//TODO Egnlish spell check
+    String term = "hamad";
     try {
+//      PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_Qaribullah))));
+      Optional<Translator> translatorOptional = Optional.of(Translator.English_Qaribullah);
       String suggestion = spellAdviser.suggest(
-          term, PathResolver.resolveSpellIndexPath(Optional.<Translator>absent()),
-          AnalyzerRegistry.getAnalyzer(LocaleEnum.Arabic)
+          term, PathResolver.resolveSpellIndexPath(translatorOptional),
+          AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())
       );
 
       System.out.println(suggestion);
@@ -83,5 +75,4 @@ public class QuranIndexGenerator extends IndexGenerator{
       e.printStackTrace();
     }
   }
-
 }

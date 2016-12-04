@@ -1,6 +1,7 @@
-package com.maktashaf.taymiyyah.analysis.generator;
+package com.maktashaf.taymiyyah.analysis.generator.translation.urdu;
 
 import com.google.common.base.Optional;
+import com.maktashaf.taymiyyah.analysis.generator.IndexGenerator;
 import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.util.PathResolver;
@@ -24,7 +25,7 @@ public class MaududiIndexGenerator extends IndexGenerator{
 
   @Test
   public void createIndex(){
-    createIndex(Optional.of(Translator.Maududi), "./data/translation/urdu/ur.maududi.txt");
+    createIndex(Optional.of(Translator.Urdu_Maududi), "./data/translation/urdu/ur.maududi.txt");
   }
 
   @Test
@@ -39,7 +40,7 @@ public class MaududiIndexGenerator extends IndexGenerator{
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
           .withLocale(LocaleEnum.Urdu)
-          .withTranslator(Translator.Maududi)
+          .withTranslator(Translator.Urdu_Maududi)
           .withOriginal(false)
           .withPageNo(3)
           .withPageSize(32)
@@ -71,7 +72,7 @@ public class MaududiIndexGenerator extends IndexGenerator{
 //    term = "محمد صدری";
 //    term = "OR";
     try {
-      Optional<Translator> translatorOptional = Optional.of(Translator.Maududi);
+      Optional<Translator> translatorOptional = Optional.of(Translator.Urdu_Maududi);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
           AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())

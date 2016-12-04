@@ -158,7 +158,7 @@ public class AnalyzerDemo {
   public static void doSpellCheck1(){
     String term = "muhmad";
     try {
-      Directory dir = FSDirectory.open(new File(PathResolver.resolveSpellIndexPath(Optional.of(Translator.YousufAli))));
+      Directory dir = FSDirectory.open(new File(PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_YousufAli))));
       SpellChecker spell = new SpellChecker(dir);
       spell.setStringDistance(new LevensteinDistance());
 
@@ -201,7 +201,7 @@ public class AnalyzerDemo {
 //    term = "محمد صدری";
 //    term = "OR";
     try {
-      Directory dir = FSDirectory.open(new File(PathResolver.resolveSpellIndexPath(Optional.of(Translator.Maududi))));
+      Directory dir = FSDirectory.open(new File(PathResolver.resolveSpellIndexPath(Optional.of(Translator.Urdu_Maududi))));
       SpellChecker spell = new SpellChecker(dir);
       spell.setStringDistance(new LevensteinDistance());
 
