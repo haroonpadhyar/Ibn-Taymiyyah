@@ -10,28 +10,35 @@ import com.maktashaf.taymiyyah.repository.lucene.QuranLuceneRepoImpl;
 import com.maktashaf.taymiyyah.vo.SearchResult;
 
 /**
+ * Provide primary searching service for Quran and Translation.
+ *
  * @author Haroon Anwar padhyar.
  */
 public class QuranSearchSearchServiceImpl implements QuranSearchService {
-  private QuranJDBCRepo quranJDBCRepo = new QuranJDBCRepoImpl();
   private QuranLuceneRepo quranLuceneRepo = new QuranLuceneRepoImpl();
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public SearchResult doFullTextSearch(SearchParam searchParam) {
     SearchResult searchResult = quranLuceneRepo.searchAyah(searchParam);
-//    quranJDBCRepo.fillTranslation(searchResult.getQuranList(), searchParam.getLocaleEnum(), searchParam.isOriginal());
     return searchResult;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Quran findByAccumId(int accumId, Translator translator) {
-//    return quranJDBCRepo.findByAccumId(accumId, localeEnum);
     return quranLuceneRepo.findByAccumId(accumId, translator);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Quran findByAyahId(int surahId, int ayahId, Translator translator) {
-//    return quranJDBCRepo.findByAyahId(surahId, ayahId, localeEnum);
     return quranLuceneRepo.findByAyahId(surahId, ayahId, translator);
   }
 }

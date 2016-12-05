@@ -8,6 +8,7 @@ import com.maktashaf.taymiyyah.model.Quran;
 /**
  * @author Haroon Anwar padhyar.
  */
+@Deprecated
 public interface QuranJDBCRepo {
 
   List<Quran> findAll(LocaleEnum localeEnum);

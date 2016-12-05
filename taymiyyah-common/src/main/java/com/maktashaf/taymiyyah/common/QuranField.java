@@ -1,7 +1,9 @@
 package com.maktashaf.taymiyyah.common;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * Available fields related to Quran and Translation.
+ *
+ * @author Haroon Anwar Padhyar.
  */
 public enum QuranField {
   accumId("ACCM_ID"),

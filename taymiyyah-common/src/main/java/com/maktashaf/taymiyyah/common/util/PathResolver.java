@@ -7,11 +7,19 @@ import com.maktashaf.taymiyyah.common.ProjectConstant;
 import com.maktashaf.taymiyyah.common.Translator;
 
 /**
+ *  Utility class for index path resolving for documents
  *
  * @author Haroon Anwar Padhyar.
  */
 public class PathResolver {
 
+  /**
+   * Resolve path to index file of {@link com.maktashaf.taymiyyah.common.Translator} if present, otherwise
+   * of Quran's index file.
+   *
+   * @param translatorOptional
+   * @return path to index file.
+   */
   public static String resolveIndexPath(Optional<Translator> translatorOptional){
     if(translatorOptional.isPresent()){
       return resolveIndexPathForTranslation(translatorOptional.get());
@@ -20,6 +28,13 @@ public class PathResolver {
     }
   }
 
+  /**
+   * Resolve path to spell check index file of {@link com.maktashaf.taymiyyah.common.Translator} if present, otherwise
+   * of Quran's spell check index file.
+   *
+   * @param translatorOptional
+   * @return path to spell check i.ndex file
+   */
   public static String resolveSpellIndexPath(Optional<Translator> translatorOptional){
     if(translatorOptional.isPresent()){
       return resolveSpellIndexPathForTranslation(translatorOptional.get());
@@ -28,10 +43,16 @@ public class PathResolver {
     }
   }
 
+  /**
+   * Resolve to base index path.
+   */
   private static String resolveIndexPath(){
     return ProjectConstant.LUCENE_INDEX_PATH;
   }
 
+  /**
+   * Resolve to translation index path with base index path.
+   */
   private static String resolveIndexPathForTranslation(Translator translator) {
     return new StringBuilder()
         .append(resolveIndexPath())
@@ -44,6 +65,9 @@ public class PathResolver {
         .toString();
   }
 
+  /**
+   * Resolve to translation's spell check index path with translation index path.
+   */
   private static String resolveSpellIndexPathForTranslation(Translator translator) {
     return new StringBuilder()
         .append(resolveIndexPathForTranslation(translator))
@@ -52,6 +76,9 @@ public class PathResolver {
         .toString();
   }
 
+  /**
+   * Resolve to Quran index path with base index path.
+   */
   private static String resolveIndexPathForOriginal() {
     return new StringBuilder()
         .append(resolveIndexPath())
@@ -60,6 +87,9 @@ public class PathResolver {
         .toString();
   }
 
+  /**
+   * Resolve to Quran's spell check index path with Quran index path.
+   */
   private static String resolveSpellIndexPathForOriginal() {
     return new StringBuilder()
         .append(resolveIndexPathForOriginal())

@@ -24,6 +24,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 /**
+ * Searcher for Translation Text.
+ *
  * @author Haroon Anwar Padhyar.
  */
 public class QuranTranslationSearcher extends AbstractQuranSearcher implements QuranSearcher{

@@ -1,4 +1,4 @@
-package com.maktashaf.taymiyyah.controller;
+package com.maktashaf.taymiyyah.web.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,9 +21,9 @@ import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
 import com.maktashaf.taymiyyah.search.service.QuranSearchSearchServiceImpl;
 import com.maktashaf.taymiyyah.search.service.QuranSearchService;
-import com.maktashaf.taymiyyah.vo.RequestData;
-import com.maktashaf.taymiyyah.vo.ResultData;
 import com.maktashaf.taymiyyah.vo.SearchResult;
+import com.maktashaf.taymiyyah.web.dto.RequestData;
+import com.maktashaf.taymiyyah.web.dto.ResultData;
 import org.apache.log4j.Logger;
 
 /**

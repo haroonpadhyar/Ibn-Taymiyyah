@@ -38,6 +38,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 /**
+ * Base class for Quran and Quran's Translation search
+ *
  * @author Haroon Anwar Padhyar.
  */
 public abstract class AbstractQuranSearcher  implements QuranSearcher{
@@ -45,6 +47,9 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
   public static int MAX_HITS = 500; // ideally 20 result per page so total 25 pages.
   private SpellAdviser spellAdviser = new SpellAdviserImpl();
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public SearchResult search(SearchParam searchParam){
     SearchResult searchResult = SearchResult.builder().build();
@@ -147,6 +152,9 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Quran findByAccumId(int accumId, Translator translator){
     Quran quran = null;
@@ -200,6 +208,9 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
     return quran;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Quran findByAyahId(int surahId, int ayahId, Translator translator){
     Quran quran = null;

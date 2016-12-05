@@ -9,7 +9,7 @@ package com.maktashaf.taymiyyah.repository.lucene.analysis.ur.filter;
  *  <li> Normalization of SAAD with SEEN and so on.
  * </ul>
  *
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public class UrduSoundAlikeNormalizer {
   public static final char ALEF = '\u0627';

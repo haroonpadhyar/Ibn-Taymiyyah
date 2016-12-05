@@ -1,18 +1,19 @@
-*JSON based request.
-Generalise and extend able Index Generator.
-Add more translator.
 Deployment with Openshit Next Gen
 Continue Quraan reading from searched ayah.
-*Id based search revisit
 Exception handling with client response.
-Apply proper builder pattern to VOs.
 Server side fully latest JSON based and only required parameter logic mean what can be stored in session don't expect from request
 Server should be REST based.
 Client side to angularjs2 with i18n
 Resolve TODOs
 Revisit maven dependencies many are not required like hadoop, zookeeper etc.
 Logging
-Code comments
 Biography of translator
 properties file for production and dev
 Cache resolved path by Translator in PathResolver
+Unit Test
+*Code comments
+*JSON based request.
+*Generalise and extend able Index Generator.
+*Add more translator.
+*Id based search revisit
+*Apply proper builder pattern to VOs.

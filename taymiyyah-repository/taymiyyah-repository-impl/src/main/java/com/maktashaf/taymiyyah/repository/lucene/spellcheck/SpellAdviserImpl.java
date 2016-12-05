@@ -15,11 +15,16 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * Provide suggestions if there is spell error.
+ *
+ * @author Haroon Anwar Padhyar.
  */
 public class SpellAdviserImpl implements SpellAdviser {
   private static Logger logger = Logger.getLogger(SpellAdviserImpl.class);
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public String suggest(String text, String spellIndexPath, Analyzer analyzer){
     String suggestedTerm = "";

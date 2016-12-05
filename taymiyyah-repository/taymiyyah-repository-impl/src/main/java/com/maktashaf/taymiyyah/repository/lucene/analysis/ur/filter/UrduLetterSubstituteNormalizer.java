@@ -8,7 +8,7 @@ package com.maktashaf.taymiyyah.repository.lucene.analysis.ur.filter;
  *  <li> Normalization of DO_CHASHMI_HEH with CHOTI_HEH and so on.
  * </ul>
  *
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public class UrduLetterSubstituteNormalizer {
 

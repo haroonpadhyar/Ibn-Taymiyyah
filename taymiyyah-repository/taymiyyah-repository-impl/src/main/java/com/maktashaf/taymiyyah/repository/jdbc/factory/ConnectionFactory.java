@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 /**
  * @author: Haroon Anwar Padhyar.
  */
+@Deprecated
 public class ConnectionFactory {
   private static Logger logger = Logger.getLogger(ConnectionFactory.class);
   private static ConnectionFactory connectionFactory;

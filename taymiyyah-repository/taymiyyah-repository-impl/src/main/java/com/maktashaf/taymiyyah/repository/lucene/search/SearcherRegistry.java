@@ -5,7 +5,9 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * Registry for all available Quran and Translation searcher in system.
+ *
+ * @autho: Haroon Anwar Padhyar.
  */
 public class SearcherRegistry {
   private static Map<Boolean, QuranSearcher> searcherMap = Maps.newHashMap();

@@ -7,9 +7,9 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 /**
- * Filter diacritics from arabic text.
+ * Filter substitute letter from urdu text.
  *
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public final class UrduLetterSubstituteFilter extends TokenFilter {
   private final UrduLetterSubstituteNormalizer normalizer = new UrduLetterSubstituteNormalizer();

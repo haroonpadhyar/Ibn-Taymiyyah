@@ -18,7 +18,9 @@ import org.apache.lucene.analysis.util.StopwordAnalyzerBase;
 import org.apache.lucene.util.Version;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * Urdu text analyzer.
+ *
+ * @author Haroon Anwar Padhyar.
  */
 public class UrduAnalyzer extends StopwordAnalyzerBase {
 

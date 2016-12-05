@@ -1,8 +1,11 @@
 package com.maktashaf.taymiyyah.common;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * Available Database table name for Quran and translation text.
+ *
+ * @author Haroon Anwar Padhyar.
  */
+@Deprecated
 public enum QuranText {
   Quran("QURAN"),
   QuranUrMaududi("QURAN_UR_MAUDUDI") ,

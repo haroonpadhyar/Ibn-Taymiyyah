@@ -5,6 +5,8 @@ import java.util.Properties;
 import com.maktashaf.taymiyyah.common.util.ResourceUtil;
 
 /**
+ * Class to hold project level constants.
+ *
  * @author Haroon Anwar Padhyar.
  */
 public abstract class ProjectConstant {

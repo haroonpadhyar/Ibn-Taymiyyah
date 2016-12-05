@@ -11,7 +11,9 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.util.Version;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * Registry for all available language analyzers in system.
+ *
+ * @author Haroon Anwar Padhyar.
  */
 public class AnalyzerRegistry {
   private static Map<LocaleEnum, Analyzer> analyzerTable = Maps.newEnumMap(LocaleEnum.class);

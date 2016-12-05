@@ -20,7 +20,9 @@ import org.apache.lucene.analysis.util.StopwordAnalyzerBase;
 import org.apache.lucene.util.Version;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * Customized analyzer for Arabic language.
+ *
+ * @author Haroon Anwar Padhyar.
  */
 public class ArabicCustomizedAnalyzer extends StopwordAnalyzerBase {
 

@@ -10,7 +10,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
  * Filter superscripts from arabic text.
  * Normalize text to stem.
  *
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public final class ArabicExtendedNormalizationFilter extends TokenFilter {
   private final ArabicExtendedNormalizer normalizer = new ArabicExtendedNormalizer();

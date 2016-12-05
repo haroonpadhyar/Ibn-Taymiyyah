@@ -3,7 +3,9 @@ package com.maktashaf.taymiyyah.common;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * Available translators in system.
+ *
+ * @author Haroon Anwar Padhyar.
  */
 public enum Translator {
   Arabic_Jalalayn(LocaleEnum.Arabic, "تفسير الجلالين"),

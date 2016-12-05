@@ -20,7 +20,9 @@ import org.apache.lucene.analysis.phonetic.PhoneticFilterFactory;
 import org.apache.solr.core.SolrResourceLoader;
 
 /**
- * @author: Haroon
+ * Phonetic analyzer for English language.
+ *
+ * @author Haroon Anwar Padhyar.
  */
 public class EnglishPhoneticAnalyzer extends StopwordAnalyzerBase {
   public EnglishPhoneticAnalyzer(Version matchVersion) {

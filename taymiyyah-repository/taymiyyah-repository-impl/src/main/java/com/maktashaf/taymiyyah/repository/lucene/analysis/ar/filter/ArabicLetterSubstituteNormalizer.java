@@ -8,7 +8,7 @@ package com.maktashaf.taymiyyah.repository.lucene.analysis.ar.filter;
  *  <li> Normalization of WAW_WITH_HAMZA with WAW and so on.
  * </ul>
  *
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public class ArabicLetterSubstituteNormalizer {
   public static final char WAW = '\u0648'; //  و

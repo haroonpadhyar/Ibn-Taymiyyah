@@ -1,4 +1,4 @@
-package com.maktashaf.taymiyyah.filter;
+package com.maktashaf.taymiyyah.web.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -8,7 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 /**
- * @author: Haroon Anwar Padhyar.
+ * Web request filter to set encoding.
+ *
+ * @author Haroon Anwar Padhyar.
  */
 public class CharsetFilter implements Filter{
   private String encoding;

@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 /**
  * @author: Haroon Anwar Padhyar.
  */
+@Deprecated
 public class QuranJDBCRepoImpl implements QuranJDBCRepo{
   private static Logger logger = Logger.getLogger(QuranJDBCRepoImpl.class);
   private QueryBuilder queryBuilder = new QueryBuilderImpl();

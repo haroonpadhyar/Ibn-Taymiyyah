@@ -10,7 +10,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
  * Filter for transliteration for Urdu to Arabic.
  * Normalize text to stem.
  *
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public final class ArabicTransliterationFilter extends TokenFilter {
   private final ArabicTransliterationNormalizer normalizer = new ArabicTransliterationNormalizer();

@@ -1,6 +1,8 @@
-package com.maktashaf.taymiyyah.vo;
+package com.maktashaf.taymiyyah.web.dto;
 
 /**
+ * Class to hold web request json data.
+ *
  * @author Haroon Anwar Padhyar.
  */
 public class RequestData {
@@ -22,6 +24,11 @@ public class RequestData {
     this.ajax = ajax;
   }
 
+  /**
+   *  Get term to search.
+   *
+   * @return term.
+   */
   public String getTerm() {
     return term;
   }
@@ -30,6 +37,12 @@ public class RequestData {
     this.term = term;
   }
 
+  /**
+   *  Get hidden term to search. This is used in pagination request since first time searched
+   *  term is set in client as hidden.
+   *
+   * @return term.
+   */
   public String getTermHidden() {
     return termHidden;
   }
@@ -46,6 +59,11 @@ public class RequestData {
     this.locale = locale;
   }
 
+  /**
+   * Get the user's selected Translator.
+   *
+   * @return translator.
+   */
   public String getTranslator() {
     return translator;
   }
@@ -62,6 +80,11 @@ public class RequestData {
     this.src = src;
   }
 
+  /**
+   * Get user's selected page number.
+   *
+   * @return page number.
+   */
   public int getCurrentPage() {
     return currentPage;
   }
@@ -78,6 +101,11 @@ public class RequestData {
     this.totalPages = totalPages;
   }
 
+  /**
+   * Get nature of search.
+   *
+   * @return true if for Quran search is selected, false if translator search is selected.
+   */
   public Boolean getOriginal() {
     return original;
   }

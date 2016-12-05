@@ -7,9 +7,9 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 /**
- * Filter diacritics from arabic text.
+ * Filter sound alike letter from arabic text.
  *
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public final class UrduSoundAlikeFilter extends TokenFilter {
   private final UrduSoundAlikeNormalizer normalizer = new UrduSoundAlikeNormalizer();

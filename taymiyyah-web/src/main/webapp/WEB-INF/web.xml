@@ -15,7 +15,7 @@
 
   <filter>
     <filter-name>encoding-filter</filter-name>
-    <filter-class>com.maktashaf.taymiyyah.filter.CharsetFilter</filter-class>
+    <filter-class>com.maktashaf.taymiyyah.web.filter.CharsetFilter</filter-class>
     <init-param>
       <param-name>encoding</param-name>
       <param-value>UTF-8</param-value>
@@ -30,7 +30,7 @@
   <!-- Servlet mapping -->
   <servlet>
     <servlet-name>SearchServlet</servlet-name>
-    <servlet-class>com.maktashaf.taymiyyah.controller.SearchServlet</servlet-class>
+    <servlet-class>com.maktashaf.taymiyyah.web.controller.SearchServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>

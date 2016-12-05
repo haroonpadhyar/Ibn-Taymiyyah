@@ -11,7 +11,7 @@ import static org.apache.lucene.analysis.util.StemmerUtil.delete;
  *  <li> Normalization of dotless yeh (alef maksura) to yeh.
  * </ul>
  *
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public class ArabicExtendedNormalizer {
   public static final char ALEF = '\u0627';

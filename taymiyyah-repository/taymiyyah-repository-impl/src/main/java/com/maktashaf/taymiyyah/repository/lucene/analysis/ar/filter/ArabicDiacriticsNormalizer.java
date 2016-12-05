@@ -5,7 +5,7 @@ import static org.apache.lucene.analysis.util.StemmerUtil.delete;
 /**
  * Normalize diacritics.
  *
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public class ArabicDiacriticsNormalizer {
 

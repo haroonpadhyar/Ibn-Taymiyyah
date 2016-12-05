@@ -9,6 +9,7 @@ import com.maktashaf.taymiyyah.common.QuranText;
 /**
  * @author: Haroon Anwar Padhyar.
  */
+@Deprecated
 public class QueryBuilderImpl implements QueryBuilder {
 
   @Override

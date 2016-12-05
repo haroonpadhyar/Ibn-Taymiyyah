@@ -5,7 +5,9 @@ import java.util.Locale;
 import com.google.common.collect.ImmutableBiMap;
 
 /**
- * @author: Haroon Anwar Padhyar.
+ * Available locals in system.
+ *
+ * @author Haroon Anwar Padhyar.
  */
 public enum LocaleEnum {
   Arabic(new Locale("ar")),
@@ -22,6 +24,9 @@ public enum LocaleEnum {
     return value;
   }
 
+  /**
+   * Map between {@link java.util.Locale} and {@link com.maktashaf.taymiyyah.common.LocaleEnum}
+   */
   public static class localeBiMap {
     private static final ImmutableBiMap<Locale, LocaleEnum> mirror;
 
@@ -42,6 +47,9 @@ public enum LocaleEnum {
     }
   }
 
+  /**
+   * Map between language and {@link com.maktashaf.taymiyyah.common.LocaleEnum}
+   */
   public static class languageBiMap {
     private static final ImmutableBiMap<String, LocaleEnum> mirror;
 

@@ -9,7 +9,7 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 /**
  * Filter diacritics from arabic text.
  *
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public final class ArabicDiacriticsFilter extends TokenFilter {
   private final ArabicDiacriticsNormalizer normalizer = new ArabicDiacriticsNormalizer();

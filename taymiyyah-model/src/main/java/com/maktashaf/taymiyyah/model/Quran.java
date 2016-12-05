@@ -1,7 +1,7 @@
 package com.maktashaf.taymiyyah.model;
 
 /**
- * Persistent Entity maps to 'quran' database table.
+ * Class to represent Quran's  attributes.
  *
  * @author Haroon Anwar Padhyar.
  */

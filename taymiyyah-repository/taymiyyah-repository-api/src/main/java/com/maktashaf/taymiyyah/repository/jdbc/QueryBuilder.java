@@ -7,6 +7,7 @@ import com.maktashaf.taymiyyah.common.LocaleEnum;
 /**
  * @author: Haroon Anwar Padhyar.
  */
+@Deprecated
 public interface QueryBuilder {
   String getFindAllQuery(LocaleEnum localeEnum);
   String getFillTranslationQuery(Set<Integer> keys, LocaleEnum localeEnum, boolean isOriginal);

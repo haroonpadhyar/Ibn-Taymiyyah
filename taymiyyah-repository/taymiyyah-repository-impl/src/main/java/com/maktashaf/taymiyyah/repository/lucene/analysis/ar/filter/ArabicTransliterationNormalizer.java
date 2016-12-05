@@ -8,7 +8,7 @@ package com.maktashaf.taymiyyah.repository.lucene.analysis.ar.filter;
  * and sound but have different code point.e.g Urdu choti yeh ی '\u06CC' to
  * Arabic dot-less yeh ى '\u0649'
  *
- * @author: Haroon Anwar Padhyar.
+ * @author Haroon Anwar Padhyar.
  */
 public class ArabicTransliterationNormalizer {
 
