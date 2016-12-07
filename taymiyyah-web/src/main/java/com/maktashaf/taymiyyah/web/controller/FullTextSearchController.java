@@ -74,6 +74,7 @@ public class FullTextSearchController extends HttpServlet {
         .withTotalHits(searchResult.getTotalHits())
         .withOriginal(original)
         .withTerm(term)
+        .withTranslator(translator.name())
         .withTranslatorLanguage(translator.getLocaleEnum().value().getLanguage())
         .withTime(String.valueOf(totalTime / 1000f))
         .withSuggestedTerm(searchResult.getSuggestedTerm())

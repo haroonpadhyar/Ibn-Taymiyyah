@@ -16,6 +16,7 @@ public class ResultData {
   private boolean original;
   private String term;
   private String translatorLanguage;
+  private String translator;
   private String time;
   private String suggestedTerm;
   List<Quran> quranList;
@@ -189,6 +190,35 @@ public class ResultData {
    */
   public ResultData withTranslatorLanguage(String translatorLanguage) {
     this.translatorLanguage = translatorLanguage;
+    return this;
+  }
+
+  /**
+   *  Get user's translator.
+   *
+   * @return translator.
+   */
+  public String getTranslator() {
+    return translator;
+  }
+
+  /**
+   *  Set user's translator.
+   *
+   * @param  translator
+   */
+  public void setTranslator(String translator) {
+    this.translator = translator;
+  }
+
+  /**
+   *  Set user's translator.
+   *
+   * @param  translator
+   * @return {@link com.maktashaf.taymiyyah.web.dto.ResultData}
+   */
+  public ResultData withTranslator(String translator) {
+    this.translator = translator;
     return this;
   }
 

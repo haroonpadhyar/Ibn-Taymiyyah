@@ -1,6 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 
-<select id="ayahCombo" style="width: 100%;padding: 7px;">
+<select id="surahCombo" style="width: 100%;padding: 7px;">
     <option value="1">1 - الفاتحة</option>
     <option value="2">2 - البقرة</option>
     <option value="3">3 - آل عمران</option>
