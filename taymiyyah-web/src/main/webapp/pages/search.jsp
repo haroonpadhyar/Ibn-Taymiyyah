@@ -29,9 +29,9 @@
 
 <div class="container">
 
-<a href="searchthetext?locale=ar">العربیة</a>&nbsp;
-<a href="searchthetext?locale=ur">اردو</a>&nbsp;
-<a href="searchthetext?locale=en">English</a>&nbsp;
+<a href="home?locale=ar">العربیة</a>&nbsp;
+<a href="home?locale=ur">اردو</a>&nbsp;
+<a href="home?locale=en">English</a>&nbsp;
 
   <div class="row">
     <%-- Full text search form --%>

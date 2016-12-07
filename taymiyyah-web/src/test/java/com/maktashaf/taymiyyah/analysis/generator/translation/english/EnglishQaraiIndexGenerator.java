@@ -36,7 +36,6 @@ public class EnglishQaraiIndexGenerator extends IndexGenerator{
 //      term = "MHMT";
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.English)
           .withTranslator(Translator.English_Qarai)
           .withOriginal(false)
           .withPageNo(1)

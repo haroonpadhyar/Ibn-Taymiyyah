@@ -15,7 +15,7 @@ public class ResultData {
   private int totalHits;
   private boolean original;
   private String term;
-  private String lang;
+  private String translatorLanguage;
   private String time;
   private String suggestedTerm;
   List<Quran> quranList;
@@ -168,27 +168,27 @@ public class ResultData {
    *
    * @return lang.
    */
-  public String getLang() {
-    return lang;
+  public String getTranslatorLanguage() {
+    return translatorLanguage;
   }
 
   /**
    *  Set user's selected language.
    *
-   * @param  lang.
+   * @param  translatorLanguage
    */
-  public void setLang(String lang) {
-    this.lang = lang;
+  public void setTranslatorLanguage(String translatorLanguage) {
+    this.translatorLanguage = translatorLanguage;
   }
 
   /**
    *  Set user's selected language.
    *
-   * @param  lang.
+   * @param  translatorLanguage
    * @return {@link com.maktashaf.taymiyyah.web.dto.ResultData}
    */
-  public ResultData withLang(String lang) {
-    this.lang = lang;
+  public ResultData withTranslatorLanguage(String translatorLanguage) {
+    this.translatorLanguage = translatorLanguage;
     return this;
   }
 
@@ -204,7 +204,7 @@ public class ResultData {
   /**
    *  Set system processing time.
    *
-   * @param  time.
+   * @param  time
    */
   public void setTime(String time) {
     this.time = time;
@@ -213,7 +213,7 @@ public class ResultData {
   /**
    *  Set system processing time.
    *
-   * @param  time.
+   * @param  time
    * @return {@link com.maktashaf.taymiyyah.web.dto.ResultData}
    */
   public ResultData withTime(String time) {

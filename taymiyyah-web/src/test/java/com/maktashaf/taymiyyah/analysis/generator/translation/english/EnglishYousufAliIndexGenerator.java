@@ -36,7 +36,6 @@ public class EnglishYousufAliIndexGenerator extends IndexGenerator{
 //      term = "MHMT";
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.English)
           .withTranslator(Translator.English_YousufAli)
           .withOriginal(false)
           .withPageNo(1)

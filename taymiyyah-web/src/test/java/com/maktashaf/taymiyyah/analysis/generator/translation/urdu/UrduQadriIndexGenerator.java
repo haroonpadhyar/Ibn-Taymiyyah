@@ -2,7 +2,6 @@ package com.maktashaf.taymiyyah.analysis.generator.translation.urdu;
 
 import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.analysis.generator.IndexGenerator;
-import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.util.PathResolver;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
@@ -39,7 +38,6 @@ public class UrduQadriIndexGenerator extends IndexGenerator{
 
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.Urdu)
           .withTranslator(Translator.Urdu_Qadri)
           .withOriginal(false)
           .withPageNo(3)

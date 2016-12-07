@@ -39,7 +39,6 @@ public class UrduAhmedRazaKhanIndexGenerator extends IndexGenerator{
 
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.Urdu)
           .withTranslator(Translator.Urdu_AhmedRazaKhan)
           .withOriginal(false)
           .withPageNo(3)

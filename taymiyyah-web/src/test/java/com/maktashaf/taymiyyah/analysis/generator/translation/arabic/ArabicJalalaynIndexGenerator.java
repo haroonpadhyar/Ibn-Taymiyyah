@@ -39,7 +39,6 @@ public class ArabicJalalaynIndexGenerator extends IndexGenerator{
 
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.Arabic)
           .withTranslator(Translator.Arabic_Jalalayn)
           .withOriginal(false)
           .withPageNo(3)

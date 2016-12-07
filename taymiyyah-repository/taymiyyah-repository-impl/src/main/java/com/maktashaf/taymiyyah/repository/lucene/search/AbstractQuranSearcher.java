@@ -66,7 +66,7 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       Analyzer analyzer = chooseAnalyzer(searchParam);
       if(analyzer == null)
         throw new RuntimeException("No Analyzer found for: "
-            +searchParam.getLocaleEnum().value() + ": "+searchParam.getTranslator());
+            +searchParam.getTranslator().getLocaleEnum().value() + ": "+searchParam.getTranslator());
 
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);

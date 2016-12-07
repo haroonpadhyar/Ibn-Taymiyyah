@@ -39,7 +39,6 @@ public class ArabicMuyassarIndexGenerator extends IndexGenerator{
 
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.Arabic)
           .withTranslator(Translator.Arabic_Muyassar)
           .withOriginal(false)
           .withPageNo(3)

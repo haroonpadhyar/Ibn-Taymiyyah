@@ -6,23 +6,10 @@ package com.maktashaf.taymiyyah.web.dto;
  * @author Haroon Anwar Padhyar.
  */
 public class RequestData {
-  private Boolean ajax;
   private String term;
-  private String termHidden;
-  private String locale;
   private String translator;
-  private String src;
-  private int currentPage;
-  private int totalPages;
-  private Boolean original;
-
-  public Boolean getAjax() {
-    return ajax;
-  }
-
-  public void setAjax(Boolean ajax) {
-    this.ajax = ajax;
-  }
+  private int pageNo;
+  private Boolean original = true;
 
   /**
    *  Get term to search.
@@ -38,28 +25,6 @@ public class RequestData {
   }
 
   /**
-   *  Get hidden term to search. This is used in pagination request since first time searched
-   *  term is set in client as hidden.
-   *
-   * @return term.
-   */
-  public String getTermHidden() {
-    return termHidden;
-  }
-
-  public void setTermHidden(String termHidden) {
-    this.termHidden = termHidden;
-  }
-
-  public String getLocale() {
-    return locale;
-  }
-
-  public void setLocale(String locale) {
-    this.locale = locale;
-  }
-
-  /**
    * Get the user's selected Translator.
    *
    * @return translator.
@@ -72,33 +37,17 @@ public class RequestData {
     this.translator = translator;
   }
 
-  public String getSrc() {
-    return src;
-  }
-
-  public void setSrc(String src) {
-    this.src = src;
-  }
-
   /**
    * Get user's selected page number.
    *
    * @return page number.
    */
-  public int getCurrentPage() {
-    return currentPage;
+  public int getPageNo() {
+    return pageNo;
   }
 
-  public void setCurrentPage(int currentPage) {
-    this.currentPage = currentPage;
-  }
-
-  public int getTotalPages() {
-    return totalPages;
-  }
-
-  public void setTotalPages(int totalPages) {
-    this.totalPages = totalPages;
+  public void setPageNo(int pageNo) {
+    this.pageNo = pageNo;
   }
 
   /**

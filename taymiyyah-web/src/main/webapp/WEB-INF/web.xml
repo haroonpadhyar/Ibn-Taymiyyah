@@ -29,13 +29,33 @@
 
   <!-- Servlet mapping -->
   <servlet>
-    <servlet-name>SearchServlet</servlet-name>
-    <servlet-class>com.maktashaf.taymiyyah.web.controller.SearchServlet</servlet-class>
+    <servlet-name>HomeController</servlet-name>
+    <servlet-class>com.maktashaf.taymiyyah.web.controller.HomeController</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>SearchServlet</servlet-name>
-    <url-pattern>/searchthetext</url-pattern>
+    <servlet-name>HomeController</servlet-name>
+    <url-pattern>/home</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>FullTextSearchController</servlet-name>
+    <servlet-class>com.maktashaf.taymiyyah.web.controller.FullTextSearchController</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FullTextSearchController</servlet-name>
+    <url-pattern>/search/fulltext</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>IdentitySearchController</servlet-name>
+    <servlet-class>com.maktashaf.taymiyyah.web.controller.IdentitySearchController</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>IdentitySearchController</servlet-name>
+    <url-pattern>/search/identity/*</url-pattern>
   </servlet-mapping>
 
   <session-config>

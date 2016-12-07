@@ -39,7 +39,6 @@ public class UrduNajafiIndexGenerator extends IndexGenerator{
 
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.Urdu)
           .withTranslator(Translator.Urdu_Najafi)
           .withOriginal(false)
           .withPageNo(3)

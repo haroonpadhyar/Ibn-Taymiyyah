@@ -36,7 +36,6 @@ public class EnglishPickthallIndexGenerator extends IndexGenerator{
 //      term = "MHMT";
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.English)
           .withTranslator(Translator.English_Pickthall)
           .withOriginal(false)
           .withPageNo(1)

@@ -36,7 +36,6 @@ public class EnglishSarwarIndexGenerator extends IndexGenerator{
 //      term = "MHMT";
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.English)
           .withTranslator(Translator.English_Sarwar)
           .withOriginal(false)
           .withPageNo(1)

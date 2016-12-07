@@ -39,7 +39,6 @@ public class QuranIndexGenerator extends IndexGenerator{
 
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.Arabic)
           .withTranslator(Translator.Urdu_Maududi)
           .withOriginal(true)
           .withPageNo(1)

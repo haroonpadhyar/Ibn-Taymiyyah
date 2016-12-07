@@ -36,7 +36,6 @@ public class EnglishWahiduddinIndexGenerator extends IndexGenerator{
 //      term = "MHMT";
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.English)
           .withTranslator(Translator.English_Wahiduddin)
           .withOriginal(false)
           .withPageNo(1)

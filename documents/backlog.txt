@@ -1,7 +1,7 @@
 Deployment with Openshit Next Gen
 Continue Quraan reading from searched ayah.
 Exception handling with client response.
-Server side fully latest JSON based and only required parameter logic mean what can be stored in session don't expect from request
+...Server side fully latest JSON based and only required parameter logic mean what can be stored in session don't expect from request
 Server should be REST based.
 Client side to angularjs2 with i18n
 Resolve TODOs
@@ -11,6 +11,7 @@ Biography of translator
 properties file for production and dev
 Cache resolved path by Translator in PathResolver
 Unit Test
+proper error page.
 *Code comments
 *JSON based request.
 *Generalise and extend able Index Generator.

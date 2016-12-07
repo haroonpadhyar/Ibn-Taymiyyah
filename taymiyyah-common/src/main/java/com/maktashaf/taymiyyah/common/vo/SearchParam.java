@@ -1,6 +1,5 @@
 package com.maktashaf.taymiyyah.common.vo;
 
-import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.Translator;
 
 /**
@@ -10,7 +9,6 @@ import com.maktashaf.taymiyyah.common.Translator;
  */
 public class SearchParam {
   private String term;
-  private LocaleEnum localeEnum;
   private Translator translator;
   private boolean original;
   private int pageNo;
@@ -27,15 +25,6 @@ public class SearchParam {
    */
   public String getTerm() {
     return term;
-  }
-
-  /**
-   *  Get user's selected {@link com.maktashaf.taymiyyah.common.LocaleEnum}.
-   *
-   * @return localEnum.
-   */
-  public LocaleEnum getLocaleEnum() {
-    return localeEnum;
   }
 
   /**
@@ -100,17 +89,6 @@ public class SearchParam {
      */
     public SearchParamBuilder withTerm(String term){
       searchParam.term = term;
-      return this;
-    }
-
-    /**
-     * Set {@link com.maktashaf.taymiyyah.common.LocaleEnum}.
-     *
-     * @param localeEnum
-     * @return {@link com.maktashaf.taymiyyah.common.vo.SearchParam.SearchParamBuilder}
-     */
-    public SearchParamBuilder withLocale(LocaleEnum localeEnum){
-      searchParam.localeEnum = localeEnum;
       return this;
     }
 

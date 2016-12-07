@@ -36,7 +36,6 @@ public class EnglishArberryIndexGenerator extends IndexGenerator{
 //      term = "MHMT";
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.English)
           .withTranslator(Translator.English_Arberry)
           .withOriginal(false)
           .withPageNo(1)

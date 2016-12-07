@@ -36,7 +36,6 @@ public class EnglishShakirIndexGenerator extends IndexGenerator{
 //      term = "MHMT";
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.English)
           .withTranslator(Translator.English_Shakir)
           .withOriginal(false)
           .withPageNo(1)

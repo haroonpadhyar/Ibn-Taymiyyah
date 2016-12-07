@@ -39,7 +39,6 @@ public class UrduJalandhryIndexGenerator extends IndexGenerator{
 
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.Urdu)
           .withTranslator(Translator.Urdu_Jalandhry)
           .withOriginal(false)
           .withPageNo(3)

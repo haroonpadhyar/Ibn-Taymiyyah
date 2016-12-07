@@ -36,7 +36,6 @@ public class EnglishItaniIndexGenerator extends IndexGenerator{
 //      term = "MHMT";
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
-          .withLocale(LocaleEnum.English)
           .withTranslator(Translator.English_Itani)
           .withOriginal(false)
           .withPageNo(1)
