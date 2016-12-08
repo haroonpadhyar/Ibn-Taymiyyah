@@ -94,7 +94,10 @@
   <div id="paginationDiv" style="display: none">
     <jsp:include page="pagination.jsp" />
   </div>
-  <div id="didYouMean" class="container" style="display: none">
+  <div id="errorMsg" class="container alert alert-danger" style="display: none">
+
+  </div>
+  <div id="didYouMean" class="container alert alert-info" style="display: none">
     <label style="color: red"><fmt:message key="didYouMean" />:</label>&nbsp;
     <span id="didYouMeanSuggestion" style="color: blue; font: bold;font-size: medium"></span>
   </div>

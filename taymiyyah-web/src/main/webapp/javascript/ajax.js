@@ -83,15 +83,29 @@ $(document).ready(function(){
             $( '#timeDiv' ).hide();
             $( '#qtableDiv' ).hide();
             $( '#paginationDiv' ).hide();
+            $( '#errorMsg' ).hide();
           }
           else {
             $( '#didYouMean' ).hide();
             $( '#timeDiv' ).show();
             $( '#qtableDiv' ).show();
             $( '#paginationDiv' ).show();
+            $( '#errorMsg' ).hide();
           }
+        }else if(resp.code == 300) {
+            $( '#errorMsg' ).html( "<strong>Error!</strong> "+ resp.data);
+            $( '#errorMsg' ).show();
+            $( '#didYouMean' ).hide();
+            $( '#timeDiv' ).hide();
+            $( '#qtableDiv' ).hide();
+            $( '#paginationDiv' ).hide();
         }else{
-          //TODO show error msg.
+            $( '#errorMsg' ).html( "<strong>Error!</strong> System error ocured. Please try again.");
+            $( '#errorMsg' ).show();
+            $( '#didYouMean' ).hide();
+            $( '#timeDiv' ).hide();
+            $( '#qtableDiv' ).hide();
+            $( '#paginationDiv' ).hide();
         }
       }
     });
@@ -125,6 +139,21 @@ $(document).ready(function(){
           $( '#timeDiv' ).hide();
           $( '#qtableDiv' ).show();
           $( '#paginationDiv' ).hide();
+          $( '#errorMsg' ).hide();
+        }else if(resp.code == 300) {
+            $( '#errorMsg' ).html( "<strong>Error!</strong> "+ resp.data);
+            $( '#errorMsg' ).show();
+            $( '#didYouMean' ).hide();
+            $( '#timeDiv' ).hide();
+            $( '#qtableDiv' ).hide();
+            $( '#paginationDiv' ).hide();
+        }else{
+            $( '#errorMsg' ).html( "<strong>Error!</strong> System error ocured. Please try again.");
+            $( '#errorMsg' ).show();
+            $( '#didYouMean' ).hide();
+            $( '#timeDiv' ).hide();
+            $( '#qtableDiv' ).hide();
+            $( '#paginationDiv' ).hide();
         }
       }
     });
