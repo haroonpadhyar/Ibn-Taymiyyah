@@ -95,7 +95,7 @@
     <jsp:include page="pagination.jsp" />
   </div>
   <div id="errorMsg" class="container alert alert-danger" style="display: none">
-
+    <strong><fmt:message key="error" />!&nbsp;</strong><span><fmt:message key="error.system.general" /></span>
   </div>
   <div id="didYouMean" class="container alert alert-info" style="display: none">
     <label style="color: red"><fmt:message key="didYouMean" />:</label>&nbsp;

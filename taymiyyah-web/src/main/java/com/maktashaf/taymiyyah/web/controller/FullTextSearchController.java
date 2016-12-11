@@ -1,6 +1,7 @@
 package com.maktashaf.taymiyyah.web.controller;
 
 import java.io.IOException;
+import java.util.Locale;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import com.maktashaf.taymiyyah.web.dto.ResultData;
 import com.maktashaf.taymiyyah.web.exception.BusinessException;
 import com.maktashaf.taymiyyah.web.util.HttpResponseUtil;
 import com.maktashaf.taymiyyah.web.util.JsonUtil;
+import com.maktashaf.taymiyyah.web.util.ResourceBundleUtil;
 import org.apache.log4j.Logger;
 
 /**
@@ -45,10 +47,11 @@ public class FullTextSearchController extends HttpServlet {
     }catch(Exception e){
       logger.error("Error occurred while Full Text Search Controller receive POST request.");
       logger.error(Throwables.getStackTraceAsString(e));
-      String message = "Some system error occurred please try again!";//TODO load from iI8n file
+      String message = "error.system.general";
       if(e instanceof BusinessException)
-        message = e.getMessage();
-      HttpResponseUtil.writeFailureResponse(resp, message);
+        message = e.getMessage() ;
+      HttpResponseUtil.writeFailureResponse(resp,
+          ResourceBundleUtil.getMessage(message, (Locale) req.getSession().getAttribute("locale")) );
     }
   }
 
@@ -86,7 +89,7 @@ public class FullTextSearchController extends HttpServlet {
   private RequestData extractRequestData(HttpServletRequest req){
     String json = req.getParameter("searchParams");
     if(null == json)
-      throw new BusinessException("SearchParams not found, Invalid Request.");//TODO load from iI8n file
+      throw new BusinessException("error.invalid.request.fulltext");
 
     RequestData requestData = JsonUtil.fromJson(json, RequestData.class);
     String term = requestData.getTerm();
@@ -94,10 +97,10 @@ public class FullTextSearchController extends HttpServlet {
     Translator translator = Translator.look(translatorStr);
 
     if(null == translator)
-      throw new BusinessException("Translator not supported."); //TODO load from iI8n file
+      throw new BusinessException("error.unsupported.translator");
 
     if(null == term || term.length() <= 0)
-      throw new BusinessException("Search Term cannot be empty."); //TODO load from iI8n file
+      throw new BusinessException("error.search.term.empty.fulltext");
 
     return requestData;
   }

@@ -1,6 +1,6 @@
 Deployment with Openshit Next Gen
 Continue Quraan reading from searched ayah.
-...Exception handling with client response.
+Exception handling error messages to client with iI8n
 Server should be REST based.
 Client side to angularjs2 with i18n
 Resolve TODOs
@@ -11,6 +11,7 @@ properties file for production and dev
 Cache resolved path by Translator in PathResolver
 Unit Test
 proper error page.
+*Exception handling with client response.
 *Server side fully latest JSON based and only required parameter logic mean what can be stored in session don't expect from request
 *Code comments
 *JSON based request.

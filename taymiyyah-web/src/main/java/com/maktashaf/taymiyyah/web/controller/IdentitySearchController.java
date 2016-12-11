@@ -94,11 +94,11 @@ public class IdentitySearchController extends HttpServlet {
       HttpResponseUtil.writeSuccessResponse(resp, resultData);
 
     }catch(Exception e){
-      logger.error("Error occurred while Identity Search Controller receive POST request. "+url);
+      logger.error("Error occurred while Identity Search Controller receive POST request. : "+url);
       logger.error(Throwables.getStackTraceAsString(e));
       String message = "Some system error occurred please try again!";//TODO load from iI8n file
       if(e instanceof BusinessException)
-        message = e.getMessage() + " : "+url ;
+        message = e.getMessage();
       HttpResponseUtil.writeFailureResponse(resp, message);
     }
   }

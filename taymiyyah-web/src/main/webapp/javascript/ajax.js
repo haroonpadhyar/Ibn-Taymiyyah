@@ -93,14 +93,13 @@ $(document).ready(function(){
             $( '#errorMsg' ).hide();
           }
         }else if(resp.code == 300) {
-            $( '#errorMsg' ).html( "<strong>Error!</strong> "+ resp.data);
+            $( '#errorMsg span' ).html(resp.data);
             $( '#errorMsg' ).show();
             $( '#didYouMean' ).hide();
             $( '#timeDiv' ).hide();
             $( '#qtableDiv' ).hide();
             $( '#paginationDiv' ).hide();
         }else{
-            $( '#errorMsg' ).html( "<strong>Error!</strong> System error ocured. Please try again.");
             $( '#errorMsg' ).show();
             $( '#didYouMean' ).hide();
             $( '#timeDiv' ).hide();
@@ -141,14 +140,13 @@ $(document).ready(function(){
           $( '#paginationDiv' ).hide();
           $( '#errorMsg' ).hide();
         }else if(resp.code == 300) {
-            $( '#errorMsg' ).html( "<strong>Error!</strong> "+ resp.data);
+            $( '#errorMsg span' ).html(resp.data);
             $( '#errorMsg' ).show();
             $( '#didYouMean' ).hide();
             $( '#timeDiv' ).hide();
             $( '#qtableDiv' ).hide();
             $( '#paginationDiv' ).hide();
         }else{
-            $( '#errorMsg' ).html( "<strong>Error!</strong> System error ocured. Please try again.");
             $( '#errorMsg' ).show();
             $( '#didYouMean' ).hide();
             $( '#timeDiv' ).hide();

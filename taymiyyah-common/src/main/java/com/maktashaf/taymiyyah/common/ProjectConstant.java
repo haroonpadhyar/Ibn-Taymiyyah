@@ -10,6 +10,7 @@ import com.maktashaf.taymiyyah.common.util.ResourceUtil;
  * @author Haroon Anwar Padhyar.
  */
 public abstract class ProjectConstant {
+  public static final String RESOURCE_BUNDLE_PATH = "i18n/messages";
   public static final String QURANN_DIR = "Quraan";
   public static final String TRANSLATION_DIR = "Translation";
   public static final String SPELL_CHECK_DIR = "SpellCheck";
