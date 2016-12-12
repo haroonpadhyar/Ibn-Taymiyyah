@@ -40,7 +40,7 @@ public class IdentitySearchController extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     if(logger.isDebugEnabled()) {
-      logger.debug("Full Text Search Controller receive POST request.");
+      logger.debug("Identity Search Controller receive POST request.");
     }
     String url = req.getRequestURI();
     try{
