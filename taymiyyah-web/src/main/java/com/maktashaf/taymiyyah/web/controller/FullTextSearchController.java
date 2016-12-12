@@ -89,7 +89,7 @@ public class FullTextSearchController extends HttpServlet {
   private RequestData extractRequestData(HttpServletRequest req){
     String json = req.getParameter("searchParams");
     if(null == json)
-      throw new BusinessException("error.invalid.request.fulltext");
+      throw new BusinessException("error.invalid.request");
 
     RequestData requestData = JsonUtil.fromJson(json, RequestData.class);
     String term = requestData.getTerm();
@@ -100,7 +100,7 @@ public class FullTextSearchController extends HttpServlet {
       throw new BusinessException("error.unsupported.translator");
 
     if(null == term || term.length() <= 0)
-      throw new BusinessException("error.search.term.empty.fulltext");
+      throw new BusinessException("error.search.term.empty");
 
     return requestData;
   }

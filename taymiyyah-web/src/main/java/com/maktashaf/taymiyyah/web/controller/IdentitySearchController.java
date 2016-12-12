@@ -3,6 +3,7 @@ package com.maktashaf.taymiyyah.web.controller;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +19,7 @@ import com.maktashaf.taymiyyah.search.service.QuranSearchService;
 import com.maktashaf.taymiyyah.web.dto.ResultData;
 import com.maktashaf.taymiyyah.web.exception.BusinessException;
 import com.maktashaf.taymiyyah.web.util.HttpResponseUtil;
+import com.maktashaf.taymiyyah.web.util.ResourceBundleUtil;
 import org.apache.log4j.Logger;
 
 /**
@@ -48,7 +50,7 @@ public class IdentitySearchController extends HttpServlet {
 
       ResultData resultData = new ResultData();
       if(splitUrl.length != 4 && splitUrl.length != 5){
-        throw new BusinessException("Invalid URL."); //TODO load from iI8n file
+        throw new BusinessException("error.invalid.request");
       }else {
         if (splitUrl.length == 4) {
           String accumIdStr = splitUrl[2];
@@ -59,11 +61,11 @@ public class IdentitySearchController extends HttpServlet {
             ayahId = Integer.valueOf(accumIdStr);
           }
           catch(Exception e) {
-            throw new BusinessException("Invalid URL Aaya id must be a valid number."); //TODO load from iI8n file
+            throw new BusinessException("error.invalid.ayah.id");
           }
           translator = Translator.look(translatorStr);
           if (null == translator)
-            throw new BusinessException("Translator not supported."); //TODO load from iI8n file
+            throw new BusinessException("error.unsupported.translator");
 
           resultData = findByAccumId(ayahId, translator);
         }
@@ -79,13 +81,13 @@ public class IdentitySearchController extends HttpServlet {
             ayahId = Integer.valueOf(ayahIdStr);
           }
           catch(Exception e) {
-            throw new BusinessException("Invalid URL Surah/Aaya id must be a valid number."); //TODO load from iI8n file
+            throw new BusinessException("error.invalid.ayah.id");
           }
           translator = Translator.look(translatorStr);
           if (null == translator)
-            throw new BusinessException("Translator not supported."); //TODO load from iI8n file
+            throw new BusinessException("error.unsupported.translator");
 
-          resultData = findByAyahId(surahId, ayahId, translator);
+          resultData = findByAyahId(req, surahId, ayahId, translator);
         }
       }
 
@@ -96,21 +98,29 @@ public class IdentitySearchController extends HttpServlet {
     }catch(Exception e){
       logger.error("Error occurred while Identity Search Controller receive POST request. : "+url);
       logger.error(Throwables.getStackTraceAsString(e));
-      String message = "Some system error occurred please try again!";//TODO load from iI8n file
-      if(e instanceof BusinessException)
+      String message = ResourceBundleUtil.getMessage("error.system.general", (Locale) req.getSession().getAttribute("locale"));
+      if(e instanceof BusinessException) {
         message = e.getMessage();
+        if(!((BusinessException)e).isResolved())
+          message = ResourceBundleUtil.getMessage(message, (Locale) req.getSession().getAttribute("locale"));
+      }
       HttpResponseUtil.writeFailureResponse(resp, message);
     }
   }
 
-  private ResultData findByAyahId(int surahId, int ayahId, Translator translator){
+  private ResultData findByAyahId(HttpServletRequest req,int surahId, int ayahId, Translator translator){
     Quran quran = null;
     if((surahId > 0 && surahId <= 114)
         && (ayahId > 0 && ayahId <= ayahCountMap.get(surahId)))
       quran = quranSearchService.findByAyahId(surahId, ayahId, translator);
-    else
-      throw new BusinessException("Surah must be in range 1 - 114 "+((surahId > 0 && surahId <= 114)
-          ?"and for Surah ["+surahId+"] " + "ayah must be in range 1 - "+ayahCountMap.get(surahId):""));//TODO load from iI8n file
+    else {
+      String msg = ResourceBundleUtil.getMessage("error.invalid.surah.range", (Locale) req.getSession().getAttribute("locale"));
+      if(surahId > 0 && surahId <= 114){
+        msg += ResourceBundleUtil.getMessage("error.invalid.ayah.range", (Locale) req.getSession().getAttribute("locale"));
+        msg = String.format(msg, String.valueOf(surahId), String.valueOf(ayahCountMap.get(surahId)));
+      }
+      throw new BusinessException(msg, true);
+    }
 
     List<Quran> quranList = Lists.newArrayList();
     if(quran != null)
@@ -126,7 +136,7 @@ public class IdentitySearchController extends HttpServlet {
     if(ayahId > 0 && ayahId <= 6236)
       quran = quranSearchService.findByAccumId(ayahId, translator);
     else
-      throw new BusinessException("ayahId must be in range 1 - 6236.");//TODO load from iI8n file
+      throw new BusinessException("error.invalid.ayah.serial.range");
 
     List<Quran> quranList = Lists.newArrayList();
     if(quran != null)
