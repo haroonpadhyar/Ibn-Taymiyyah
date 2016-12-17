@@ -58,6 +58,16 @@
     <url-pattern>/search/identity/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>QuranReaderController</servlet-name>
+    <servlet-class>com.maktashaf.taymiyyah.web.controller.QuranReaderController</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>QuranReaderController</servlet-name>
+    <url-pattern>/search/read/*</url-pattern>
+  </servlet-mapping>
+
   <session-config>
     <session-timeout>30</session-timeout>
   </session-config>

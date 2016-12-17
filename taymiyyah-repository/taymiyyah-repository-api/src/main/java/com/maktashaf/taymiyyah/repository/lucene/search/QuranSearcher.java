@@ -38,4 +38,14 @@ public interface QuranSearcher {
    * @return
    */
   Quran findByAyahId(int surahId, int ayahId, Translator translator);
+
+  /**
+   * Read next Quran's ayah from accumulated id.
+   *
+   * @param accumId
+   * @param translator
+   * @param numberOfNext
+   * @return {@link com.maktashaf.taymiyyah.model.Quran}
+   */
+  SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext);
 }

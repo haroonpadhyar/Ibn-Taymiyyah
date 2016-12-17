@@ -26,7 +26,6 @@
 <%--<fmt:setBundle basename="i18n.messages" var="msg"/>--%>
 <fmt:bundle basename="i18n.messages">
 
-<div class="container">
   <!--PAGINATION-->
   <div>
     <ul class="pagination">
@@ -47,5 +46,4 @@
     </ul>
   </div>
 
-</div>
 </fmt:bundle>

@@ -40,4 +40,12 @@ public class QuranLuceneRepoImpl implements QuranLuceneRepo{
     Quran byAyahId = SearcherRegistry.getSearcher(Boolean.TRUE).findByAyahId(surahId, ayahId, translator);
     return byAyahId;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext){
+    return SearcherRegistry.getSearcher(Boolean.TRUE).findNextByAccumId(accumId, translator, numberOfNext);
+  }
 }

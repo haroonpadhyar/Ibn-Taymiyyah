@@ -19,7 +19,7 @@ public interface QuranSearchService {
    * @param searchParam
    * @return {@link com.maktashaf.taymiyyah.vo.SearchResult}.
    */
-  public SearchResult doFullTextSearch(SearchParam searchParam);
+  SearchResult doFullTextSearch(SearchParam searchParam);
 
   /**
    * Search Quran's ayah based upon ayah accumulated id.
@@ -28,7 +28,7 @@ public interface QuranSearchService {
    * @param translator
    * @return {@link com.maktashaf.taymiyyah.model.Quran}
    */
-  public Quran findByAccumId(int accumId, Translator translator);
+  Quran findByAccumId(int accumId, Translator translator);
 
   /**
    * Search Quran's ayah based upon ayah surah id and ayah id.
@@ -38,5 +38,15 @@ public interface QuranSearchService {
    * @param translator
    * @return @return {@link com.maktashaf.taymiyyah.model.Quran}
    */
-  public Quran findByAyahId(int surahId, int ayahId, Translator translator);
+  Quran findByAyahId(int surahId, int ayahId, Translator translator);
+
+  /**
+   * Read next Quran's ayah from accumulated id.
+   *
+   * @param accumId
+   * @param translator
+   * @param numberOfNext
+   * @return {@link com.maktashaf.taymiyyah.model.Quran}
+   */
+  SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext);
 }

@@ -34,8 +34,8 @@ public class IdentitySearchController extends HttpServlet {
   private static final String CONTROLLER_URL = "search/identity";
 
   /**
-   * URL: /search/identity/{translator}/{surahId}/{ayahId}
-   * URL: /search/identity/{translator}/{ayahId}
+   * URL: /search/identity/{surahId}/{ayahId}/{translator}
+   * URL: /search/identity/{ayahId}/{translator}
    */
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -92,6 +92,7 @@ public class IdentitySearchController extends HttpServlet {
       }
 
       long totalTime = System.currentTimeMillis() - startTime;
+      resultData.setTotalHits(1);
       resultData.setTime(String.valueOf(totalTime / 1000f));
       HttpResponseUtil.writeSuccessResponse(resp, resultData);
 

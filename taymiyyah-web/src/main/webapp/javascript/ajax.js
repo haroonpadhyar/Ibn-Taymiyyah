@@ -62,7 +62,7 @@ $(document).ready(function(){
         var resp = JSON.parse(data);
         if(resp.code == 200) {
           var data = resp.data;
-          var str = populateResultTable(data);
+          var str = populateResultTable(data, true);
 
           $( '#qtableDiv' ).html( str );
           $( '#currentPage' ).html( data.currentPage );
@@ -76,6 +76,8 @@ $(document).ready(function(){
           $( '#termHidden' ).val( data.term );
           $( '#translatorHidden' ).val( data.translator );
 
+          $( '.nav-tabs' ).show();
+          $( '#searchTab' ).show();
           var suggestedTerm = data.suggestedTerm;
           if (suggestedTerm.length > 0 ) {
             $( '#didYouMeanSuggestion' ).html( suggestedTerm );
@@ -94,17 +96,9 @@ $(document).ready(function(){
           }
         }else if(resp.code == 300) {
             $( '#errorMsg span' ).html(resp.data);
-            $( '#errorMsg' ).show();
-            $( '#didYouMean' ).hide();
-            $( '#timeDiv' ).hide();
-            $( '#qtableDiv' ).hide();
-            $( '#paginationDiv' ).hide();
+            displayOnError();
         }else{
-            $( '#errorMsg' ).show();
-            $( '#didYouMean' ).hide();
-            $( '#timeDiv' ).hide();
-            $( '#qtableDiv' ).hide();
-            $( '#paginationDiv' ).hide();
+            displayOnError();
         }
       }
     });
@@ -132,26 +126,23 @@ $(document).ready(function(){
         var resp = JSON.parse( data );
         if ( resp.code == 200 ) {
           var data = resp.data;
-          var str = populateResultTable(data);
+          var str = populateResultTable(data, true);
+
+          $( '.nav-tabs' ).show();
+          $( '#searchTab' ).show();
 
           $( '#qtableDiv' ).html( str );
-          $( '#timeDiv' ).hide();
+          $( '#totalHitsSmall' ).html( data.totalHits );
+          $( '#time' ).html( data.time );
+          $( '#timeDiv' ).show();
           $( '#qtableDiv' ).show();
           $( '#paginationDiv' ).hide();
           $( '#errorMsg' ).hide();
         }else if(resp.code == 300) {
-            $( '#errorMsg span' ).html(resp.data);
-            $( '#errorMsg' ).show();
-            $( '#didYouMean' ).hide();
-            $( '#timeDiv' ).hide();
-            $( '#qtableDiv' ).hide();
-            $( '#paginationDiv' ).hide();
+          $( '#errorMsg span' ).html(resp.data);
+          displayOnError();
         }else{
-            $( '#errorMsg' ).show();
-            $( '#didYouMean' ).hide();
-            $( '#timeDiv' ).hide();
-            $( '#qtableDiv' ).hide();
-            $( '#paginationDiv' ).hide();
+          displayOnError();
         }
       }
     });
@@ -159,7 +150,15 @@ $(document).ready(function(){
   });
 });
 
-var populateResultTable = function(data){
+var displayOnError = function(){
+  $( '#errorMsg' ).show();
+  $( '#didYouMean' ).hide();
+  $( '#timeDiv' ).hide();
+  $( '#qtableDiv' ).hide();
+  $( '#paginationDiv' ).hide();
+}
+
+var populateResultTable = function(data, isRead){
   var quranList = data.quranList;
   var str = "";
   for ( var i = 0; i < quranList.length; i++ ) {
@@ -175,14 +174,52 @@ var populateResultTable = function(data){
       str += "<p style=\"font-size: large\" dir=\"ltr\">"
           + quran.ayahTranslationText
           + "</p>";
+      if(isRead){
+        str += " <p><a><span style=\"font-size: small\" dir=\"ltr\" onclick=\"readQuran("+quran.accmId+");\">Read Quran</span></a></p>";
+      }
     }
     else {
       str += "<p style=\"font-size: large\" dir=\"rtl\">"
           + quran.ayahTranslationText
           + "</p>";
+      if(isRead){
+        str += " <p><a><span style=\"font-size: small\" dir=\"rtl\" onclick=\"readQuran("+quran.accmId+");\">Read Quran</span></a></p>";
+      }
     }
     str += "</div>";
   }
   return str;
+}
+
+var readQuran = function(accmId){
+  $.ajax({ // ajax call starts
+    url: 'search/read/'+accmId+'/'+$( '#translatorCombo' ).val(),
+    type: "GET",
+//      dataType: 'json',
+    success: function(data) {
+      var resp = JSON.parse( data );
+      if ( resp.code == 200 ) {
+        var data = resp.data;
+        var str = populateResultTable(data, false);
+
+        $( '.nav-tabs' ).show();
+        $( '#readTab' ).show();
+
+        $( '#qtableReadDiv' ).html( str );
+        $( '#totalHitsSmallRead' ).html( data.totalHits );
+        $( '#timeRead' ).html( data.time );
+        $( '#qtableReadDiv' ).show();
+        $( '#timeReadDiv' ).show();
+//        $( '#qtableDiv' ).show();
+//        $( '#paginationDiv' ).hide();
+//        $( '#errorMsg' ).hide();
+      }else if(resp.code == 300) {
+        $( '#errorMsg span' ).html(resp.data);
+        displayOnError();
+      }else{
+        displayOnError();
+      }
+    }
+  });
 }
 

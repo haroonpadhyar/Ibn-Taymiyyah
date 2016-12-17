@@ -212,6 +212,73 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
    * {@inheritDoc}
    */
   @Override
+  public SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext){
+    Directory dir = null;
+    IndexReader reader = null;
+    IndexSearcher searcher = null;
+    SearchResult searchResult = SearchResult.builder().build();
+    try {
+      List<Quran> quranList = new ArrayList<Quran>();
+      SearchParam searchParam = SearchParam.builder()
+          .withOriginal(true)
+          .withTranslator(translator)
+          .build();
+
+      dir = FSDirectory.open(new File(resolveIndexPath(searchParam)));
+      reader = DirectoryReader.open(dir);
+      searcher = new IndexSearcher(reader);
+
+      TermQuery termQuery = new TermQuery(new Term(QuranField.accumId.value(), String.valueOf(accumId)));
+      TopDocs topDocs = searcher.search(termQuery, 10);
+      ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+
+      int totalHits = topDocs.totalHits;
+      for (ScoreDoc scoreDoc : scoreDocs) {
+        Document doc = searcher.doc(scoreDoc.doc);
+        Quran quran = new Quran();
+        quran.setAccmId(Integer.valueOf(doc.get(QuranField.accumId.value())).intValue());
+        quran.setAyahId(Integer.valueOf(doc.get(QuranField.ayahId.value())).intValue());
+        quran.setSurahId(Integer.valueOf(doc.get(QuranField.surahId.value())).intValue());
+        quran.setJuzId(Integer.valueOf(doc.get(QuranField.juzId.value())).intValue());
+        quran.setSurahName(doc.get(QuranField.surahName.value()));
+        quran.setJuzName(doc.get(QuranField.juzName.value()));
+        quran.setAyahText(doc.get(QuranField.ayahText.value()));
+
+        // load translation.
+        setUnSearchedTextInField(searchParam, Lists.newArrayList(quran));
+
+        quranList.add(quran);
+      }
+
+      //prepare result
+      searchResult = SearchResult.builder()
+          .withTotalHits(totalHits)
+          .withQuranList(quranList)
+          .build();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      new RuntimeException(e);
+    }finally {
+      try {
+        if(dir != null)
+          dir.close();
+        if(reader != null)
+          reader.close();
+      } catch(Exception e){
+        e.printStackTrace();
+        logger.error(e.getMessage());
+        throw new RuntimeException(e);
+      }
+    }
+
+    return searchResult;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public Quran findByAyahId(int surahId, int ayahId, Translator translator){
     Quran quran = null;
     Directory dir = null;

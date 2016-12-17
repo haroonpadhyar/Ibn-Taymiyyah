@@ -3,8 +3,6 @@ package com.maktashaf.taymiyyah.search.service;
 import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
 import com.maktashaf.taymiyyah.model.Quran;
-import com.maktashaf.taymiyyah.repository.jdbc.QuranJDBCRepo;
-import com.maktashaf.taymiyyah.repository.jdbc.QuranJDBCRepoImpl;
 import com.maktashaf.taymiyyah.repository.lucene.QuranLuceneRepo;
 import com.maktashaf.taymiyyah.repository.lucene.QuranLuceneRepoImpl;
 import com.maktashaf.taymiyyah.vo.SearchResult;
@@ -40,5 +38,13 @@ public class QuranSearchSearchServiceImpl implements QuranSearchService {
   @Override
   public Quran findByAyahId(int surahId, int ayahId, Translator translator) {
     return quranLuceneRepo.findByAyahId(surahId, ayahId, translator);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext){
+    return quranLuceneRepo.findNextByAccumId(accumId, translator, numberOfNext);
   }
 }

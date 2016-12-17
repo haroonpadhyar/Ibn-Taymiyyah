@@ -78,29 +78,58 @@
   <jsp:include page="header.jsp" />
   <jsp:include page="search.jsp" />
 
-  <div id="timeDiv" class="container" style="display: none">
-    <small style="color: darkgray">
-        <%--<fmt:message key="almost" bundle="${msg}"/>--%>
-      <fmt:message key="almost"/>
-      <span id="totalHitsSmall"></span>
-        <%--<fmt:message key="results" bundle="${msg}"/>--%>
-      <fmt:message key="results"/>
-      (<span id="time"></span>)&nbsp;
-        <%--<fmt:message key="seconds" bundle="${msg}"/>--%>
-      <fmt:message key="seconds"/>
-    </small>
+  <div class="container">
+    <ul class="nav nav-tabs" style="display: none">
+      <li class="active"><a id="searchTab" data-toggle="tab" href="#Search" style="display: none">Search</a></li>
+      <li><a id="readTab" data-toggle="tab" href="#Read" style="display: none">Read</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="Search" class="tab-pane fade in active">
+        <div id="timeDiv" style="display: none">
+          <small style="color: darkgray">
+              <%--<fmt:message key="almost" bundle="${msg}"/>--%>
+            <fmt:message key="almost"/>
+            <span id="totalHitsSmall"></span>
+              <%--<fmt:message key="results" bundle="${msg}"/>--%>
+            <fmt:message key="results"/>
+            (<span id="time"></span>)&nbsp;
+              <%--<fmt:message key="seconds" bundle="${msg}"/>--%>
+            <fmt:message key="seconds"/>
+          </small>
+        </div>
+        <div id="qtableDiv" style="display: none"></div>
+        <div id="paginationDiv" style="display: none">
+          <jsp:include page="pagination.jsp" />
+        </div>
+        <div id="errorMsg" class="alert alert-danger" style="display: none">
+          <strong><fmt:message key="error" />!&nbsp;</strong><span><fmt:message key="error.system.general" /></span>
+        </div>
+        <div id="didYouMean" class="alert alert-info" style="display: none">
+          <label style="color: red"><fmt:message key="didYouMean" />:</label>&nbsp;
+          <span id="didYouMeanSuggestion" style="color: blue; font: bold;font-size: medium"></span>
+        </div>
+
+      </div>
+      <div id="Read" class="tab-pane fade">
+        <div id="timeReadDiv" style="display: none">
+          <small style="color: darkgray">
+              <%--<fmt:message key="almost" bundle="${msg}"/>--%>
+            <fmt:message key="almost"/>
+            <span id="totalHitsSmallRead"></span>
+              <%--<fmt:message key="results" bundle="${msg}"/>--%>
+            <fmt:message key="results"/>
+            (<span id="timeRead"></span>)&nbsp;
+              <%--<fmt:message key="seconds" bundle="${msg}"/>--%>
+            <fmt:message key="seconds"/>
+          </small>
+        </div>
+        <div id="qtableReadDiv" style="display: none"></div>
+      </div>
+    </div>
+
   </div>
-  <div id="qtableDiv" class="container" style="display: none"></div>
-  <div id="paginationDiv" style="display: none">
-    <jsp:include page="pagination.jsp" />
-  </div>
-  <div id="errorMsg" class="container alert alert-danger" style="display: none">
-    <strong><fmt:message key="error" />!&nbsp;</strong><span><fmt:message key="error.system.general" /></span>
-  </div>
-  <div id="didYouMean" class="container alert alert-info" style="display: none">
-    <label style="color: red"><fmt:message key="didYouMean" />:</label>&nbsp;
-    <span id="didYouMeanSuggestion" style="color: blue; font: bold;font-size: medium"></span>
-  </div>
+
 
     <%--
       <div class="container">
