@@ -202,7 +202,11 @@ var readQuran = function(accmId, readDirection){
       var resp = JSON.parse( data );
       if ( resp.code == 200 ) {
         var data = resp.data;
+        var quranList = data.quranList;
         var str = populateResultTable(data, false);
+        if(quranList.length > 0){
+          $( '#accumIdHidden' ).val(quranList[0].accmId);
+        }
 
         $( '.nav-tabs' ).show();
         $( '#readTab' ).show();
@@ -213,6 +217,7 @@ var readQuran = function(accmId, readDirection){
         $( '#totalHitsSmallRead' ).html( data.totalHits );
         $( '#timeRead' ).html( data.time );
         $( '#qtableReadDiv' ).show();
+        $( '#paginationReadDiv' ).show();
         $( '#timeReadDiv' ).show();
 //        $( '#qtableDiv' ).show();
 //        $( '#paginationDiv' ).hide();
@@ -226,4 +231,29 @@ var readQuran = function(accmId, readDirection){
     }
   });
 }
+
+//-- Id Search
+$(document).ready(function(){
+  $('#nxtRead').live('click', function() {
+    var accumIdStr = $( '#accumIdHidden' ).val();
+    var accumId = Number(accumIdStr) + 11;
+    if(accumId > 6236){
+      accumId = 6236
+    }
+    readQuran(accumId, 'f');
+    return false; // keeps the page from not refreshing
+  });
+});
+
+$(document).ready(function(){
+  $('#prvRead').live('click', function() {
+    var accumIdStr = $( '#accumIdHidden' ).val();
+    var accumId = Number(accumIdStr) - 1;
+    if(accumId < 1) {
+      accumId = 1;
+    }
+    readQuran(accumId, 'r');
+    return false; // keeps the page from not refreshing
+  });
+});
 

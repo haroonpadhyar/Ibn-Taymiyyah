@@ -129,6 +129,13 @@
           </small>
         </div>
         <div id="qtableReadDiv" style="display: none"></div>
+        <div id="paginationReadDiv" style="display: none">
+          <ul class="pagination">
+            <li><a href="" id="prvRead" class="previous">&laquo;&nbsp;<fmt:message key="previous"/></a></li>
+            <li><a href="" id="nxtRead" class="next"><fmt:message key="next"/>&nbsp;&raquo;</a></li>
+          </ul>
+        </div>
+        <input id="accumIdHidden" type="hidden" value="0" />
       </div>
     </div>
 
