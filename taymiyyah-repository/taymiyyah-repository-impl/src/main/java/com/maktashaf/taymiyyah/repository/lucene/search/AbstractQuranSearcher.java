@@ -239,7 +239,7 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       NumericRangeQuery numericQuery = NumericRangeQuery.newIntRange(
           QuranField.accumId.value(), from, to, true, true
       );
-      TopDocs topDocs = searcher.search(numericQuery, numberOfNext);
+      TopDocs topDocs = searcher.search(numericQuery, numberOfNext + 1); // +1 since lower range included.
       ScoreDoc[] scoreDocs = topDocs.scoreDocs;
 
       int totalHits = topDocs.totalHits;
