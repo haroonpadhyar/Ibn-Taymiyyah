@@ -35,7 +35,9 @@ public class QuranReaderController extends HttpServlet {
   private static final String CONTROLLER_URL = "search/read";
 
   /**
-   * URL: /search/read/{accmId}/{translator}
+   * URL: /search/read/{accmId}/{translator}/{readDirection}
+   *
+   * readDirection can be f=forward, r=reverse.
    */
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -49,24 +51,34 @@ public class QuranReaderController extends HttpServlet {
       String[] splitUrl = substring.split("/");
 
       ResultData resultData = new ResultData();
-      if(splitUrl.length != 4){
+      if(splitUrl.length != 5){
         throw new BusinessException("error.invalid.request");
       }else {
-          String accumIdStr = splitUrl[2];
-          String translatorStr = splitUrl[3];
-          Translator translator = null;
-          int ayahId = 0;
-          try {
-            ayahId = Integer.valueOf(accumIdStr);
-          }
-          catch(Exception e) {
-            throw new BusinessException("error.invalid.ayah.id");
-          }
-          translator = Translator.look(translatorStr);
-          if (null == translator)
-            throw new BusinessException("error.unsupported.translator");
+        boolean readDirection = true;
+        String accumIdStr = splitUrl[2];
+        String translatorStr = splitUrl[3];
+        String readDirectionStr = splitUrl[4];
+        Translator translator = null;
+        int ayahId = 0;
+        try {
+          ayahId = Integer.valueOf(accumIdStr);
+        }
+        catch(Exception e) {
+          throw new BusinessException("error.invalid.ayah.id");
+        }
+        translator = Translator.look(translatorStr);
+        if (null == translator)
+          throw new BusinessException("error.unsupported.translator");
 
-          resultData = findNextByAccumId(ayahId, translator, 10);
+        if("f".equals(readDirectionStr)){
+          readDirection = true;
+        }else if("r".equals(readDirectionStr)){
+          readDirection = false;
+        }else {
+          throw new BusinessException("error.invalid.request");
+        }
+
+        resultData = findNextByAccumId(ayahId, translator, 10, readDirection);
       }
 
       long totalTime = System.currentTimeMillis() - startTime;
@@ -86,11 +98,11 @@ public class QuranReaderController extends HttpServlet {
     }
   }
 
-  private ResultData findNextByAccumId(int ayahId, Translator translator, int numberOfNext){
+  private ResultData findNextByAccumId(int ayahId, Translator translator, int numberOfNext, boolean readDirection){
     Quran quran = null;
     SearchResult searchResult = SearchResult.builder().build();
     if(ayahId > 0 && ayahId <= 6236) {
-      searchResult = quranSearchService.findNextByAccumId(ayahId, translator, numberOfNext);
+      searchResult = quranSearchService.findNextByAccumId(ayahId, translator, numberOfNext, readDirection);
     }
     else
       throw new BusinessException("error.invalid.ayah.serial.range");

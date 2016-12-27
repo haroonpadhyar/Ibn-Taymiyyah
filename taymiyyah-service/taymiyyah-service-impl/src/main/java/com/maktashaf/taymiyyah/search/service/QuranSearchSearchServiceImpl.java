@@ -44,7 +44,7 @@ public class QuranSearchSearchServiceImpl implements QuranSearchService {
    * {@inheritDoc}
    */
   @Override
-  public SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext){
-    return quranLuceneRepo.findNextByAccumId(accumId, translator, numberOfNext);
+  public SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext, boolean readDirection){
+    return quranLuceneRepo.findNextByAccumId(accumId, translator, numberOfNext, readDirection);
   }
 }

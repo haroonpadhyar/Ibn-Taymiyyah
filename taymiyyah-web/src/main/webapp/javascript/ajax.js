@@ -177,7 +177,7 @@ var populateResultTable = function(data, isRead){
           + quran.ayahTranslationText
           + "</p>";
       if(isRead){
-        str += " <p><a><span style=\"font-size: small\" dir=\"ltr\" onclick=\"readQuran("+quran.accmId+");\">Read Quran</span></a></p>";
+        str += " <p><a><span style=\"font-size: small\" dir=\"ltr\" onclick=\"readQuran("+quran.accmId+", 'f');\">Read Quran</span></a></p>";
       }
     }
     else {
@@ -185,7 +185,7 @@ var populateResultTable = function(data, isRead){
           + quran.ayahTranslationText
           + "</p>";
       if(isRead){
-        str += " <p><a><span style=\"font-size: small\" dir=\"rtl\" onclick=\"readQuran("+quran.accmId+");\">Read Quran</span></a></p>";
+        str += " <p><a><span style=\"font-size: small\" dir=\"rtl\" onclick=\"readQuran("+quran.accmId+", 'f');\">Read Quran</span></a></p>";
       }
     }
     str += "</div>";
@@ -193,9 +193,9 @@ var populateResultTable = function(data, isRead){
   return str;
 }
 
-var readQuran = function(accmId){
+var readQuran = function(accmId, readDirection){
   $.ajax({ // ajax call starts
-    url: 'search/read/'+accmId+'/'+$( '#translatorCombo' ).val(),
+    url: 'search/read/'+accmId+'/'+$( '#translatorCombo' ).val() + '/'+readDirection,
     type: "GET",
 //      dataType: 'json',
     success: function(data) {
@@ -207,6 +207,7 @@ var readQuran = function(accmId){
         $( '.nav-tabs' ).show();
         $( '#readTab' ).show();
         $('.nav-tabs a[href="#Read"]').tab('show');
+        window.scrollTo(0, 0);
 
         $( '#qtableReadDiv' ).html( str );
         $( '#totalHitsSmallRead' ).html( data.totalHits );

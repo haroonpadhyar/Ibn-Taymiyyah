@@ -45,7 +45,7 @@ public class QuranLuceneRepoImpl implements QuranLuceneRepo{
    * {@inheritDoc}
    */
   @Override
-  public SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext){
-    return SearcherRegistry.getSearcher(Boolean.TRUE).findNextByAccumId(accumId, translator, numberOfNext);
+  public SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext, boolean readDirection){
+    return SearcherRegistry.getSearcher(Boolean.TRUE).findNextByAccumId(accumId, translator, numberOfNext, readDirection);
   }
 }

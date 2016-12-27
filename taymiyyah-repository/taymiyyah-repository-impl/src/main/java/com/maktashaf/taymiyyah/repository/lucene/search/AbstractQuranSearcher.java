@@ -213,7 +213,7 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
    * {@inheritDoc}
    */
   @Override
-  public SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext){
+  public SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext, boolean readDirection){
     Directory dir = null;
     IndexReader reader = null;
     IndexSearcher searcher = null;
@@ -229,10 +229,17 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 
+      int from = accumId;
+      int to   = accumId + numberOfNext;
+      if(!readDirection){
+        from = accumId - numberOfNext;
+        to   = accumId;
+      }
+
       NumericRangeQuery numericQuery = NumericRangeQuery.newIntRange(
-          QuranField.accumId.value(), accumId, (accumId + 10), true, false
+          QuranField.accumId.value(), from, to, true, true
       );
-      TopDocs topDocs = searcher.search(numericQuery, 10);
+      TopDocs topDocs = searcher.search(numericQuery, numberOfNext);
       ScoreDoc[] scoreDocs = topDocs.scoreDocs;
 
       int totalHits = topDocs.totalHits;

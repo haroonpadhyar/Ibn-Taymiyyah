@@ -47,7 +47,8 @@ public interface QuranLuceneRepo {
    * @param accumId
    * @param translator
    * @param numberOfNext
+   * @param readDirection true for forward, false for reverse.
    * @return {@link com.maktashaf.taymiyyah.model.Quran}
    */
-  SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext);
+  SearchResult findNextByAccumId(int accumId, Translator translator, int numberOfNext, boolean readDirection);
 }
