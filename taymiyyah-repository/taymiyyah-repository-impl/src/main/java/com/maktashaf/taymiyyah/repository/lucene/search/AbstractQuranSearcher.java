@@ -19,14 +19,13 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.search.highlight.Highlighter;
@@ -171,8 +170,10 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 
-      TermQuery termQuery = new TermQuery(new Term(QuranField.accumId.value(), String.valueOf(accumId)));
-      TopDocs topDocs = searcher.search(termQuery, 1);
+      NumericRangeQuery numericQuery = NumericRangeQuery.newIntRange(
+          QuranField.accumId.value(), accumId, accumId, true, true
+      );
+      TopDocs topDocs = searcher.search(numericQuery, 1);
       ScoreDoc[] scoreDocs = topDocs.scoreDocs;
       Document doc = searcher.doc(scoreDocs[0].doc);
 
@@ -228,8 +229,10 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 
-      TermQuery termQuery = new TermQuery(new Term(QuranField.accumId.value(), String.valueOf(accumId)));
-      TopDocs topDocs = searcher.search(termQuery, 10);
+      NumericRangeQuery numericQuery = NumericRangeQuery.newIntRange(
+          QuranField.accumId.value(), accumId, (accumId + 10), true, false
+      );
+      TopDocs topDocs = searcher.search(numericQuery, 10);
       ScoreDoc[] scoreDocs = topDocs.scoreDocs;
 
       int totalHits = topDocs.totalHits;
@@ -294,11 +297,16 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 
-      TermQuery termQuerySurah = new TermQuery(new Term(QuranField.surahId.value(), String.valueOf(surahId)));
-      TermQuery termQueryAyah = new TermQuery(new Term(QuranField.ayahId.value(), String.valueOf(ayahId)));
+      NumericRangeQuery numericQuerySurah = NumericRangeQuery.newIntRange(
+          QuranField.surahId.value(), surahId, surahId, true, true
+      );
+      NumericRangeQuery numericQueryAyah = NumericRangeQuery.newIntRange(
+          QuranField.ayahId.value(), ayahId, ayahId, true, true
+      );
+
       BooleanQuery booleanQuery = new BooleanQuery();
-      booleanQuery.add(termQuerySurah, BooleanClause.Occur.MUST);
-      booleanQuery.add(termQueryAyah, BooleanClause.Occur.MUST);
+      booleanQuery.add(numericQuerySurah, BooleanClause.Occur.MUST);
+      booleanQuery.add(numericQueryAyah, BooleanClause.Occur.MUST);
       TopDocs topDocs = searcher.search(booleanQuery, 1);
       ScoreDoc[] scoreDocs = topDocs.scoreDocs;
       Document doc = searcher.doc(scoreDocs[0].doc);

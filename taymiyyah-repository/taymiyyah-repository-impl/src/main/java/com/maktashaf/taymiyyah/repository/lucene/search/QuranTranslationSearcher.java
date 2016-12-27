@@ -15,10 +15,9 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -67,8 +66,10 @@ public class QuranTranslationSearcher extends AbstractQuranSearcher implements Q
       searcher = new IndexSearcher(reader);
 
       for (Quran quran : quranList) {
-        TermQuery termQuery = new TermQuery(new Term(QuranField.accumId.value(), String.valueOf(quran.getAccmId())));
-        TopDocs topDocs = searcher.search(termQuery, 1);
+        NumericRangeQuery numericQuery = NumericRangeQuery.newIntRange(
+            QuranField.accumId.value(), quran.getAccmId(), quran.getAccmId(), true, true
+        );
+        TopDocs topDocs = searcher.search(numericQuery, 1);
         ScoreDoc[] scoreDocs = topDocs.scoreDocs;
         Document doc = searcher.doc(scoreDocs[0].doc);
         quran.setAyahText(doc.get(QuranField.ayahText.value()));

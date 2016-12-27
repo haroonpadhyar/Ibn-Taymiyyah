@@ -1,5 +1,11 @@
 package com.maktashaf.taymiyyah.analysis.generator;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
+
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Lists;
@@ -12,6 +18,7 @@ import com.maktashaf.taymiyyah.repository.lucene.analysis.AnalyzerRegistry;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.IntField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -25,12 +32,6 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * * @author Haroon Anwar Padhyar
@@ -56,10 +57,10 @@ public class IndexGenerator {
       for (Quran quran : quranList) {
         System.out.println("Indexing... "+quran.getAccmId()+" : "+quran.getAyahText());
         Document doc = new Document();
-        doc.add(new TextField(QuranField.accumId.value(), String.valueOf(quran.getAccmId()), Store.YES)  );
-        doc.add(new TextField(QuranField.ayahId.value(), String.valueOf(quran.getAyahId()), Store.YES) );
-        doc.add(new TextField(QuranField.surahId.value(), String.valueOf(quran.getSurahId()), Store.YES) );
-        doc.add(new TextField(QuranField.juzId.value(), String.valueOf(quran.getJuzId()), Store.YES) );
+        doc.add(new IntField(QuranField.accumId.value(), quran.getAccmId(), Store.YES)  );
+        doc.add(new IntField(QuranField.ayahId.value(), quran.getAyahId(), Store.YES) );
+        doc.add(new IntField(QuranField.surahId.value(), quran.getSurahId(), Store.YES) );
+        doc.add(new IntField(QuranField.juzId.value(), quran.getJuzId(), Store.YES) );
         doc.add(new TextField(QuranField.surahName.value(), quran.getSurahName(), Store.YES) );
         doc.add(new TextField(QuranField.juzName.value(), quran.getJuzName(), Store.YES));
         doc.add(new TextField(QuranField.ayahText.value(), quran.getAyahText(), Store.YES));
