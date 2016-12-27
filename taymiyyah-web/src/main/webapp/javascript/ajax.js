@@ -78,6 +78,7 @@ $(document).ready(function(){
 
           $( '.nav-tabs' ).show();
           $( '#searchTab' ).show();
+          $('.nav-tabs a[href="#Search"]').tab('show');
           var suggestedTerm = data.suggestedTerm;
           if (suggestedTerm.length > 0 ) {
             $( '#didYouMeanSuggestion' ).html( suggestedTerm );
@@ -130,6 +131,7 @@ $(document).ready(function(){
 
           $( '.nav-tabs' ).show();
           $( '#searchTab' ).show();
+          $('.nav-tabs a[href="#Search"]').tab('show');
 
           $( '#qtableDiv' ).html( str );
           $( '#totalHitsSmall' ).html( data.totalHits );
@@ -204,6 +206,7 @@ var readQuran = function(accmId){
 
         $( '.nav-tabs' ).show();
         $( '#readTab' ).show();
+        $('.nav-tabs a[href="#Read"]').tab('show');
 
         $( '#qtableReadDiv' ).html( str );
         $( '#totalHitsSmallRead' ).html( data.totalHits );

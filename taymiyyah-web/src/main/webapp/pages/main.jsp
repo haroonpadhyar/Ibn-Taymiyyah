@@ -80,8 +80,12 @@
 
   <div class="container">
     <ul class="nav nav-tabs" style="display: none">
-      <li class="active"><a id="searchTab" data-toggle="tab" href="#Search" style="display: none">Search</a></li>
-      <li><a id="readTab" data-toggle="tab" href="#Read" style="display: none">Read</a></li>
+      <li class="active">
+        <a id="searchTab" data-toggle="tab" href="#Search" style="display: none">Search</a>
+      </li>
+      <li>
+        <a id="readTab" data-toggle="tab" href="#Read" style="display: none">Read</a>
+      </li>
     </ul>
 
     <div class="tab-content">
