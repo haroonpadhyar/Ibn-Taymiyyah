@@ -81,12 +81,13 @@
   <div class="container">
     <ul class="nav nav-tabs" style="display: none">
       <li class="active">
-        <a id="searchTab" data-toggle="tab" href="#Search" style="display: none">Search</a>
+        <a id="searchTab" data-toggle="tab" href="#Search" style="display: none"><fmt:message key="search" /></a>
       </li>
       <li>
-        <a id="readTab" data-toggle="tab" href="#Read" style="display: none">Read</a>
+        <a id="readTab" data-toggle="tab" href="#Read" style="display: none"><fmt:message key="reading" /></a>
       </li>
     </ul>
+    <div id="readingLableHidden" style="display: none"><fmt:message key="QuranReading" /></div>
 
     <div class="tab-content">
       <div id="Search" class="tab-pane fade in active">

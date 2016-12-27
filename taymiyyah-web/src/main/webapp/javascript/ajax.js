@@ -161,6 +161,7 @@ var displayOnError = function(){
 }
 
 var populateResultTable = function(data, isRead){
+  var readingLable = $('#readingLableHidden' ).html();
   var quranList = data.quranList;
   var str = "";
   for ( var i = 0; i < quranList.length; i++ ) {
@@ -177,7 +178,7 @@ var populateResultTable = function(data, isRead){
           + quran.ayahTranslationText
           + "</p>";
       if(isRead){
-        str += " <p><a><span style=\"font-size: small\" dir=\"ltr\" onclick=\"readQuran("+quran.accmId+", 'f');\">Read Quran</span></a></p>";
+        str += " <p><a><span style=\"font-size: small\" dir=\"ltr\" onclick=\"readQuran("+quran.accmId+", 'f');\">"+readingLable+"</span></a></p>";
       }
     }
     else {
@@ -185,7 +186,7 @@ var populateResultTable = function(data, isRead){
           + quran.ayahTranslationText
           + "</p>";
       if(isRead){
-        str += " <p><a><span style=\"font-size: small\" dir=\"rtl\" onclick=\"readQuran("+quran.accmId+", 'f');\">Read Quran</span></a></p>";
+        str += " <p><a><span style=\"font-size: small\" dir=\"rtl\" onclick=\"readQuran("+quran.accmId+", 'f');\">"+readingLable+"</span></a></p>";
       }
     }
     str += "</div>";
