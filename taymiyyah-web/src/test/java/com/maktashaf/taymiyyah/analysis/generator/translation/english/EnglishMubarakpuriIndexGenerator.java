@@ -2,7 +2,6 @@ package com.maktashaf.taymiyyah.analysis.generator.translation.english;
 
 import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.analysis.generator.IndexGenerator;
-import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.util.PathResolver;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
@@ -58,14 +57,14 @@ public class EnglishMubarakpuriIndexGenerator extends IndexGenerator{
 
   @Test
   @Ignore
-  public void doSpellCheck(){//TODO Egnlish spell check
+  public void doSpellCheck(){
     String term = "hamad";
     try {
 //      PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_Mubarakpuri))));
       Optional<Translator> translatorOptional = Optional.of(Translator.English_Mubarakpuri);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
-          AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())
+          AnalyzerRegistry.getDictionaryAnalyzer(translatorOptional.get().getLocaleEnum())
       );
 
       System.out.println(suggestion);

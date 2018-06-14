@@ -60,7 +60,7 @@ public class EnglishYousufAliIndexGenerator extends IndexGenerator{
 
   @Test
   @Ignore
-  public void doSpellCheck(){//TODO Egnlish spell check
+  public void doSpellCheck(){
     String term = "muhmad";
     try {
 //      PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_YousufAli))));

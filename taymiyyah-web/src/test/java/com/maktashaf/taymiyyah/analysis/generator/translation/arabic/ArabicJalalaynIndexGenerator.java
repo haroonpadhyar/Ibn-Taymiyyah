@@ -2,7 +2,6 @@ package com.maktashaf.taymiyyah.analysis.generator.translation.arabic;
 
 import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.analysis.generator.IndexGenerator;
-import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.util.PathResolver;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
@@ -74,7 +73,7 @@ public class ArabicJalalaynIndexGenerator extends IndexGenerator{
       Optional<Translator> translatorOptional = Optional.of(Translator.Arabic_Jalalayn);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
-          AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())
+          AnalyzerRegistry.getDictionaryAnalyzer(translatorOptional.get().getLocaleEnum())
       );
 
       System.out.println(suggestion);

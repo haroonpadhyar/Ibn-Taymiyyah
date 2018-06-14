@@ -120,7 +120,7 @@ public class QuranIndexGenerator extends IndexGenerator{
     try {
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(Optional.<Translator>absent()),
-          AnalyzerRegistry.getAnalyzer(LocaleEnum.Arabic)
+          AnalyzerRegistry.getDictionaryAnalyzer(LocaleEnum.Arabic)
       );
 
       System.out.println(suggestion);

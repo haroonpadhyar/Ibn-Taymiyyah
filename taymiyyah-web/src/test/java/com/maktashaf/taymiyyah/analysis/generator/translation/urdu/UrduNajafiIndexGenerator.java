@@ -74,7 +74,7 @@ public class UrduNajafiIndexGenerator extends IndexGenerator{
       Optional<Translator> translatorOptional = Optional.of(Translator.Urdu_Najafi);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
-          AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())
+          AnalyzerRegistry.getDictionaryAnalyzer(translatorOptional.get().getLocaleEnum())
       );
 
       System.out.println(suggestion);
