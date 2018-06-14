@@ -12,7 +12,7 @@ import com.maktashaf.taymiyyah.model.Quran;
 public class ResultData {
   private int currentPage;
   private int totalPages;
-  private int totalHits;
+  private long totalHits;
   private boolean original;
   private String term;
   private String translatorLanguage;
@@ -84,7 +84,7 @@ public class ResultData {
    *
    * @return number of total hits
    */
-  public int getTotalHits() {
+  public long getTotalHits() {
     return totalHits;
   }
 
@@ -103,7 +103,7 @@ public class ResultData {
    * @param totalHits
    * @return {@link com.maktashaf.taymiyyah.web.dto.ResultData}
    */
-  public ResultData withTotalHits(int totalHits) {
+  public ResultData withTotalHits(long totalHits) {
     this.totalHits = totalHits;
     return this;
   }

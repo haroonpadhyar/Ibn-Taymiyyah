@@ -2,7 +2,6 @@ package com.maktashaf.taymiyyah.analysis.generator.translation.english;
 
 import com.google.common.base.Optional;
 import com.maktashaf.taymiyyah.analysis.generator.IndexGenerator;
-import com.maktashaf.taymiyyah.common.LocaleEnum;
 import com.maktashaf.taymiyyah.common.Translator;
 import com.maktashaf.taymiyyah.common.util.PathResolver;
 import com.maktashaf.taymiyyah.common.vo.SearchParam;
@@ -34,6 +33,9 @@ public class EnglishYousufAliIndexGenerator extends IndexGenerator{
     try {
       String term = "Mohamad";
 //      term = "MHMT";
+      term = "muhmad";
+//      term = "Mohamad"
+      ;
       SearchParam searchParam = SearchParam.builder()
           .withTerm(term)
           .withTranslator(Translator.English_YousufAli)
@@ -59,13 +61,13 @@ public class EnglishYousufAliIndexGenerator extends IndexGenerator{
   @Test
   @Ignore
   public void doSpellCheck(){//TODO Egnlish spell check
-    String term = "hamad";
+    String term = "muhmad";
     try {
 //      PathResolver.resolveSpellIndexPath(Optional.of(Translator.English_YousufAli))));
       Optional<Translator> translatorOptional = Optional.of(Translator.English_YousufAli);
       String suggestion = spellAdviser.suggest(
           term, PathResolver.resolveSpellIndexPath(translatorOptional),
-          AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum())
+          AnalyzerRegistry.getDictionaryAnalyzer(translatorOptional.get().getLocaleEnum())
       );
 
       System.out.println(suggestion);

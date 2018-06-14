@@ -1,7 +1,7 @@
 package com.maktashaf.taymiyyah.repository.lucene.search;
 
-import java.io.File;
 import java.io.StringReader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,13 +17,13 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.IntPoint;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
@@ -34,7 +34,6 @@ import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
 /**
  * Base class for Quran and Quran's Translation search
@@ -57,23 +56,24 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
     IndexSearcher searcher = null;
     try {
       List<Quran> quranList = new ArrayList<Quran>();
-      int totalHits = 0;
+      long totalHits = 0;
       int totalPages = 0;
 
-      dir = FSDirectory.open(new File(resolveIndexPath(searchParam)));
+      dir = FSDirectory.open(Paths.get(resolveIndexPath(searchParam)));
 
       Analyzer analyzer = chooseAnalyzer(searchParam);
-      if(analyzer == null)
+      Analyzer dictionaryAnalyzer = chooseDictionaryAnalyzer(searchParam);
+      if(analyzer == null || dictionaryAnalyzer == null)
         throw new RuntimeException("No Analyzer found for: "
             +searchParam.getTranslator().getLocaleEnum().value() + ": "+searchParam.getTranslator());
 
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 
-      QueryParser parser = new QueryParser(Version.LUCENE_46, QuranField.ayahText.value(), analyzer);
+      QueryParser parser = new QueryParser(QuranField.ayahText.value(), analyzer);
       Query query = parser.parse(searchParam.getTerm());
 
-      TopScoreDocCollector collector = TopScoreDocCollector.create(MAX_HITS, true);
+      TopScoreDocCollector collector = TopScoreDocCollector.create(MAX_HITS);
       searcher.search(query, collector);
 
       int pageNo = Math.max(1, searchParam.getPageNo()); // if PageNo is zero then get 1.
@@ -101,7 +101,7 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
       String suggestedTerm = "";
       if (quranList.size() <= 0) {
         String spellIndexPath = resolveSpellIndexPath(searchParam);
-        suggestedTerm = spellAdviser.suggest(searchParam.getTerm(), spellIndexPath, analyzer);
+        suggestedTerm = spellAdviser.suggest(searchParam.getTerm(), spellIndexPath, dictionaryAnalyzer);
       }
 
       setUnSearchedTextInField(searchParam, quranList);
@@ -166,14 +166,12 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
           .withTranslator(translator)
           .build();
 
-      dir = FSDirectory.open(new File(resolveIndexPath(searchParam)));
+      dir = FSDirectory.open(Paths.get(resolveIndexPath(searchParam)));
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 
-      NumericRangeQuery numericQuery = NumericRangeQuery.newIntRange(
-          QuranField.accumId.value(), accumId, accumId, true, true
-      );
-      TopDocs topDocs = searcher.search(numericQuery, 1);
+      Query query = IntPoint.newExactQuery(QuranField.accumId.value(), accumId);
+      TopDocs topDocs = searcher.search(query, 1);
       ScoreDoc[] scoreDocs = topDocs.scoreDocs;
       Document doc = searcher.doc(scoreDocs[0].doc);
 
@@ -225,7 +223,7 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
           .withTranslator(translator)
           .build();
 
-      dir = FSDirectory.open(new File(resolveIndexPath(searchParam)));
+      dir = FSDirectory.open(Paths.get(resolveIndexPath(searchParam)));
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 
@@ -236,13 +234,11 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
         to   = accumId;
       }
 
-      NumericRangeQuery numericQuery = NumericRangeQuery.newIntRange(
-          QuranField.accumId.value(), from, to, true, true
-      );
-      TopDocs topDocs = searcher.search(numericQuery, numberOfNext + 1); // +1 since lower range included.
+      Query numericRangeQuery = IntPoint.newRangeQuery(QuranField.accumId.value(), from, to);
+      TopDocs topDocs = searcher.search(numericRangeQuery, numberOfNext + 1); // +1 since lower range included.
       ScoreDoc[] scoreDocs = topDocs.scoreDocs;
 
-      int totalHits = topDocs.totalHits;
+      long totalHits = topDocs.totalHits;
       for (ScoreDoc scoreDoc : scoreDocs) {
         Document doc = searcher.doc(scoreDoc.doc);
         Quran quran = new Quran();
@@ -300,20 +296,16 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
           .withTranslator(translator)
           .build();
 
-      dir = FSDirectory.open(new File(resolveIndexPath(searchParam)));
+      dir = FSDirectory.open(Paths.get(resolveIndexPath(searchParam)));
       reader = DirectoryReader.open(dir);
       searcher = new IndexSearcher(reader);
 
-      NumericRangeQuery numericQuerySurah = NumericRangeQuery.newIntRange(
-          QuranField.surahId.value(), surahId, surahId, true, true
-      );
-      NumericRangeQuery numericQueryAyah = NumericRangeQuery.newIntRange(
-          QuranField.ayahId.value(), ayahId, ayahId, true, true
-      );
-
-      BooleanQuery booleanQuery = new BooleanQuery();
-      booleanQuery.add(numericQuerySurah, BooleanClause.Occur.MUST);
-      booleanQuery.add(numericQueryAyah, BooleanClause.Occur.MUST);
+      Query numericQuerySurah = IntPoint.newExactQuery(QuranField.surahId.value(), surahId);
+      Query numericQueryAyah = IntPoint.newExactQuery(QuranField.ayahId.value(), ayahId);
+      BooleanQuery booleanQuery = new BooleanQuery.Builder()
+          .add(numericQuerySurah, BooleanClause.Occur.MUST)
+          .add(numericQueryAyah, BooleanClause.Occur.MUST)
+          .build();
       TopDocs topDocs = searcher.search(booleanQuery, 1);
       ScoreDoc[] scoreDocs = topDocs.scoreDocs;
       Document doc = searcher.doc(scoreDocs[0].doc);
@@ -356,4 +348,5 @@ public abstract class AbstractQuranSearcher  implements QuranSearcher{
   protected abstract void setSearchedTextInField(Quran quran, String text);
   protected abstract void setUnSearchedTextInField(SearchParam searchParam, List<Quran> quranList);
   protected abstract Analyzer chooseAnalyzer(SearchParam searchParam);
+  protected abstract Analyzer chooseDictionaryAnalyzer(SearchParam searchParam);
 }

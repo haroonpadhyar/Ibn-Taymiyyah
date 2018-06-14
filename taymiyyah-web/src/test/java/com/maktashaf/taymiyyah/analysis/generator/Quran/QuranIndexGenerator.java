@@ -60,6 +60,53 @@ public class QuranIndexGenerator extends IndexGenerator{
 
   @Test
   @Ignore
+  public void searchByAccumId(){
+    try {
+      Quran quran = quranSearchService.findByAccumId(4, Translator.Urdu_Maududi);
+
+        System.out.println(quran.getAyahText());
+        System.out.println("-------------------");
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  @Test
+  @Ignore
+  public void searchByAyahId(){
+    try {
+      Quran quran = quranSearchService.findByAyahId(1, 5, Translator.Urdu_Maududi);
+
+      System.out.println(quran.getAyahText());
+      System.out.println("-------------------");
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  @Test
+  @Ignore
+  public void searchNextByAccumId(){
+    try {
+      SearchResult searchResult = quranSearchService.findNextByAccumId(5, Translator.Urdu_Maududi, 10, true);
+
+      for (Quran quran : searchResult.getQuranList()) {
+        System.out.println(quran.getAyahText());
+        System.out.println("-------------------");
+      }
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  @Test
+  @Ignore
   public void doSpellCheck(){
     String term = "مُحَمَّدٌ";
 //    term = "ہارون";

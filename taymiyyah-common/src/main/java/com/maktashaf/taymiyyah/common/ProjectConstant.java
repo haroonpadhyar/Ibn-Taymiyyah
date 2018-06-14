@@ -13,6 +13,7 @@ public abstract class ProjectConstant {
   public static final String RESOURCE_BUNDLE_PATH = "i18n/messages";
   public static final String QURANN_DIR = "Quraan";
   public static final String TRANSLATION_DIR = "Translation";
+  public static final String DICTIONARY = "Dictionary";
   public static final String SPELL_CHECK_DIR = "SpellCheck";
   public static final String SYSTEM_PROPERTIES_FILE_PATH = "system.properties";
   public static final String LUCENE_INDEX_PATH;

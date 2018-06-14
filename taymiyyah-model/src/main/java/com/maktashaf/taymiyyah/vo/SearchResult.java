@@ -10,7 +10,7 @@ import com.maktashaf.taymiyyah.model.Quran;
  * @author Haroon Anwar Padhyar.
  */
 public class SearchResult {
-  private int totalHits;
+  private long totalHits;
   private int totalPages;
   private String suggestedTerm;
   private List<Quran> quranList;
@@ -24,7 +24,7 @@ public class SearchResult {
    *
    * @return number of total hits
    */
-  public int getTotalHits() {
+  public long getTotalHits() {
     return totalHits;
   }
 
@@ -79,7 +79,7 @@ public class SearchResult {
      * @param totalHits
      * @return {@link com.maktashaf.taymiyyah.vo.SearchResult.SearchResultBuilder}
      */
-    public SearchResultBuilder withTotalHits(int totalHits){
+    public SearchResultBuilder withTotalHits(long totalHits){
       searchResult.totalHits = totalHits;
       return this;
     }

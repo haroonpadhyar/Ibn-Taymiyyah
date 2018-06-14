@@ -1,15 +1,15 @@
 package com.maktashaf.taymiyyah.repository.lucene.spellcheck;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.Paths;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.search.spell.LevensteinDistance;
+import org.apache.lucene.search.spell.LevenshteinDistance;
 import org.apache.lucene.search.spell.SpellChecker;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -29,9 +29,9 @@ public class SpellAdviserImpl implements SpellAdviser {
   public String suggest(String text, String spellIndexPath, Analyzer analyzer){
     String suggestedTerm = "";
     try {
-      Directory dir = FSDirectory.open(new File(spellIndexPath));
+      Directory dir = FSDirectory.open(Paths.get(spellIndexPath));
       SpellChecker spell = new SpellChecker(dir);
-      spell.setStringDistance(new LevensteinDistance());
+      spell.setStringDistance(new LevenshteinDistance());
 
       String[] split = text.split(" ");
       boolean suggestionFound = false;

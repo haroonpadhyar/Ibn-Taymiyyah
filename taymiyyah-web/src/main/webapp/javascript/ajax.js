@@ -180,6 +180,7 @@ var populateResultTable = function(data, isRead){
       if(isRead){
         str += " <p><a><span style=\"font-size: small\" dir=\"ltr\" onclick=\"readQuran("+quran.accmId+", 'f');\">"+readingLable+"</span></a></p>";
       }
+      str += " <span style=\"font-size: small\" dir=\"ltr\" >"+(i+1)+"/"+quranList.length+"</span>";
     }
     else {
       str += "<p style=\"font-size: large\" dir=\"rtl\">"
@@ -188,6 +189,7 @@ var populateResultTable = function(data, isRead){
       if(isRead){
         str += " <p><a><span style=\"font-size: small\" dir=\"rtl\" onclick=\"readQuran("+quran.accmId+", 'f');\">"+readingLable+"</span></a></p>";
       }
+      str += " <span style=\"font-size: small\" dir=\"rtl\" >"+(i+1)+"/"+quranList.length+"</span>";
     }
     str += "</div>";
   }

@@ -1,23 +1,22 @@
 package com.maktashaf.taymiyyah.repository.lucene.analysis.ar;
 
 import java.io.IOException;
-import java.io.Reader;
 
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ar.filter.ArabicDiacriticsFilter;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ar.filter.ArabicExtendedNormalizationFilter;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ar.filter.ArabicLetterSubstituteFilter;
 import com.maktashaf.taymiyyah.repository.lucene.analysis.ar.filter.ArabicTransliterationFilter;
+import org.apache.lucene.analysis.CharArraySet;
+import org.apache.lucene.analysis.StopwordAnalyzerBase;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.ar.ArabicAnalyzer;
 import org.apache.lucene.analysis.ar.ArabicStemFilter;
+import org.apache.lucene.analysis.core.DecimalDigitFilter;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
 import org.apache.lucene.analysis.core.StopFilter;
 import org.apache.lucene.analysis.miscellaneous.SetKeywordMarkerFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
-import org.apache.lucene.analysis.util.CharArraySet;
-import org.apache.lucene.analysis.util.StopwordAnalyzerBase;
-import org.apache.lucene.util.Version;
 
 /**
  * Customized analyzer for Arabic language.
@@ -25,6 +24,7 @@ import org.apache.lucene.util.Version;
  * @author Haroon Anwar Padhyar.
  */
 public class ArabicCustomizedAnalyzer extends StopwordAnalyzerBase {
+  private boolean isForDictionary;
 
   /**
    * File containing default Arabic stopwords.
@@ -68,20 +68,26 @@ public class ArabicCustomizedAnalyzer extends StopwordAnalyzerBase {
   /**
    * Builds an analyzer with the default stop words: {@link #DEFAULT_STOPWORD_FILE}.
    */
-  public ArabicCustomizedAnalyzer(Version matchVersion) {
-    this(matchVersion, DefaultSetHolder.DEFAULT_STOP_SET);
+  public ArabicCustomizedAnalyzer() {
+    this(DefaultSetHolder.DEFAULT_STOP_SET);
+  }
+
+  /**
+   * Builds an analyzer with dictionary analysis option and the default stop words: {@link #DEFAULT_STOPWORD_FILE}.
+   */
+  public ArabicCustomizedAnalyzer(boolean isForDictionary) {
+    this(DefaultSetHolder.DEFAULT_STOP_SET);
+    this.isForDictionary = isForDictionary;
   }
 
   /**
    * Builds an analyzer with the given stop words
    *
-   * @param matchVersion
-   *          lucene compatibility version
    * @param stopwords
    *          a stopword set
    */
-  public ArabicCustomizedAnalyzer(Version matchVersion, CharArraySet stopwords){
-    this(matchVersion, stopwords, CharArraySet.EMPTY_SET);
+  public ArabicCustomizedAnalyzer(CharArraySet stopwords){
+    this(stopwords, CharArraySet.EMPTY_SET);
   }
 
   /**
@@ -89,35 +95,35 @@ public class ArabicCustomizedAnalyzer extends StopwordAnalyzerBase {
    * provided this analyzer will add a {@link org.apache.lucene.analysis.miscellaneous.SetKeywordMarkerFilter} before
    * {@link org.apache.lucene.analysis.ar.ArabicStemFilter}.
    *
-   * @param matchVersion
-   *          lucene compatibility version
    * @param stopwords
    *          a stopword set
    * @param stemExclusionSet
    *          a set of terms not to be stemmed
    */
-  public ArabicCustomizedAnalyzer(Version matchVersion, CharArraySet stopwords, CharArraySet stemExclusionSet){
-    super(matchVersion, stopwords);
+  public ArabicCustomizedAnalyzer(CharArraySet stopwords, CharArraySet stemExclusionSet){
+    super(stopwords);
     if(!stemExclusionSet.isEmpty()) {
-      this.stemExclusionSet = CharArraySet.unmodifiableSet(CharArraySet.copy(
-          matchVersion, stemExclusionSet));
+      this.stemExclusionSet = CharArraySet.unmodifiableSet(CharArraySet.copy(stemExclusionSet));
     }else
       this.stemExclusionSet = DefaultSetHolder.DEFAULT_STEM_EXCLUSION_SET;
   }
 
   @Override
-  protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
-    final Tokenizer source = new StandardTokenizer(matchVersion, reader);
-    TokenStream result = new LowerCaseFilter(matchVersion, source);
+  protected TokenStreamComponents createComponents(String fieldName) {
+    final Tokenizer source = new StandardTokenizer();
+    TokenStream result = new LowerCaseFilter(source);
+    result = new DecimalDigitFilter(result);
     result = new ArabicTransliterationFilter(result);
     result = new ArabicDiacriticsFilter(result);
-    result = new StopFilter( matchVersion, result, stopwords);
+    result = new StopFilter(result, stopwords);
     result = new ArabicExtendedNormalizationFilter(result);
     if(!stemExclusionSet.isEmpty()) {
       result = new SetKeywordMarkerFilter(result, stemExclusionSet);
     }
-    result = new ArabicStemFilter(result);
-    result = new ArabicLetterSubstituteFilter(result);
+    if(!isForDictionary) {
+      result = new ArabicStemFilter(result);
+      result = new ArabicLetterSubstituteFilter(result);
+    }
     return new TokenStreamComponents(source, result);
   }
 }

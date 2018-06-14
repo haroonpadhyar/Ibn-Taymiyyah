@@ -1,23 +1,17 @@
 package com.maktashaf.taymiyyah.repository.lucene.analysis.en;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.lucene.analysis.core.LowerCaseFilter;
-import org.apache.lucene.analysis.en.PorterStemFilter;
-import org.apache.lucene.analysis.core.StopFilter;
-import org.apache.lucene.analysis.util.StopwordAnalyzerBase;
+import org.apache.commons.codec.language.Metaphone;
+import org.apache.lucene.analysis.StopwordAnalyzerBase;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.core.LowerCaseFilter;
+import org.apache.lucene.analysis.core.StopFilter;
 import org.apache.lucene.analysis.en.EnglishPossessiveFilter;
+import org.apache.lucene.analysis.en.PorterStemFilter;
+import org.apache.lucene.analysis.phonetic.PhoneticFilter;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
-import org.apache.lucene.util.Version;
-import org.apache.lucene.analysis.phonetic.PhoneticFilterFactory;
-import org.apache.solr.core.SolrResourceLoader;
 
 /**
  * Phonetic analyzer for English language.
@@ -25,29 +19,28 @@ import org.apache.solr.core.SolrResourceLoader;
  * @author Haroon Anwar Padhyar.
  */
 public class EnglishPhoneticAnalyzer extends StopwordAnalyzerBase {
-  public EnglishPhoneticAnalyzer(Version matchVersion) {
-    super(matchVersion, StandardAnalyzer.STOP_WORDS_SET);
+  private boolean isForDictionary;
+
+  public EnglishPhoneticAnalyzer() {
+    super(StandardAnalyzer.STOP_WORDS_SET);
+  }
+
+  public EnglishPhoneticAnalyzer(boolean isForDictionary) {
+    super(StandardAnalyzer.STOP_WORDS_SET);
+    this.isForDictionary = isForDictionary;
   }
 
   @Override
-  protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
-    final Tokenizer source = new StandardTokenizer(matchVersion, reader);
-    TokenStream result = new StandardFilter(matchVersion, source);
-    result = new EnglishPossessiveFilter(matchVersion, result);
-    result = new LowerCaseFilter(matchVersion, result);
-    result = new StopFilter(matchVersion, result, stopwords);
-    result = new PorterStemFilter(result);
-
-    Map<String, String> map = new HashMap<String, String>();
-    map.put(PhoneticFilterFactory.ENCODER, "METAPHONE");
-    PhoneticFilterFactory phoneticFilterFactory = new PhoneticFilterFactory(map);
-    try {
-      phoneticFilterFactory.inform(new SolrResourceLoader(""));
+  protected TokenStreamComponents createComponents(String fieldName) {
+    final Tokenizer source = new StandardTokenizer();
+    TokenStream result = new StandardFilter(source);
+    result = new EnglishPossessiveFilter(result);
+    result = new LowerCaseFilter(result);
+    result = new StopFilter(result, stopwords);
+    if(!isForDictionary) {
+      result = new PorterStemFilter(result);
+      result = new PhoneticFilter(result, new Metaphone(), false);
     }
-    catch(IOException e) {
-      e.printStackTrace();
-    }
-    result = phoneticFilterFactory.create(result);
 
     return new TokenStreamComponents(source, result);
   }

@@ -1,9 +1,9 @@
 package com.maktashaf.taymiyyah.analysis.generator;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 import com.google.common.base.Optional;
@@ -18,7 +18,9 @@ import com.maktashaf.taymiyyah.repository.lucene.analysis.AnalyzerRegistry;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.IntField;
+import org.apache.lucene.document.IntPoint;
+import org.apache.lucene.document.StoredField;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -29,7 +31,6 @@ import org.apache.lucene.search.spell.LuceneDictionary;
 import org.apache.lucene.search.spell.SpellChecker;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -44,32 +45,62 @@ public class IndexGenerator {
     try {
       List<Quran> quranList = parseTextForQuran(sourceFilePath);
 
-      Directory dir = FSDirectory.open(new File(PathResolver.resolveIndexPath(translatorOptional)));
+      Directory dir = FSDirectory.open(Paths.get(PathResolver.resolveIndexPath(translatorOptional)));
       Analyzer analyzer = AnalyzerRegistry.getAnalyzer(LocaleEnum.Arabic);// For Original Quran.
       if (translatorOptional.isPresent()) {
         analyzer = AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum());
       }
 
-      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_46, analyzer);
+      // For Dictionary Index
+      Directory dictionaryDir = FSDirectory.open(Paths.get(PathResolver.resolveDictionaryIndexPath(translatorOptional)));
+      Analyzer dictionaryAnalyzer = AnalyzerRegistry.getDictionaryAnalyzer(LocaleEnum.Arabic);// For Original Quran.
+      if (translatorOptional.isPresent()) {
+        dictionaryAnalyzer = AnalyzerRegistry.getDictionaryAnalyzer(translatorOptional.get().getLocaleEnum());
+      }
+
+      IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
       iwc.setOpenMode(OpenMode.CREATE);
       IndexWriter writer = new IndexWriter(dir, iwc);
+
+      // For Dictionary Index
+      IndexWriterConfig dictionaryIwc = new IndexWriterConfig(dictionaryAnalyzer);
+      dictionaryIwc.setOpenMode(OpenMode.CREATE);
+      IndexWriter dictionaryWriter = new IndexWriter(dictionaryDir, dictionaryIwc);
 
       for (Quran quran : quranList) {
         System.out.println("Indexing... "+quran.getAccmId()+" : "+quran.getAyahText());
         Document doc = new Document();
-        doc.add(new IntField(QuranField.accumId.value(), quran.getAccmId(), Store.YES)  );
-        doc.add(new IntField(QuranField.ayahId.value(), quran.getAyahId(), Store.YES) );
-        doc.add(new IntField(QuranField.surahId.value(), quran.getSurahId(), Store.YES) );
-        doc.add(new IntField(QuranField.juzId.value(), quran.getJuzId(), Store.YES) );
+        doc.add(new IntPoint(QuranField.accumId.value(), quran.getAccmId())  );
+        doc.add(new StoredField(QuranField.accumId.value(), String.valueOf(quran.getAccmId()))  );
+
+        doc.add(new IntPoint(QuranField.ayahId.value(), quran.getAyahId())  );
+        doc.add(new StoredField(QuranField.ayahId.value(), String.valueOf(quran.getAyahId())) );
+
+        doc.add(new IntPoint(QuranField.surahId.value(), quran.getSurahId())  );
+        doc.add(new StoredField(QuranField.surahId.value(), String.valueOf(quran.getSurahId())) );
+
+        doc.add(new StringField(QuranField.juzId.value(), String.valueOf(quran.getJuzId()), Store.YES) );
         doc.add(new TextField(QuranField.surahName.value(), quran.getSurahName(), Store.YES) );
         doc.add(new TextField(QuranField.juzName.value(), quran.getJuzName(), Store.YES));
         doc.add(new TextField(QuranField.ayahText.value(), quran.getAyahText(), Store.YES));
         writer.addDocument(doc);
+
+        // For Dictionary Index
+        Document dictionaryDoc = new Document();
+        dictionaryDoc.add(new TextField(QuranField.ayahText.value(), quran.getAyahText(), Store.NO));
+        dictionaryWriter.addDocument(dictionaryDoc);
+
       }
+
+      // Close resources
       writer.close();
       dir.close();
 
-      //Generate spell check dictionary
+      // For Dictionary Index
+      dictionaryWriter.close();
+      dictionaryDir.close();
+
+      //Generate spell check indexes
       createSpellCheckIndex(translatorOptional);
     }
     catch(Exception e) {
@@ -79,18 +110,19 @@ public class IndexGenerator {
   }
 
   private void createSpellCheckIndex(Optional<Translator> translatorOptional){
+    System.out.println("Indexing SpellCheck... ");
     try {
-      Directory dir = FSDirectory.open(new File(PathResolver.resolveSpellIndexPath(translatorOptional)));
+      Directory dir = FSDirectory.open(Paths.get(PathResolver.resolveSpellIndexPath(translatorOptional)));
       SpellChecker spell = new SpellChecker(dir);
-      IndexReader reader = DirectoryReader.open(FSDirectory.open(new File(PathResolver.resolveIndexPath(
-              translatorOptional
-          ))));
+      IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(
+                  PathResolver.resolveDictionaryIndexPath(translatorOptional)
+              )));
       LuceneDictionary luceneDictionary = new LuceneDictionary(reader, QuranField.ayahText.value());
-      Analyzer analyzer = AnalyzerRegistry.getAnalyzer(LocaleEnum.Arabic);// For Original Quran.
+      Analyzer analyzer = AnalyzerRegistry.getDictionaryAnalyzer(LocaleEnum.Arabic);// For Original Quran.
       if (translatorOptional.isPresent()) {
-        analyzer = AnalyzerRegistry.getAnalyzer(translatorOptional.get().getLocaleEnum());
+        analyzer = AnalyzerRegistry.getDictionaryAnalyzer(translatorOptional.get().getLocaleEnum());
       }
-      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_46, analyzer);
+      IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
       spell.indexDictionary(luceneDictionary, iwc, false);
 
       reader.close();

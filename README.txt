@@ -19,10 +19,14 @@ Step for Installation.
 4- Copy 'index' folder and paste under 'WEB-INF' folder.
 5- Deploy Application and Start the tomcat sever.
 
+---heroku deploymeny-
+heroku run bash --app mustakshif. for bash access.
+copy all project with pom files to a directory run following command in that directory
+heroku war:deploy taymiyyah-web/target/taymiyyah-web-1.0.war --app mustakshif --includes index
 
 System Requirement.
 ------------------
-JDK 1.6+
-Tomcat 5.5
+JDK 1.8+
+Tomcat 7+
 MySQL 5+
 

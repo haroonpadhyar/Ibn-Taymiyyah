@@ -15,7 +15,7 @@ public interface QuranSearcher {
    * Provide full text according to provided {@link com.maktashaf.taymiyyah.common.vo.SearchParam}
    * and give {@link com.maktashaf.taymiyyah.vo.SearchResult}.
    *
-   * @param searchParam.
+   * @param searchParam
    * @return .
    */
   SearchResult search(SearchParam searchParam);
